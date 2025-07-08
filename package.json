@@ -8,7 +8,9 @@
     "create-playcanvas": "index.js"
   },
   "files": [
-    "index.js"
+    "index.js",
+    "templates",
+    "dist"
   ],
   "scripts": {
     "dev": "unbuild --stub",

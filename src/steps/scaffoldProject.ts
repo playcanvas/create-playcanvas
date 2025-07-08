@@ -31,7 +31,7 @@ export async function scaffoldProject(opts: Options): Promise<void> {
   // Locate template dir relative to this file
   const templateDir = path.resolve(
     fileURLToPath(import.meta.url),
-    `../../src/templates/${template}`,
+    `../../templates/${template}`,
   )
 
   // Helper to write/copy files
