@@ -4,7 +4,7 @@ import { formatTargetDir } from './utils/fs.js'
 import { getFullCustomCommand } from './utils/packageManager.js'
 import { scaffoldProject } from './steps/scaffoldProject.js'
 import type { PkgInfo } from './utils/packageManager.js'
-import { FRAMEWORKS, TEMPLATES } from './templates/index.js'
+import { FRAMEWORKS, TEMPLATES } from '../templates/index.js'
 
 // Step helpers
 import { getTargetDir } from './steps/getTargetDir.js'
