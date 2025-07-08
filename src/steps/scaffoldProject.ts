@@ -26,7 +26,7 @@ export async function scaffoldProject(opts: Options): Promise<void> {
 
   const pkgManager = pkgInfo ? pkgInfo.name : 'npm'
 
-  prompts.log.step(`Scaffolding project in ${root}...`)
+  prompts.log.step(`Creating project in ${root}...`)
 
   // Locate template dir relative to this file
   const templateDir = path.resolve(
@@ -53,15 +53,18 @@ export async function scaffoldProject(opts: Options): Promise<void> {
 
   // Read / patch / write package.json
   const pkg = JSON.parse(
-    fs.readFileSync(path.join(templateDir, 'package.json'), 'utf-8'),
-  )
+    fs.readFileSync(path.join(templateDir, 'package.json'), 'utf-8')
+  );
+
   pkg.name = packageName
-  write('package.json', JSON.stringify(pkg, null, 2) + '\n')
+  write('package.json', JSON.stringify(pkg, null, 2) + '\n');
 
   // Final instructions
   let doneMessage = ''
-  const cdProjectName = path.relative(cwd, root)
-  doneMessage += `Done. Now run:\n`
+  const cdProjectName = path.relative(cwd, root);
+
+  doneMessage += `Project created. Now run:\n`;
+
   if (root !== cwd) {
     doneMessage += `\n  cd ${cdProjectName.includes(' ') ? `"${cdProjectName}"` : cdProjectName}`
   }

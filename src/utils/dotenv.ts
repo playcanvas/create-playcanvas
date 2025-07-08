@@ -20,5 +20,4 @@ export async function createEnvFile(
   const envPath = path.join(outputPath, ".env");
 
   await fs.writeFile(envPath, envContent, "utf8");
-  console.log(`.env file created at ${envPath}`);
 }

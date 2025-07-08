@@ -1,13 +1,10 @@
-import fs from 'node:fs'
-import path from 'node:path'
-import { fileURLToPath } from 'node:url'
 import mri from 'mri'
 import * as prompts from '@clack/prompts'
 import { formatTargetDir } from './utils/fs.js'
 import { getFullCustomCommand } from './utils/packageManager.js'
 import { scaffoldProject } from './steps/scaffoldProject.js'
 import type { PkgInfo } from './utils/packageManager.js'
-import { FRAMEWORKS, TEMPLATES } from '../templates/index.js'
+import { FRAMEWORKS, TEMPLATES } from './templates/index.js'
 
 // Step helpers
 import { getTargetDir } from './steps/getTargetDir.js'
@@ -29,13 +26,15 @@ const argv = mri<{
 const cwd = process.cwd()
 
 const helpMessage = `\
-Usage: create-playcanvas [OPTION]... [DIRECTORY]
+Usage: npm create playcanvas@latest [OPTION]...
 
 Create a new PlayCanvas project in JavaScript or TypeScript.
 With no arguments, start the CLI in interactive mode.
 
 Options:
   -t, --template NAME        use a specific template
+  -h, --help                 show help
+  -d, --delete               delete the project directory if it exists
 `
 
 const renameFiles: Record<string, string | undefined> = {

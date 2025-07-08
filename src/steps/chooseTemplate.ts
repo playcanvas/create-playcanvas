@@ -1,26 +1,5 @@
 import * as prompts from '@clack/prompts'
 
-// Types replicated locally to avoid cross-file dependencies
-export type ColorFunc = (str: string | number) => string
-export type FrameworkVariant = {
-  name: string
-  display: string
-  color: ColorFunc
-  customCommand?: string
-}
-export type Framework = {
-  name: string
-  display: string
-  color: ColorFunc
-  description?: string
-  variants: FrameworkVariant[]
-}
-
-interface PkgInfo {
-  name: string
-  version: string
-}
-
 export async function chooseTemplate({
   argTemplate,
   FRAMEWORKS,
@@ -54,6 +33,7 @@ export async function chooseTemplate({
         return {
           label: frameworkColor(framework.display || framework.name),
           value: framework,
+          hint: framework.description,
         }
       }),
     })
@@ -82,3 +62,24 @@ export async function chooseTemplate({
 
   return template!
 } 
+
+// Types replicated locally to avoid cross-file dependencies
+export type ColorFunc = (str: string | number) => string
+
+export type FrameworkVariant = {
+  name: string
+  display: string
+  color: ColorFunc
+  customCommand?: string
+}
+export type Framework = {
+  name: string
+  display: string
+  color: ColorFunc
+  description?: string
+  variants: FrameworkVariant[]
+}
+interface PkgInfo {
+  name: string
+  version: string
+}

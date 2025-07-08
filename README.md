@@ -52,7 +52,7 @@ npm create playcanvas@latest
 The CLI will prompt you for:
 
 1. **Project name** – folder to create (defaults to `playcanvas-project`).
-2. **Overwrite behaviour** if the folder exists.
+2. **Overwrite behavior** if the folder exists.
 3. **Package name** – used in `package.json`.
 4. **Framework & variant** – pick from templates below.
 5. **Scaffolding** – project files are copied and tweaked; a final cheat-sheet is printed.
