@@ -1,4 +1,4 @@
-import colors from 'picocolors'
+import colors, { yellow } from 'picocolors'
 const { blue, cyan } = colors
 
 /**
@@ -13,9 +13,22 @@ const { blue, cyan } = colors
  */
 export const FRAMEWORKS: Framework[] = [
   {
+    name: 'vanilla',
+    display: 'Vanilla',
+    description: 'with playcanvas engine',
+    color: yellow,
+    variants: [
+      {
+        name: 'vanilla-ts',
+        display: 'TypeScript',
+        color: blue,
+      },
+    ],
+  },
+  {
     name: 'react',
-    display: '@playcanvas/react',
-    description: 'A @playcanvas/react project',
+    display: 'React',
+    description: 'with @playcanvas/react',
     color: cyan,
     variants: [
       {
@@ -24,7 +37,7 @@ export const FRAMEWORKS: Framework[] = [
         color: blue,
       },
     ],
-  },
+  }
 ]
 
 export const TEMPLATES = FRAMEWORKS.flatMap((f) => f.variants.map((v) => v.name)) 
