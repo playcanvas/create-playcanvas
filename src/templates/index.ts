@@ -14,8 +14,8 @@ const { blue, cyan } = colors
 export const FRAMEWORKS: Framework[] = [
   {
     name: 'react',
-    display: 'React',
-    description: 'A PlayCanvas React project',
+    display: '@playcanvas/react',
+    description: 'A @playcanvas/react project',
     color: cyan,
     variants: [
       {
