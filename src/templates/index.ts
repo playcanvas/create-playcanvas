@@ -1,4 +1,5 @@
 import colors from 'picocolors'
+const { blue, cyan } = colors
 
 /**
  * You can add new frameworks here.
@@ -11,6 +12,19 @@ import colors from 'picocolors'
  * 
  */
 export const FRAMEWORKS: Framework[] = [
+  {
+    name: 'react',
+    display: '@playcanvas/react',
+    description: 'A @playcanvas/react project',
+    color: cyan,
+    variants: [
+      {
+        name: 'react-ts',
+        display: 'TypeScript',
+        color: blue,
+      },
+    ],
+  },
 ]
 
 export const TEMPLATES = FRAMEWORKS.flatMap((f) => f.variants.map((v) => v.name)) 
