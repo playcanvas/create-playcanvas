@@ -13,6 +13,19 @@ const { blue, cyan } = colors
  */
 export const FRAMEWORKS: Framework[] = [
   {
+    name: 'vanilla',
+    display: 'Vanilla',
+    description: 'with playcanvas engine',
+    color: yellow,
+    variants: [
+      {
+        name: 'vanilla-ts',
+        display: 'TypeScript',
+        color: blue,
+      },
+    ],
+  },
+  {
     name: 'react',
     display: 'React',
     description: 'with @playcanvas/react',

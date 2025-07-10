@@ -1,0 +1,23 @@
+{
+  "name": "playcanvas-project",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "predev": "node ./scripts/ensure-node-version.cjs",
+    "dev": "vite",
+    "build": "tsc && vite build",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "playcanvas": "^2.8.2"
+  },
+  "devDependencies": {
+    "semver": "^7.7.2",
+    "typescript": "~5.8.3",
+    "vite": "^7.0.3"
+  },
+  "engines": {
+    "node": "^20.19.0 || >=22.12.0"
+  }
+}

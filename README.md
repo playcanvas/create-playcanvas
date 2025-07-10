@@ -1,10 +1,6 @@
 # Create a PlayCanvas project in seconds
 
-`create playcanvas` spins up a ready-to-code PlayCanvas workspace in seconds, complete with modern tooling and opinionated defaults. Pick a template, answer a few prompts (or skip them with flags) and you're ready to `npm run dev`.
-
-## 📦 Usage
-
-You don't install anything globally – just run the CLI with your favourite package manager:
+A simple one line command to sin up a read-to-code PlayCanvas project in seconds.
 
 ```bash
 # npm (recommended)
@@ -50,10 +46,10 @@ Flags:
 
 | Template     | Description                 |
 | ------------ | --------------------------- |
-| `vanilla`    | Plain JavaScript PlayCanvas |
-| `react-ts`   | React + TypeScript + Vite   |
+| `vanilla-ts` | Plain Typescript PlayCanvas |
+| `react-ts`   | React + TypeScript          |
 
-_To add your own template, drop a folder in `templates/<name>` and it will be auto-detected._
+_To add your own template, drop a folder in `templates/<name>` and update the `templates/index.js`
 
 ## 🛠 Development
 
