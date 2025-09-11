@@ -1,10 +1,11 @@
 {
-  "extends": ["config:base"],
-  "packageRules": [
-    {
-      "fileMatch": ["templates/.*/package\\.json$"],
-      "enabled": true,
-      "description": "Update dependencies in template package.json files"
-    }
-  ]
+"extends": ["config:recommended"],
+    "packageRules": [
+        {
+            "description": "Update dependencies in template package.json files",
+            "matchManagers": ["npm"],
+            "matchFileNames": ["^templates/.*/package\\.json$"],
+            "labels": ["templates"]
+        }
+    ]
 }
