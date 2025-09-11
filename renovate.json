@@ -1,0 +1,10 @@
+{
+  "extends": ["config:base"],
+  "packageRules": [
+    {
+      "fileMatch": ["templates/.*/package\\.json$"],
+      "enabled": true,
+      "description": "Update dependencies in template package.json files"
+    }
+  ]
+}
