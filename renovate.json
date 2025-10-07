@@ -1,11 +1,27 @@
 {
-"extends": ["config:recommended"],
-    "packageRules": [
-        {
-            "description": "Update dependencies in template package.json files",
-            "matchManagers": ["npm"],
-            "matchFileNames": ["^templates/.*/package\\.json$"],
-            "labels": ["templates"]
-        }
-    ]
+  "extends": ["config:recommended"],
+  "packageRules": [
+    {
+      "description": "Batch RUNTIME deps in templates",
+      "matchManagers": ["npm"],
+      "matchFileNames": ["^templates/.*/package\\.json$"],
+      "matchDepTypes": ["dependencies", "optionalDependencies"],
+      "groupName": "Template runtime deps",
+      "groupSlug": "templates-runtime",
+      "separateMajorMinor": false,
+      "separateMinorPatch": false,
+      "labels": ["templates", "runtime"]
+    },
+    {
+      "description": "Batch DEV deps in templates",
+      "matchManagers": ["npm"],
+      "matchFileNames": ["^templates/.*/package\\.json$"],
+      "matchDepTypes": ["devDependencies"],
+      "groupName": "Template dev deps",
+      "groupSlug": "templates-dev",
+      "separateMajorMinor": false,
+      "separateMinorPatch": false,
+      "labels": ["templates", "dev"]
+    }
+  ]
 }
