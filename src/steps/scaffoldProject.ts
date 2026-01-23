@@ -28,11 +28,17 @@ export async function scaffoldProject(opts: Options): Promise<void> {
 
   prompts.log.step(`Creating project in ${root}...`)
 
-  // Locate template dir relative to this file
-  const templateDir = path.resolve(
-    fileURLToPath(import.meta.url),
-    `../../../templates/${template}`,
-  )
+  // Locate template dir - works in both dev (src/steps/) and prod (dist/)
+  const __filename = fileURLToPath(import.meta.url)
+  const __dirname = path.dirname(__filename)
+  const possiblePaths = [
+    path.resolve(__dirname, '../../templates', template),    // prod: dist/index.mjs
+    path.resolve(__dirname, '../../../templates', template), // dev: src/steps/scaffoldProject.ts
+  ]
+  const templateDir = possiblePaths.find(p => fs.existsSync(p))
+  if (!templateDir) {
+    throw new Error(`Template directory not found for: ${template}`)
+  }
 
   // Helper to write/copy files
   const write = (file: string, content?: string) => {
