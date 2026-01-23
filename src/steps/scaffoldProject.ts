@@ -32,8 +32,8 @@ export async function scaffoldProject(opts: Options): Promise<void> {
   const __filename = fileURLToPath(import.meta.url)
   const __dirname = path.dirname(__filename)
   const possiblePaths = [
-    path.resolve(__dirname, '../../templates', template),    // prod: dist/index.mjs
-    path.resolve(__dirname, '../../../templates', template), // dev: src/steps/scaffoldProject.ts
+    path.resolve(__dirname, '../templates', template),   // prod: dist/index.mjs → ../templates
+    path.resolve(__dirname, '../../templates', template), // dev: src/steps/scaffoldProject.ts → ../../templates
   ]
   const templateDir = possiblePaths.find(p => fs.existsSync(p))
   if (!templateDir) {
