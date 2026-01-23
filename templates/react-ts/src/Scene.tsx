@@ -1,10 +1,11 @@
-// @ts-expect-error - ShadowCatcher is not typed
+// @ts-expect-error - PlayCanvas ESM scripts don't have type declarations
+import { CameraControls } from "playcanvas/scripts/esm/camera-controls.mjs";
+// @ts-expect-error - PlayCanvas ESM scripts don't have type declarations
 import { Grid } from "playcanvas/scripts/esm/grid.mjs";
 import { useEffect, useState } from "react";
 import { Entity } from "@playcanvas/react";
 import { useEnvAtlas, useMaterial } from "@playcanvas/react/hooks";
-import { Camera, EnvAtlas, Render, Script } from "@playcanvas/react/components";
-import { OrbitControls } from "@playcanvas/react/scripts";
+import { Camera, Environment, Render, Script } from "@playcanvas/react/components";
 
 /**
  * The Scene renders a sphere with a grid and camera controls
@@ -15,7 +16,7 @@ function Scene({ onClick }: SceneProps) {
   const [hovering, setHovering] = useState(false);
 
   // Set a material color based on the hover state
-  const diffuse =  hovering ? '#ffffff' : '#dddddd';
+  const diffuse =  hovering ? 'orange' : 'lightgrey';
 
   // Create a material for the sphere
   const material = useMaterial({ diffuse });
@@ -34,7 +35,7 @@ function Scene({ onClick }: SceneProps) {
   return (
     <>
       {/* Render some environment lighting using the environment map */}
-      <EnvAtlas asset={envMap} showSkybox={false} />
+      <Environment envAtlas={envMap} showSkybox={false} />
 
       {/* Render a background grid */}
       <Entity scale={[1000, 1000, 1000]}>
@@ -44,13 +45,12 @@ function Scene({ onClick }: SceneProps) {
       {/* Create a camera entity with orbit controls */}
       <Entity name='camera' position={[4, 1, 4]}>
           <Camera clearColor='#171717' />
-          <OrbitControls />
+          <Script script={CameraControls} />
       </Entity>
 
       {/* Create and position entity with pointer events */}
       <Entity 
-        position={[0, 2, 0]} 
-        scale={[4, 4, 4]} 
+        position={[0, 0.5, 0]}
         onClick={onClick}
         onPointerOver={() => setHovering(true)}
         onPointerOut={() => setHovering(false)}
