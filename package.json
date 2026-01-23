@@ -1,6 +1,6 @@
 {
   "name": "create-playcanvas",
-  "author": "Mark Lundin",
+  "author": "PlayCanvas <support@playcanvas.com>",
   "version": "0.2.0",
   "description": "Scaffold a PlayCanvas project",
   "type": "module",
