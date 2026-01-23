@@ -131,3 +131,10 @@ button:focus-visible {
   top: 0;
   left: 0;
 }
+
+.pill {
+  background-color: #000;
+  color: #fff;
+  padding: 0.5rem 1rem;
+  border-radius: 0.5rem;
+}

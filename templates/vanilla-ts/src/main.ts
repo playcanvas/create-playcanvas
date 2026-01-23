@@ -2,7 +2,8 @@ import './style.css'
 import typescriptLogo from './assets/typescript.svg'
 import playcanvasLogo from './assets/playcanvas.png'
 import { setupApp } from './App'
-import { setupCounter } from './counter'
+
+let count = 0;
 
 document.querySelector<HTMLDivElement>('#root')!.innerHTML = `
   <div>
@@ -20,17 +21,25 @@ document.querySelector<HTMLDivElement>('#root')!.innerHTML = `
         </header>
       </div>
       <div>
-        <div class="card">
-          <button id="counter" type="button"></button>
-        </div>
-        <p class="read-the-docs">
-          Click on the Vite and TypeScript logos to learn more
+        <span id="counter" class="pill">
+          Click Count: ${count}
+        </span>
+        <p>
+          Edit <code>src/App.ts</code> and save to test HMR
         </p>
       </div>
+      <p class="read-the-docs">
+        Click on the PlayCanvas and TypeScript logos to learn more
+      </p>
     </div>
   </div>
 `
 
-const increment = setupCounter(document.getElementById('counter') as HTMLButtonElement);
+const counterElement = document.getElementById('counter')!;
 
-setupApp(document.getElementById('application-canvas') as HTMLCanvasElement, () => increment());
+const increment = () => {
+  count++;
+  counterElement.textContent = `Click Count: ${count}`;
+};
+
+setupApp(document.getElementById('application-canvas') as HTMLCanvasElement, increment);

@@ -29,7 +29,7 @@ function App() {
         </div>
         <div>
           <span className="pill">
-            count is {count}
+            Click Count: {count}
           </span>
           <p>
             Edit <code>src/Scene.tsx</code> and save to test HMR
