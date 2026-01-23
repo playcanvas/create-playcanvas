@@ -34,7 +34,6 @@ import { CameraControls } from 'playcanvas/scripts/esm/camera-controls.mjs';
 
 import { throttle } from './utils';
 
-// Colors matching the React template
 const HOVER_COLOR = new Color(1, 0.647, 0);
 const DEFAULT_COLOR = new Color(0.827, 0.827, 0.827);
 
@@ -43,7 +42,6 @@ const DEFAULT_COLOR = new Color(0.827, 0.827, 0.827);
  */
 async function loadEnvironment(app: AppBase, url: string): Promise<void> {
   return new Promise((resolve, reject) => {
-    // Match React's useEnvAtlas settings for proper RGBP decoding
     const asset = new Asset('env-atlas', 'texture', { url }, {
       type: TEXTURETYPE_RGBP,
       mipmaps: false
@@ -129,7 +127,7 @@ async function setupApp(canvas: HTMLCanvasElement, onClick: () => void) {
   });
   app.root.addChild(sphere);
 
-  // Create camera entity (matching React template position)
+  // Create camera entity
   const camera = new Entity('camera');
   camera.addComponent('camera', {
     clearColor: new Color(0.09, 0.09, 0.09)
