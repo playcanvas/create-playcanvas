@@ -4,6 +4,10 @@
   "author": "PlayCanvas <support@playcanvas.com>",
   "homepage": "https://github.com/playcanvas/create-playcanvas#readme",
   "description": "Scaffold a PlayCanvas project",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/playcanvas/create-playcanvas.git"
+  },
   "keywords": [
     "playcanvas",
     "create",
