@@ -70,6 +70,10 @@ header {
   pointer-events: none;
 }
 
+.overlay a {
+  pointer-events: auto;
+}
+
 .overlay > .grow {
   flex-grow: 1;
 }
