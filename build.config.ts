@@ -1,5 +1,3 @@
-import path from 'node:path'
-import url from 'node:url'
 import { defineBuildConfig } from 'unbuild'
 
 export default defineBuildConfig({
