@@ -1,6 +1,6 @@
 {
   "name": "create-playcanvas",
-  "version": "0.2.4",
+  "version": "0.2.5",
   "author": "PlayCanvas <support@playcanvas.com>",
   "homepage": "https://github.com/playcanvas/create-playcanvas#readme",
   "description": "Scaffold a PlayCanvas project",
