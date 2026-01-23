@@ -72,7 +72,7 @@ Run `npm run build` to generate a static production bundle in `dist/`. Deploy th
 ## Further Reading
 
 * [PlayCanvas Engine Docs](https://developer.playcanvas.com)
-* [PlayCanvas React Docs](https://playcanvas-react.vercel.app)
+* [PlayCanvas React Docs](https://developer.playcanvas.com/user-manual/react/)
 * [React Docs](https://react.dev/)
 * [Vite Docs](https://vitejs.dev/)
 * [TypeScript Handbook](https://www.typescriptlang.org/docs/)
