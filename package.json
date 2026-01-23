@@ -1,8 +1,22 @@
 {
   "name": "create-playcanvas",
-  "author": "PlayCanvas <support@playcanvas.com>",
   "version": "0.2.1",
+  "author": "PlayCanvas <support@playcanvas.com>",
+  "homepage": "https://github.com/playcanvas/create-playcanvas#readme",
   "description": "Scaffold a PlayCanvas project",
+  "keywords": [
+    "playcanvas",
+    "create",
+    "scaffold",
+    "template",
+    "vite",
+    "react",
+    "typescript",
+    "webgl",
+    "webgpu",
+    "game",
+    "3d"
+  ],
   "type": "module",
   "bin": {
     "create-playcanvas": "index.js"
@@ -29,8 +43,5 @@
   },
   "engines": {
     "node": "^18.0.0 || ^20.0.0 || >=22.0.0"
-  },
-  "dependencies": {
-    "node-fetch": "^3.3.2"
   }
 }
