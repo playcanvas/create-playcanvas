@@ -1,5 +1,4 @@
 import {
-  DEVICETYPE_WEBGL2,
   createGraphicsDevice,
   AppBase,
   AppOptions,
@@ -22,7 +21,7 @@ import {
   StandardMaterial,
   Layer,
   Asset,
-  Texture,
+  AssetListLoader,
   TEXTURETYPE_RGBP
 } from 'playcanvas';
 
@@ -37,32 +36,13 @@ import { throttle } from './utils';
 const HOVER_COLOR = new Color(1, 0.647, 0);
 const DEFAULT_COLOR = new Color(0.827, 0.827, 0.827);
 
-/**
- * Load the environment map and apply it to the scene for image-based lighting
- */
-async function loadEnvironment(app: AppBase, url: string): Promise<void> {
-  return new Promise((resolve, reject) => {
-    const asset = new Asset('env-atlas', 'texture', { url }, {
-      type: TEXTURETYPE_RGBP,
-      mipmaps: false
-    });
-    asset.on('load', () => {
-      // Set the environment atlas for image-based lighting
-      app.scene.envAtlas = asset.resource as Texture;
-
-      // Disable the skybox layer (we only want IBL, not the skybox visual)
-      const skyboxLayer = app.scene.layers.getLayerByName('Skybox');
-      if (skyboxLayer) {
-        skyboxLayer.enabled = false;
-      }
-
-      resolve();
-    });
-    asset.on('error', reject);
-    app.assets.add(asset);
-    app.assets.load(asset);
-  });
-}
+// Assets to load
+const assets = {
+  envAtlas: new Asset('env-atlas', 'texture', { url: '/environment-map.png' }, {
+    type: TEXTURETYPE_RGBP,
+    mipmaps: false
+  })
+};
 
 /**
  * Setup the PlayCanvas app
@@ -76,9 +56,7 @@ async function setupApp(canvas: HTMLCanvasElement, onClick: () => void) {
   }
 
   // Create graphics device
-  const device = await createGraphicsDevice(canvas, {
-    deviceTypes: [DEVICETYPE_WEBGL2],
-  });
+  const device = await createGraphicsDevice(canvas);
 
   // Create app options
   const createOptions = new AppOptions();
@@ -95,7 +73,6 @@ async function setupApp(canvas: HTMLCanvasElement, onClick: () => void) {
   // Create app
   const app = new AppBase(canvas);
   app.init(createOptions);
-  app.start();
 
   // Set the canvas to fill the window
   app.setCanvasFillMode(FILLMODE_FILL_WINDOW);
@@ -105,12 +82,23 @@ async function setupApp(canvas: HTMLCanvasElement, onClick: () => void) {
   const resize = () => app.resizeCanvas();
   window.addEventListener('resize', resize);
 
-  app.on('destroy', () => {
+  app.once('destroy', () => {
     window.removeEventListener('resize', resize);
   });
 
-  // Load environment map
-  await loadEnvironment(app, '/environment-map.png');
+  // Load assets
+  await new Promise<void>((resolve) => {
+    new AssetListLoader(Object.values(assets), app.assets).load(() => resolve());
+  });
+
+  app.start();
+
+  // Set up environment lighting (no skybox, just IBL)
+  app.scene.envAtlas = assets.envAtlas.resource;
+  const skyboxLayer = app.scene.layers.getLayerByName('Skybox');
+  if (skyboxLayer) {
+    skyboxLayer.enabled = false;
+  }
 
   // Create sphere entity
   const sphere = new Entity('sphere');
