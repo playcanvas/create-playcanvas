@@ -16,7 +16,7 @@ function Scene({ onClick }: SceneProps) {
   const [hovering, setHovering] = useState(false);
 
   // Set a material color based on the hover state
-  const diffuse =  hovering ? 'orange' : 'lightgrey';
+  const diffuse = hovering ? 'orange' : 'lightgrey';
 
   // Create a material for the sphere
   const material = useMaterial({ diffuse });
@@ -42,7 +42,7 @@ function Scene({ onClick }: SceneProps) {
         <Script script={Grid} />
       </Entity>
 
-      {/* Create a camera entity with orbit controls */}
+      {/* Create a camera entity with camera controls */}
       <Entity name='camera' position={[4, 1, 4]}>
           <Camera clearColor='#171717' />
           <Script script={CameraControls} />
