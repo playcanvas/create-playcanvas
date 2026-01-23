@@ -19,7 +19,7 @@ function App() {
         <div className="grow">
           <header>
             <h1>PlayCanvas + React</h1>
-            <a href="https://playcanvas-react.vercel.app/docs" target="_blank">
+            <a href="https://developer.playcanvas.com/user-manual/react/" target="_blank">
               <img src={playcanvasLogo} className="playcanvas-logo logo" alt="PlayCanvas logo" />
             </a>
             <a href="https://react.dev" target="_blank">
