@@ -17,7 +17,7 @@ export async function getPackageName({
       defaultValue: toValidPackageName(packageName),
       placeholder: toValidPackageName(packageName),
       validate(dir) {
-        if (!isValidPackageName(dir)) {
+        if (!dir || !isValidPackageName(dir)) {
           return 'Invalid package.json name'
         }
       },
