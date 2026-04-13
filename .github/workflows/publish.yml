@@ -20,7 +20,7 @@ jobs:
       - name: Set up Node.js
         uses: actions/setup-node@v6
         with:
-          node-version: 24.x
+          node-version: 24.14.1
           cache: "npm"
           registry-url: "https://registry.npmjs.org/"
 
@@ -36,7 +36,7 @@ jobs:
         run: npm publish --provenance
 
       - name: Create GitHub Release
-        uses: softprops/action-gh-release@v2
+        uses: softprops/action-gh-release@v3
         with:
           generate_release_notes: true
           prerelease: false
