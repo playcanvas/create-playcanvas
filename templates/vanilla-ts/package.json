@@ -14,8 +14,8 @@
   },
   "devDependencies": {
     "semver": "^7.7.4",
-    "typescript": "~6.0.2",
-    "vite": "^8.0.8"
+    "typescript": "~6.0.3",
+    "vite": "^8.0.10"
   },
   "engines": {
     "node": "^20.19.0 || >=22.12.0"
