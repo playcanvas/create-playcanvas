@@ -34,13 +34,16 @@
     "dev": "unbuild --stub",
     "build": "unbuild",
     "typecheck": "tsc --noEmit",
+    "lint": "eslint .",
     "prepublishOnly": "npm run build"
   },
   "license": "MIT",
   "devDependencies": {
     "@clack/prompts": "^1.2.0",
+    "@playcanvas/eslint-config": "3.0.0-beta.6",
     "@types/node": "^25.6.0",
     "cross-spawn": "^7.0.6",
+    "eslint": "^9.39.0",
     "mri": "^1.2.0",
     "picocolors": "^1.1.1",
     "unbuild": "^3.6.1"
