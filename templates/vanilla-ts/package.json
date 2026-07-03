@@ -10,7 +10,7 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "playcanvas": "^2.17.2"
+    "playcanvas": "^2.20.5"
   },
   "devDependencies": {
     "semver": "^7.8.5",
