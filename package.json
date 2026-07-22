@@ -38,7 +38,7 @@
   },
   "license": "MIT",
   "devDependencies": {
-    "@clack/prompts": "^1.6.0",
+    "@clack/prompts": "^1.7.0",
     "@types/node": "^25.9.4",
     "cross-spawn": "^7.0.6",
     "mri": "^1.2.0",
