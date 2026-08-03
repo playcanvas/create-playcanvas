@@ -32,11 +32,11 @@ Skip the prompts when scripting or if you know what you want:
 npm create playcanvas@latest my-game -- -t react-ts --overwrite
 ```
 
-| Flag                | Shorthand | Description                                        |
-| ------------------- | --------- | -------------------------------------------------- |
-| `--template <name>` | `-t`      | Directly choose template variant (see list below)  |
-| `--overwrite`       |           | Remove existing files in target directory          |
-| `--help`            | `-h`      | Show help/usage information                        |
+| Flag                | Shorthand | Description                                       |
+| ------------------- | --------- | ------------------------------------------------- |
+| `--template <name>` | `-t`      | Directly choose template variant (see list below) |
+| `--overwrite`       |           | Remove existing files in target directory         |
+| `--help`            | `-h`      | Show help/usage information                       |
 
 ## Templates
 

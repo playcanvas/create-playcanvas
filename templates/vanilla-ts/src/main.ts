@@ -1,7 +1,7 @@
-import './style.css'
-import typescriptLogo from './assets/typescript.svg'
-import playcanvasLogo from './assets/playcanvas.png'
-import { setupApp } from './App'
+import './style.css';
+import typescriptLogo from './assets/typescript.svg';
+import playcanvasLogo from './assets/playcanvas.png';
+import { setupApp } from './App';
 
 let count = 0;
 
@@ -33,13 +33,13 @@ document.querySelector<HTMLDivElement>('#root')!.innerHTML = `
       </p>
     </div>
   </div>
-`
+`;
 
 const counterElement = document.getElementById('counter')!;
 
 const increment = () => {
-  count++;
-  counterElement.textContent = `Click Count: ${count}`;
+    count++;
+    counterElement.textContent = `Click Count: ${count}`;
 };
 
 setupApp(document.getElementById('application-canvas') as HTMLCanvasElement, increment);

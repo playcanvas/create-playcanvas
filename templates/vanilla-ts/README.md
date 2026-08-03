@@ -2,16 +2,16 @@
 
 A modern, batteries-included starter for building WebGL/PlayCanvas experiences with TypeScript.
 
-* **PlayCanvas** `^2.8.2` – high-performance WebGL engine
-* **Vite** `^7` – ultra-fast dev server & bundler with HMR
-* **TypeScript** `~5.8` – static typing out-of-the-box
-* **ESLint** `^9` – linting with recommended TypeScript rules
+- **PlayCanvas** `^2.8.2` – high-performance WebGL engine
+- **Vite** `^7` – ultra-fast dev server & bundler with HMR
+- **TypeScript** `~5.8` – static typing out-of-the-box
+- **ESLint** `^9` – linting with recommended TypeScript rules
 
 ---
 
 ## Prerequisites
 
-* **Node.js ≥ 20.19.0** (or ≥ 22.12.0). Use [nvm](https://github.com/nvm-sh/nvm) to install/switch:
+- **Node.js ≥ 20.19.0** (or ≥ 22.12.0). Use [nvm](https://github.com/nvm-sh/nvm) to install/switch:
 
 ```bash
 nvm install 22 # or 20.19+
@@ -42,12 +42,12 @@ Open <http://localhost:5173> to view the app. Any file changes trigger instant r
 
 ## Scripts
 
-| Command            | Description                          |
-|--------------------|--------------------------------------|
-| `npm run dev`      | Start Vite dev server with HMR       |
-| `npm run build`    | Type-check & bundle for production   |
-| `npm run preview`  | Preview the production build locally |
-| `npm run lint`     | Run ESLint over the codebase         |
+| Command           | Description                          |
+| ----------------- | ------------------------------------ |
+| `npm run dev`     | Start Vite dev server with HMR       |
+| `npm run build`   | Type-check & bundle for production   |
+| `npm run preview` | Preview the production build locally |
+| `npm run lint`    | Run ESLint over the codebase         |
 
 ---
 
@@ -68,22 +68,22 @@ Open <http://localhost:5173> to view the app. Any file changes trigger instant r
 ### `PlayCanvasCanvas.tsx` (concept)
 
 ```tsx
-import { useEffect, useRef } from 'react'
-import * as pc from 'playcanvas'
+import { useEffect, useRef } from 'react';
+import * as pc from 'playcanvas';
 
 export default function PlayCanvasCanvas() {
-  const canvasRef = useRef<HTMLCanvasElement>(null)
+    const canvasRef = useRef<HTMLCanvasElement>(null);
 
-  useEffect(() => {
-    const canvas = canvasRef.current!
-    const app = new pc.Application(canvas, {})
-    app.start()
-    // demo scene setup here…
+    useEffect(() => {
+        const canvas = canvasRef.current!;
+        const app = new pc.Application(canvas, {});
+        app.start();
+        // demo scene setup here…
 
-    return () => app.destroy() // cleanup on unmount
-  }, [])
+        return () => app.destroy(); // cleanup on unmount
+    }, []);
 
-  return <canvas ref={canvasRef} style={{ width: '100%', height: '100%' }} />
+    return <canvas ref={canvasRef} style={{ width: '100%', height: '100%' }} />;
 }
 ```
 
@@ -105,9 +105,9 @@ Run `npm run build` to generate a static production bundle in `dist/`. Deploy th
 
 ## Further Reading
 
-* [PlayCanvas Engine Docs](https://developer.playcanvas.com/en/api/)
-* [Vite Docs](https://vitejs.dev/)
-* [TypeScript Handbook](https://www.typescriptlang.org/docs/)
+- [PlayCanvas Engine Docs](https://developer.playcanvas.com/en/api/)
+- [Vite Docs](https://vitejs.dev/)
+- [TypeScript Handbook](https://www.typescriptlang.org/docs/)
 
 ---
 

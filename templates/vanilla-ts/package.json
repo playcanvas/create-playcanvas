@@ -1,23 +1,23 @@
 {
-  "name": "playcanvas-project",
-  "private": true,
-  "version": "0.0.0",
-  "type": "module",
-  "scripts": {
-    "predev": "node ./scripts/ensure-node-version.cjs",
-    "dev": "vite",
-    "build": "tsc && vite build",
-    "preview": "vite preview"
-  },
-  "dependencies": {
-    "playcanvas": "^2.21.3"
-  },
-  "devDependencies": {
-    "semver": "^7.8.5",
-    "typescript": "~7.0.2",
-    "vite": "^8.1.5"
-  },
-  "engines": {
-    "node": "^20.19.0 || >=22.12.0"
-  }
+    "name": "playcanvas-project",
+    "private": true,
+    "version": "0.0.0",
+    "type": "module",
+    "scripts": {
+        "predev": "node ./scripts/ensure-node-version.cjs",
+        "dev": "vite",
+        "build": "tsc && vite build",
+        "preview": "vite preview"
+    },
+    "dependencies": {
+        "playcanvas": "^2.21.3"
+    },
+    "devDependencies": {
+        "semver": "^7.8.5",
+        "typescript": "~7.0.2",
+        "vite": "^8.1.5"
+    },
+    "engines": {
+        "node": "^20.19.0 || >=22.12.0"
+    }
 }
