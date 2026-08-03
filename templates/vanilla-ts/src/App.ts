@@ -23,9 +23,7 @@ import {
     AssetListLoader,
     TEXTURETYPE_RGBP
 } from 'playcanvas';
-// @ts-expect-error - PlayCanvas ESM scripts don't have type declarations
 import { CameraControls } from 'playcanvas/scripts/esm/camera-controls.mjs';
-// @ts-expect-error - PlayCanvas ESM scripts don't have type declarations
 import { Grid } from 'playcanvas/scripts/esm/grid.mjs';
 
 import { throttle } from './utils';
