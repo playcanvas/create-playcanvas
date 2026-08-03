@@ -6,7 +6,6 @@
     "type": "module",
     "scripts": {
         "build": "tsc && vite build",
-        "predev": "node ./scripts/ensure-node-version.cjs",
         "dev": "vite",
         "fmt": "prettier --check .",
         "fmt:fix": "prettier --write .",
@@ -21,7 +20,6 @@
         "@playcanvas/eslint-config": "3.0.0-beta.8",
         "eslint": "^9.39.5",
         "prettier": "^3.9.6",
-        "semver": "^7.8.5",
         "typescript": "~6.0.3",
         "vite": "^8.2.0"
     },

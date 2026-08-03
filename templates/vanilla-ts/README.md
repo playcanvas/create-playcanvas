@@ -33,8 +33,6 @@ Open <http://localhost:5173>. Edit `src/App.ts` to test hot module replacement.
 .
 ├── public/
 │   └── environment-map.png
-├── scripts/
-│   └── ensure-node-version.cjs
 ├── src/
 │   ├── assets/
 │   ├── App.ts

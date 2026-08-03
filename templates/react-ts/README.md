@@ -33,8 +33,6 @@ Open <http://localhost:5173>. Edit `src/Scene.tsx` to test hot module replacemen
 .
 ├── public/
 │   └── environment-map.png
-├── scripts/
-│   └── ensure-node-version.cjs
 ├── src/
 │   ├── assets/
 │   ├── App.tsx
