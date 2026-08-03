@@ -37,7 +37,6 @@
         "fmt:fix": "prettier --write .",
         "lint": "eslint .",
         "lint:fix": "eslint . --fix",
-        "prepublishOnly": "npm run build",
         "typecheck": "tsc --noEmit"
     },
     "devDependencies": {
