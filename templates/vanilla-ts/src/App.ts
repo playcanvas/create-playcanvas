@@ -49,7 +49,7 @@ const assets = {
  * @param canvas - The canvas element
  * @param onClick - The function to call when the user clicks on the sphere
  */
-async function setupApp(canvas: HTMLCanvasElement, onClick: () => void) {
+const setupApp = async (canvas: HTMLCanvasElement, onClick: () => void) => {
     if (!canvas) {
         throw new Error('Canvas not found');
     }
@@ -133,7 +133,7 @@ async function setupApp(canvas: HTMLCanvasElement, onClick: () => void) {
     const picker = new Picker(app, 1, 1);
     const worldLayer = app.scene.layers.getLayerByName('World');
 
-    const intersectsSphere = (x: number, y: number, layer: Layer): Promise<boolean> => {
+    const intersectsSphere = (x: number, y: number, layer: Layer) => {
         if (!camera.camera) {
             return Promise.resolve(false);
         }
@@ -175,6 +175,6 @@ async function setupApp(canvas: HTMLCanvasElement, onClick: () => void) {
             }
         });
     });
-}
+};
 
 export { setupApp };

@@ -4,7 +4,7 @@ export type PkgInfo = {
 };
 
 // Build the full custom command based on the detected package manager
-export function getFullCustomCommand(customCommand: string, pkgInfo?: PkgInfo): string {
+export const getFullCustomCommand = (customCommand: string, pkgInfo?: PkgInfo) => {
     const pkgManager = pkgInfo ? pkgInfo.name : 'npm';
     const isYarn1 = pkgManager === 'yarn' && pkgInfo?.version.startsWith('1.');
 
@@ -36,4 +36,4 @@ export function getFullCustomCommand(customCommand: string, pkgInfo?: PkgInfo): 
                 return 'npm exec';
             })
     );
-}
+};

@@ -4,13 +4,7 @@ import * as prompts from '@clack/prompts';
 
 import { isValidPackageName, toValidPackageName } from '../utils.js';
 
-export async function getPackageName({
-    targetDir,
-    cancel
-}: {
-    targetDir: string;
-    cancel: () => never;
-}): Promise<string> {
+export const getPackageName = async ({ targetDir, cancel }: { targetDir: string; cancel: () => never }) => {
     let packageName = path.basename(path.resolve(targetDir));
 
     if (!isValidPackageName(packageName)) {
@@ -18,7 +12,7 @@ export async function getPackageName({
             message: 'Package name:',
             defaultValue: toValidPackageName(packageName),
             placeholder: toValidPackageName(packageName),
-            validate(dir) {
+            validate: (dir) => {
                 if (!dir || !isValidPackageName(dir)) {
                     return 'Invalid package.json name';
                 }
@@ -29,4 +23,4 @@ export async function getPackageName({
     }
 
     return packageName;
-}
+};

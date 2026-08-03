@@ -1,6 +1,6 @@
 import * as prompts from '@clack/prompts';
 
-export async function chooseTemplate({
+export const chooseTemplate = async ({
     argTemplate,
     FRAMEWORKS,
     TEMPLATES,
@@ -14,7 +14,7 @@ export async function chooseTemplate({
     pkgInfo?: PkgInfo;
     getFullCustomCommand: (customCommand: string, pkgInfo?: PkgInfo) => string;
     cancel: () => never;
-}): Promise<string> {
+}) => {
     let template = argTemplate;
     let hasInvalidArgTemplate = false;
 
@@ -58,7 +58,7 @@ export async function chooseTemplate({
     }
 
     return template!;
-}
+};
 
 // Types replicated locally to avoid cross-file dependencies
 export type ColorFunc = (str: string | number) => string;

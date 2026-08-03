@@ -17,7 +17,7 @@ type Options = {
     pkgInfo?: PkgInfo;
 };
 
-export async function scaffoldProject(opts: Options): Promise<void> {
+export const scaffoldProject = async (opts: Options) => {
     const { cwd, targetDir, template, packageName, renameFiles, pkgInfo } = opts;
 
     const root = path.join(cwd, targetDir);
@@ -84,4 +84,4 @@ export async function scaffoldProject(opts: Options): Promise<void> {
             break;
     }
     prompts.outro(doneMessage);
-}
+};

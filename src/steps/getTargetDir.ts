@@ -2,7 +2,7 @@ import * as prompts from '@clack/prompts';
 
 import { formatTargetDir } from '../utils/fs.js';
 
-export async function getTargetDir({
+export const getTargetDir = async ({
     argTargetDir,
     defaultTargetDir,
     cancel
@@ -10,7 +10,7 @@ export async function getTargetDir({
     argTargetDir?: string;
     defaultTargetDir: string;
     cancel: () => never;
-}): Promise<string> {
+}) => {
     let targetDir = argTargetDir ? formatTargetDir(String(argTargetDir)) : undefined;
 
     if (!targetDir) {
@@ -27,4 +27,4 @@ export async function getTargetDir({
     }
 
     return targetDir!;
-}
+};

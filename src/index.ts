@@ -12,7 +12,6 @@ import { handleExistingDir } from './steps/handleExistingDir.js';
 import { scaffoldProject } from './steps/scaffoldProject.js';
 import { formatTargetDir } from './utils/fs.js';
 import { getFullCustomCommand } from './utils/packageManager.js';
-import type { PkgInfo } from './utils/packageManager.js';
 
 // Step helpers
 
@@ -47,7 +46,7 @@ const renameFiles: Record<string, string | undefined> = {
 
 const defaultTargetDir = 'playcanvas-project';
 
-async function init() {
+const init = async () => {
     const argTargetDir = argv._[0] ? formatTargetDir(String(argv._[0])) : undefined;
     const argTemplate = argv.template;
     const argOverwrite = argv.overwrite;
@@ -89,9 +88,9 @@ async function init() {
         renameFiles,
         pkgInfo
     });
-}
+};
 
-function pkgFromUserAgent(userAgent: string | undefined): PkgInfo | undefined {
+const pkgFromUserAgent = (userAgent: string | undefined) => {
     if (!userAgent) return undefined;
     const pkgSpec = userAgent.split(' ')[0];
     const pkgSpecArr = pkgSpec.split('/');
@@ -99,7 +98,7 @@ function pkgFromUserAgent(userAgent: string | undefined): PkgInfo | undefined {
         name: pkgSpecArr[0],
         version: pkgSpecArr[1]
     };
-}
+};
 
 init().catch((e) => {
     console.error(e);

@@ -4,7 +4,7 @@
  * @param interval - The interval in milliseconds
  * @returns A throttled function
  */
-export function throttle<T extends unknown[]>(fn: (...args: T) => void, interval = 100) {
+export const throttle = <T extends unknown[]>(fn: (...args: T) => void, interval = 100) => {
     // interval in ms
     let last = 0;
     return (...args: T) => {
@@ -14,4 +14,4 @@ export function throttle<T extends unknown[]>(fn: (...args: T) => void, interval
             fn(...args);
         }
     };
-}
+};

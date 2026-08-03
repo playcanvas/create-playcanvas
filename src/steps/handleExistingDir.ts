@@ -4,7 +4,7 @@ import * as prompts from '@clack/prompts';
 
 import { isEmpty, emptyDir } from '../utils/fs.js';
 
-export async function handleExistingDir({
+export const handleExistingDir = async ({
     targetDir,
     argOverwrite,
     cancel
@@ -12,7 +12,7 @@ export async function handleExistingDir({
     targetDir: string;
     argOverwrite?: boolean;
     cancel: () => never;
-}): Promise<void> {
+}) => {
     if (fs.existsSync(targetDir) && !isEmpty(targetDir)) {
         const overwrite = argOverwrite
             ? 'yes'
@@ -38,4 +38,4 @@ export async function handleExistingDir({
                 return;
         }
     }
-}
+};

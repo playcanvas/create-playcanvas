@@ -8,11 +8,7 @@ import path from 'path';
  * @param {string} [prefix='VITE_'] - The prefix to add to environment variables.
  * @returns {Promise<void>}
  */
-export async function createEnvFile(
-    data: Record<string, unknown>,
-    outputPath: string,
-    prefix = 'VITE_'
-): Promise<void> {
+export const createEnvFile = async (data: Record<string, unknown>, outputPath: string, prefix = 'VITE_') => {
     const envContent = Object.entries(data)
         .map(([key, value]) => `${prefix}${key.toUpperCase()}=${JSON.stringify(value)}`)
         .join('\n');
@@ -20,4 +16,4 @@ export async function createEnvFile(
     const envPath = path.join(outputPath, '.env');
 
     await fs.writeFile(envPath, envContent, 'utf8');
-}
+};
