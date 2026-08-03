@@ -19,13 +19,14 @@ Open <http://localhost:5173>. Edit `src/App.ts` to test hot module replacement.
 
 ## Scripts
 
-| Command           | Description                         |
-| ----------------- | ----------------------------------- |
-| `npm run dev`     | Start the Vite development server   |
-| `npm run build`   | Type-check and build for production |
-| `npm run preview` | Preview the production build        |
-| `npm run lint`    | Run ESLint                          |
-| `npm run fmt`     | Check formatting                    |
+| Command             | Description                       |
+| ------------------- | --------------------------------- |
+| `npm run dev`       | Start the Vite development server |
+| `npm run build`     | Build for production              |
+| `npm run preview`   | Preview the production build      |
+| `npm run lint`      | Run ESLint                        |
+| `npm run fmt`       | Check formatting                  |
+| `npm run typecheck` | Run TypeScript checks             |
 
 ## Project structure
 

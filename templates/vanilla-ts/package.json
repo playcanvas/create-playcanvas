@@ -5,13 +5,14 @@
     "description": "A PlayCanvas TypeScript project",
     "type": "module",
     "scripts": {
-        "build": "tsc && vite build",
+        "build": "vite build",
         "dev": "vite",
         "fmt": "prettier --check .",
         "fmt:fix": "prettier --write .",
         "lint": "eslint .",
         "lint:fix": "eslint . --fix",
-        "preview": "vite preview"
+        "preview": "vite preview",
+        "typecheck": "tsc --noEmit"
     },
     "dependencies": {
         "playcanvas": "^2.21.3"
