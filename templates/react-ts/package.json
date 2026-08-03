@@ -5,14 +5,14 @@
     "description": "A PlayCanvas React project",
     "type": "module",
     "scripts": {
-        "build": "tsc -b && vite build",
-        "predev": "node ./scripts/ensure-node-version.cjs",
+        "build": "vite build",
         "dev": "vite",
         "fmt": "prettier --check .",
         "fmt:fix": "prettier --write .",
         "lint": "eslint .",
         "lint:fix": "eslint . --fix",
-        "preview": "vite preview"
+        "start": "vite preview",
+        "typecheck": "tsc --noEmit"
     },
     "dependencies": {
         "@playcanvas/react": "^0.11.5",
@@ -27,7 +27,6 @@
         "@vitejs/plugin-react": "^6.0.5",
         "eslint": "^9.39.5",
         "prettier": "^3.9.6",
-        "semver": "^7.8.5",
         "typescript": "~6.0.3",
         "vite": "^8.2.0"
     },

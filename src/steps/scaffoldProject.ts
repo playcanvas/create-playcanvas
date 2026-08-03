@@ -4,29 +4,21 @@ import { fileURLToPath } from 'node:url';
 
 import * as prompts from '@clack/prompts';
 
-import { createEnvFile } from '../utils/dotenv';
-import { copy } from '../utils/fs.js';
-import type { PkgInfo } from '../utils/packageManager.js';
-
 type Options = {
     cwd: string;
     targetDir: string;
     template: string;
     packageName: string;
     renameFiles: Record<string, string | undefined>;
-    pkgInfo?: PkgInfo;
 };
 
-export const scaffoldProject = async (opts: Options) => {
-    const { cwd, targetDir, template, packageName, renameFiles, pkgInfo } = opts;
+export const scaffoldProject = (opts: Options) => {
+    const { cwd, targetDir, template, packageName, renameFiles } = opts;
 
-    const root = path.join(cwd, targetDir);
+    const root = path.resolve(cwd, targetDir);
     fs.mkdirSync(root, { recursive: true });
 
-    // Generate a minimal .env file
-    await createEnvFile({}, root);
-
-    const pkgManager = pkgInfo ? pkgInfo.name : 'npm';
+    const pkgManager = process.env.npm_config_user_agent?.split('/')[0] ?? 'npm';
 
     prompts.log.step(`Creating project in ${root}...`);
 
@@ -42,33 +34,27 @@ export const scaffoldProject = async (opts: Options) => {
         throw new Error(`Template directory not found for: ${template}`);
     }
 
-    // Helper to write/copy files
     const write = (file: string, content?: string) => {
         const targetPath = path.join(root, renameFiles[file] ?? file);
-        if (content) {
+        if (content !== undefined) {
             fs.writeFileSync(targetPath, content);
         } else {
-            copy(path.join(templateDir, file), targetPath);
+            fs.cpSync(path.join(templateDir, file), targetPath, { recursive: true });
         }
     };
 
-    // Copy everything except package.json first
     const files = fs.readdirSync(templateDir);
     for (const file of files.filter((f) => f !== 'package.json')) {
         write(file);
     }
 
-    // Read / patch / write package.json
     const pkg = JSON.parse(fs.readFileSync(path.join(templateDir, 'package.json'), 'utf-8'));
 
     pkg.name = packageName;
     write('package.json', JSON.stringify(pkg, null, 4) + '\n');
 
-    // Final instructions
-    let doneMessage = '';
-    const cdProjectName = path.relative(cwd, root);
-
-    doneMessage += `Project created. Now run:\n`;
+    let doneMessage = 'Project created. Now run:\n';
+    const cdProjectName = path.isAbsolute(targetDir) ? root : path.relative(cwd, root);
 
     if (root !== cwd) {
         doneMessage += `\n  cd ${cdProjectName.includes(' ') ? `"${cdProjectName}"` : cdProjectName}`;

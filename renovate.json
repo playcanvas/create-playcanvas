@@ -27,6 +27,11 @@
             "allowedVersions": "<10.0.0"
         },
         {
+            "description": "Node.js updates are coordinated manually across PlayCanvas packages",
+            "matchPackageNames": ["node"],
+            "enabled": false
+        },
+        {
             "description": "typescript-eslint only supports TypeScript <6.1",
             "matchPackageNames": ["typescript"],
             "allowedVersions": "<6.1.0"

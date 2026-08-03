@@ -69,3 +69,49 @@ jobs:
 
             - name: Typecheck
               run: npm run typecheck
+
+    templates:
+        name: Template (${{ matrix.template }})
+        runs-on: ubuntu-latest
+        strategy:
+            matrix:
+                template: [vanilla-ts, react-ts]
+        steps:
+            - name: Check out code
+              uses: actions/checkout@v7
+
+            - name: Set up Node.js
+              uses: actions/setup-node@v7
+              with:
+                  node-version: 22.23.2
+                  cache: 'npm'
+                  registry-url: 'https://registry.npmjs.org/'
+
+            - name: Install dependencies
+              run: npm ci
+
+            - name: Build CLI
+              run: npm run build
+
+            - name: Scaffold template
+              run: node dist/index.mjs "$RUNNER_TEMP/${{ matrix.template }}" --template "${{ matrix.template }}"
+
+            - name: Install template dependencies
+              working-directory: ${{ runner.temp }}/${{ matrix.template }}
+              run: npm install
+
+            - name: Check template formatting
+              working-directory: ${{ runner.temp }}/${{ matrix.template }}
+              run: npm run fmt
+
+            - name: Lint template
+              working-directory: ${{ runner.temp }}/${{ matrix.template }}
+              run: npm run lint
+
+            - name: Typecheck template
+              working-directory: ${{ runner.temp }}/${{ matrix.template }}
+              run: npm run typecheck
+
+            - name: Build template
+              working-directory: ${{ runner.temp }}/${{ matrix.template }}
+              run: npm run build

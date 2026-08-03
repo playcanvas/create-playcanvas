@@ -3,25 +3,19 @@
 import * as prompts from '@clack/prompts';
 import mri from 'mri';
 
-import { FRAMEWORKS, TEMPLATES } from '../templates/index.js';
-
 import { chooseTemplate } from './steps/chooseTemplate.js';
 import { getPackageName } from './steps/getPackageName.js';
 import { getTargetDir } from './steps/getTargetDir.js';
 import { handleExistingDir } from './steps/handleExistingDir.js';
 import { scaffoldProject } from './steps/scaffoldProject.js';
 import { formatTargetDir } from './utils/fs.js';
-import { getFullCustomCommand } from './utils/packageManager.js';
-
-// Step helpers
 
 const argv = mri<{
     template?: string;
     help?: boolean;
     overwrite?: boolean;
-    delete: string;
 }>(process.argv.slice(2), {
-    alias: { h: 'help', t: 'template', d: 'delete' },
+    alias: { h: 'help', t: 'template' },
     boolean: ['help', 'overwrite'],
     string: ['template']
 });
@@ -31,13 +25,13 @@ const cwd = process.cwd();
 const helpMessage = `\
 Usage: npm create playcanvas@latest [OPTION]...
 
-Create a new PlayCanvas project in JavaScript or TypeScript.
+Create a new PlayCanvas project with TypeScript.
 With no arguments, start the CLI in interactive mode.
 
 Options:
   -t, --template NAME        use a specific template
+      --overwrite            remove existing files from a non-empty target directory
   -h, --help                 show help
-  -d, --delete               delete the project directory if it exists
 `;
 
 const renameFiles: Record<string, string | undefined> = {
@@ -57,49 +51,26 @@ const init = async () => {
         return;
     }
 
-    const pkgInfo = pkgFromUserAgent(process.env.npm_config_user_agent);
-    const cancel = () => prompts.cancel('Operation cancelled') as never;
+    const cancel = () => {
+        prompts.cancel('Operation cancelled');
+        process.exit(0);
+    };
 
-    // 1. Get project name and target dir
     const targetDir = await getTargetDir({ argTargetDir, defaultTargetDir, cancel });
-
-    // 2. Handle directory if exist and not empty
     await handleExistingDir({ targetDir, argOverwrite, cancel });
-
-    // 3. Get package name
     const packageName = await getPackageName({ targetDir, cancel });
+    const template = await chooseTemplate({ argTemplate, cancel });
 
-    // 4. Choose a framework and variant
-    const template = await chooseTemplate({
-        argTemplate,
-        FRAMEWORKS,
-        TEMPLATES,
-        pkgInfo,
-        getFullCustomCommand,
-        cancel
-    });
-
-    // 5. Scaffold project
     await scaffoldProject({
         cwd,
         targetDir,
         template,
         packageName,
-        renameFiles,
-        pkgInfo
+        renameFiles
     });
-};
-
-const pkgFromUserAgent = (userAgent: string | undefined) => {
-    if (!userAgent) return undefined;
-    const pkgSpec = userAgent.split(' ')[0];
-    const pkgSpecArr = pkgSpec.split('/');
-    return {
-        name: pkgSpecArr[0],
-        version: pkgSpecArr[1]
-    };
 };
 
 init().catch((e) => {
     console.error(e);
+    process.exitCode = 1;
 });
