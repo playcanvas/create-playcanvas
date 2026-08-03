@@ -1,30 +1,26 @@
-import path from 'node:path'
-import * as prompts from '@clack/prompts'
-import { isValidPackageName, toValidPackageName } from '../utils.js'
+import path from 'node:path';
 
-export async function getPackageName({
-  targetDir,
-  cancel,
-}: {
-  targetDir: string
-  cancel: () => never
-}): Promise<string> {
-  let packageName = path.basename(path.resolve(targetDir))
+import * as prompts from '@clack/prompts';
 
-  if (!isValidPackageName(packageName)) {
-    const packageNameResult = await prompts.text({
-      message: 'Package name:',
-      defaultValue: toValidPackageName(packageName),
-      placeholder: toValidPackageName(packageName),
-      validate(dir) {
-        if (!dir || !isValidPackageName(dir)) {
-          return 'Invalid package.json name'
-        }
-      },
-    })
-    if (prompts.isCancel(packageNameResult)) return cancel()
-    packageName = packageNameResult as string
-  }
+import { isValidPackageName, toValidPackageName } from '../utils.js';
 
-  return packageName
-} 
+export const getPackageName = async ({ targetDir, cancel }: { targetDir: string; cancel: () => never }) => {
+    let packageName = path.basename(path.resolve(targetDir));
+
+    if (!isValidPackageName(packageName)) {
+        const packageNameResult = await prompts.text({
+            message: 'Package name:',
+            defaultValue: toValidPackageName(packageName),
+            placeholder: toValidPackageName(packageName),
+            validate: (dir) => {
+                if (!dir || !isValidPackageName(dir)) {
+                    return 'Invalid package.json name';
+                }
+            }
+        });
+        if (prompts.isCancel(packageNameResult)) return cancel();
+        packageName = packageNameResult as string;
+    }
+
+    return packageName;
+};

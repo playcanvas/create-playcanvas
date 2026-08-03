@@ -1,51 +1,56 @@
 {
-  "name": "create-playcanvas",
-  "version": "0.2.6",
-  "author": "PlayCanvas <support@playcanvas.com>",
-  "homepage": "https://github.com/playcanvas/create-playcanvas#readme",
-  "description": "Scaffold a PlayCanvas project",
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/playcanvas/create-playcanvas.git"
-  },
-  "keywords": [
-    "playcanvas",
-    "create",
-    "scaffold",
-    "template",
-    "vite",
-    "react",
-    "typescript",
-    "webgl",
-    "webgpu",
-    "game",
-    "3d"
-  ],
-  "type": "module",
-  "bin": {
-    "create-playcanvas": "index.js"
-  },
-  "files": [
-    "index.js",
-    "templates",
-    "dist"
-  ],
-  "scripts": {
-    "dev": "unbuild --stub",
-    "build": "unbuild",
-    "typecheck": "tsc --noEmit",
-    "prepublishOnly": "npm run build"
-  },
-  "license": "MIT",
-  "devDependencies": {
-    "@clack/prompts": "^1.7.0",
-    "@types/node": "^25.9.5",
-    "cross-spawn": "^7.0.6",
-    "mri": "^1.2.0",
-    "picocolors": "^1.1.1",
-    "unbuild": "^3.6.1"
-  },
-  "engines": {
-    "node": "^18.0.0 || ^20.0.0 || >=22.0.0"
-  }
+    "name": "create-playcanvas",
+    "version": "0.2.6",
+    "description": "Scaffold a PlayCanvas project",
+    "keywords": [
+        "playcanvas",
+        "create",
+        "scaffold",
+        "template",
+        "vite",
+        "react",
+        "typescript",
+        "webgl",
+        "webgpu",
+        "game",
+        "3d"
+    ],
+    "homepage": "https://github.com/playcanvas/create-playcanvas#readme",
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/playcanvas/create-playcanvas.git"
+    },
+    "license": "MIT",
+    "author": "PlayCanvas <support@playcanvas.com>",
+    "type": "module",
+    "bin": {
+        "create-playcanvas": "dist/index.mjs"
+    },
+    "files": [
+        "templates",
+        "dist"
+    ],
+    "scripts": {
+        "build": "unbuild",
+        "dev": "unbuild --stub",
+        "fmt": "prettier --check .",
+        "fmt:fix": "prettier --write .",
+        "lint": "eslint .",
+        "lint:fix": "eslint . --fix",
+        "typecheck": "tsc --noEmit"
+    },
+    "devDependencies": {
+        "@clack/prompts": "^1.7.0",
+        "@playcanvas/eslint-config": "3.0.0-beta.8",
+        "@types/node": "22.x",
+        "cross-spawn": "^7.0.6",
+        "eslint": "^9.39.0",
+        "mri": "^1.2.0",
+        "picocolors": "^1.1.1",
+        "prettier": "^3.9.6",
+        "unbuild": "^3.6.1"
+    },
+    "engines": {
+        "node": ">=22.0.0"
+    }
 }

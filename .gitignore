@@ -10,6 +10,7 @@ out/
 .nuxt/
 
 # Environment variables
+.npmrc
 .env
 .env.local
 .env.development.local

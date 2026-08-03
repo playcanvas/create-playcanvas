@@ -4,7 +4,7 @@ A modern, batteries-included starter for building PlayCanvas experiences with Re
 
 ## Prerequisites
 
-* **Node.js ≥ 20.19.0** (or ≥ 22.12.0). Use [nvm](https://github.com/nvm-sh/nvm) to install/switch:
+- **Node.js ≥ 20.19.0** (or ≥ 22.12.0). Use [nvm](https://github.com/nvm-sh/nvm) to install/switch:
 
 ```bash
 nvm install 22 # or 20.19+
@@ -35,12 +35,12 @@ Open <http://localhost:5173> to view the app. Any file changes trigger instant r
 
 ## Scripts
 
-| Command            | Description                          |
-|--------------------|--------------------------------------|
-| `npm run dev`      | Start Vite dev server with HMR       |
-| `npm run build`    | Type-check & bundle for production   |
-| `npm run preview`  | Preview the production build locally |
-| `npm run lint`     | Run ESLint over the codebase         |
+| Command           | Description                          |
+| ----------------- | ------------------------------------ |
+| `npm run dev`     | Start Vite dev server with HMR       |
+| `npm run build`   | Type-check & bundle for production   |
+| `npm run preview` | Preview the production build locally |
+| `npm run lint`    | Run ESLint over the codebase         |
 
 ---
 
@@ -71,11 +71,11 @@ Run `npm run build` to generate a static production bundle in `dist/`. Deploy th
 
 ## Further Reading
 
-* [PlayCanvas Engine Docs](https://developer.playcanvas.com)
-* [PlayCanvas React Docs](https://developer.playcanvas.com/user-manual/react/)
-* [React Docs](https://react.dev/)
-* [Vite Docs](https://vitejs.dev/)
-* [TypeScript Handbook](https://www.typescriptlang.org/docs/)
+- [PlayCanvas Engine Docs](https://developer.playcanvas.com)
+- [PlayCanvas React Docs](https://developer.playcanvas.com/user-manual/react/)
+- [React Docs](https://react.dev/)
+- [Vite Docs](https://vitejs.dev/)
+- [TypeScript Handbook](https://www.typescriptlang.org/docs/)
 
 ---
 

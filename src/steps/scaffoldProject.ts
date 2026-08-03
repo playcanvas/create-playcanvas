@@ -1,87 +1,87 @@
-import fs from 'node:fs'
-import path from 'node:path'
-import { fileURLToPath } from 'node:url'
-import * as prompts from '@clack/prompts'
-import { copy } from '../utils/fs.js'
-import { createEnvFile } from '../utils/dotenv'
-import type { PkgInfo } from '../utils/packageManager.js'
+import fs from 'node:fs';
+import path from 'node:path';
+import { fileURLToPath } from 'node:url';
 
-interface Options {
-  cwd: string
-  targetDir: string
-  template: string
-  packageName: string
-  renameFiles: Record<string, string | undefined>
-  pkgInfo?: PkgInfo
-}
+import * as prompts from '@clack/prompts';
 
-export async function scaffoldProject(opts: Options): Promise<void> {
-  const { cwd, targetDir, template, packageName, renameFiles, pkgInfo } = opts
+import { createEnvFile } from '../utils/dotenv';
+import { copy } from '../utils/fs.js';
+import type { PkgInfo } from '../utils/packageManager.js';
 
-  const root = path.join(cwd, targetDir)
-  fs.mkdirSync(root, { recursive: true })
+type Options = {
+    cwd: string;
+    targetDir: string;
+    template: string;
+    packageName: string;
+    renameFiles: Record<string, string | undefined>;
+    pkgInfo?: PkgInfo;
+};
 
-  // Generate a minimal .env file
-  await createEnvFile({}, root)
+export const scaffoldProject = async (opts: Options) => {
+    const { cwd, targetDir, template, packageName, renameFiles, pkgInfo } = opts;
 
-  const pkgManager = pkgInfo ? pkgInfo.name : 'npm'
+    const root = path.join(cwd, targetDir);
+    fs.mkdirSync(root, { recursive: true });
 
-  prompts.log.step(`Creating project in ${root}...`)
+    // Generate a minimal .env file
+    await createEnvFile({}, root);
 
-  // Locate template dir - works in both dev (src/steps/) and prod (dist/)
-  const __filename = fileURLToPath(import.meta.url)
-  const __dirname = path.dirname(__filename)
-  const possiblePaths = [
-    path.resolve(__dirname, '../templates', template),   // prod: dist/index.mjs → ../templates
-    path.resolve(__dirname, '../../templates', template), // dev: src/steps/scaffoldProject.ts → ../../templates
-  ]
-  const templateDir = possiblePaths.find(p => fs.existsSync(p))
-  if (!templateDir) {
-    throw new Error(`Template directory not found for: ${template}`)
-  }
+    const pkgManager = pkgInfo ? pkgInfo.name : 'npm';
 
-  // Helper to write/copy files
-  const write = (file: string, content?: string) => {
-    const targetPath = path.join(root, renameFiles[file] ?? file)
-    if (content) {
-      fs.writeFileSync(targetPath, content)
-    } else {
-      copy(path.join(templateDir, file), targetPath)
+    prompts.log.step(`Creating project in ${root}...`);
+
+    // Locate template dir - works in both dev (src/steps/) and prod (dist/)
+    const __filename = fileURLToPath(import.meta.url);
+    const __dirname = path.dirname(__filename);
+    const possiblePaths = [
+        path.resolve(__dirname, '../templates', template), // prod: dist/index.mjs → ../templates
+        path.resolve(__dirname, '../../templates', template) // dev: src/steps/scaffoldProject.ts → ../../templates
+    ];
+    const templateDir = possiblePaths.find((p) => fs.existsSync(p));
+    if (!templateDir) {
+        throw new Error(`Template directory not found for: ${template}`);
     }
-  }
 
-  // Copy everything except package.json first
-  const files = fs.readdirSync(templateDir)
-  for (const file of files.filter((f) => f !== 'package.json')) {
-    write(file)
-  }
+    // Helper to write/copy files
+    const write = (file: string, content?: string) => {
+        const targetPath = path.join(root, renameFiles[file] ?? file);
+        if (content) {
+            fs.writeFileSync(targetPath, content);
+        } else {
+            copy(path.join(templateDir, file), targetPath);
+        }
+    };
 
-  // Read / patch / write package.json
-  const pkg = JSON.parse(
-    fs.readFileSync(path.join(templateDir, 'package.json'), 'utf-8')
-  );
+    // Copy everything except package.json first
+    const files = fs.readdirSync(templateDir);
+    for (const file of files.filter((f) => f !== 'package.json')) {
+        write(file);
+    }
 
-  pkg.name = packageName
-  write('package.json', JSON.stringify(pkg, null, 2) + '\n');
+    // Read / patch / write package.json
+    const pkg = JSON.parse(fs.readFileSync(path.join(templateDir, 'package.json'), 'utf-8'));
 
-  // Final instructions
-  let doneMessage = ''
-  const cdProjectName = path.relative(cwd, root);
+    pkg.name = packageName;
+    write('package.json', JSON.stringify(pkg, null, 4) + '\n');
 
-  doneMessage += `Project created. Now run:\n`;
+    // Final instructions
+    let doneMessage = '';
+    const cdProjectName = path.relative(cwd, root);
 
-  if (root !== cwd) {
-    doneMessage += `\n  cd ${cdProjectName.includes(' ') ? `"${cdProjectName}"` : cdProjectName}`
-  }
-  switch (pkgManager) {
-    case 'yarn':
-      doneMessage += '\n  yarn'
-      doneMessage += '\n  yarn dev'
-      break
-    default:
-      doneMessage += `\n  ${pkgManager} install`
-      doneMessage += `\n  ${pkgManager} run dev`
-      break
-  }
-  prompts.outro(doneMessage)
-} 
+    doneMessage += `Project created. Now run:\n`;
+
+    if (root !== cwd) {
+        doneMessage += `\n  cd ${cdProjectName.includes(' ') ? `"${cdProjectName}"` : cdProjectName}`;
+    }
+    switch (pkgManager) {
+        case 'yarn':
+            doneMessage += '\n  yarn';
+            doneMessage += '\n  yarn dev';
+            break;
+        default:
+            doneMessage += `\n  ${pkgManager} install`;
+            doneMessage += `\n  ${pkgManager} run dev`;
+            break;
+    }
+    prompts.outro(doneMessage);
+};

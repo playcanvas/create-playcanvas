@@ -1,16 +1,14 @@
 // Validate a string as a npm package name
-export function isValidPackageName(projectName: string): boolean {
-  return /^(?:@[a-z\d\-*~][a-z\d\-*._~]*\/)?[a-z\d\-~][a-z\d\-._~]*$/.test(
-    projectName,
-  )
-}
+export const isValidPackageName = (projectName: string) => {
+    return /^(?:@[a-z\d\-*~][a-z\d\-*._~]*\/)?[a-z\d\-~][a-z\d\-._~]*$/.test(projectName);
+};
 
 // Convert arbitrary string into a valid npm package name
-export function toValidPackageName(projectName: string): string {
-  return projectName
-    .trim()
-    .toLowerCase()
-    .replace(/\s+/g, '-')
-    .replace(/^[._]/, '')
-    .replace(/[^a-z\d\-~]+/g, '-')
-} 
+export const toValidPackageName = (projectName: string) => {
+    return projectName
+        .trim()
+        .toLowerCase()
+        .replace(/\s+/g, '-')
+        .replace(/^[._]/, '')
+        .replace(/[^a-z\d\-~]+/g, '-');
+};

@@ -1,29 +1,37 @@
 {
-  "name": "playcanvas-project",
-  "private": true,
-  "version": "0.0.0",
-  "type": "module",
-  "engines": {
-    "node": "^20.19.0 || >=22.12.0"
-  },
-  "scripts": {
-    "predev": "node ./scripts/ensure-node-version.cjs",
-    "dev": "vite",
-    "build": "tsc -b && vite build",
-    "preview": "vite preview"
-  },
-  "dependencies": {
-    "@playcanvas/react": "^0.11.5",
-    "playcanvas": "^2.21.3",
-    "react": "^19.2.8",
-    "react-dom": "^19.2.8"
-  },
-  "devDependencies": {
-    "@types/react": "^19.2.17",
-    "@types/react-dom": "^19.2.3",
-    "@vitejs/plugin-react": "^6.0.4",
-    "semver": "^7.8.5",
-    "typescript": "~7.0.2",
-    "vite": "^8.1.5"
-  }
+    "name": "playcanvas-project",
+    "version": "0.0.0",
+    "private": true,
+    "description": "A PlayCanvas React project",
+    "type": "module",
+    "scripts": {
+        "build": "tsc -b && vite build",
+        "predev": "node ./scripts/ensure-node-version.cjs",
+        "dev": "vite",
+        "fmt": "prettier --check .",
+        "fmt:fix": "prettier --write .",
+        "lint": "eslint .",
+        "lint:fix": "eslint . --fix",
+        "preview": "vite preview"
+    },
+    "dependencies": {
+        "@playcanvas/react": "^0.11.5",
+        "playcanvas": "^2.21.3",
+        "react": "^19.2.8",
+        "react-dom": "^19.2.8"
+    },
+    "devDependencies": {
+        "@playcanvas/eslint-config": "3.0.0-beta.8",
+        "@types/react": "^19.2.17",
+        "@types/react-dom": "^19.2.3",
+        "@vitejs/plugin-react": "^6.0.4",
+        "eslint": "^9.39.0",
+        "prettier": "^3.9.6",
+        "semver": "^7.8.5",
+        "typescript": "~6.0.3",
+        "vite": "^8.1.5"
+    },
+    "engines": {
+        "node": ">=22.12.0"
+    }
 }

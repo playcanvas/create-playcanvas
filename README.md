@@ -32,11 +32,11 @@ Skip the prompts when scripting or if you know what you want:
 npm create playcanvas@latest my-game -- -t react-ts --overwrite
 ```
 
-| Flag                | Shorthand | Description                                        |
-| ------------------- | --------- | -------------------------------------------------- |
-| `--template <name>` | `-t`      | Directly choose template variant (see list below)  |
-| `--overwrite`       |           | Remove existing files in target directory          |
-| `--help`            | `-h`      | Show help/usage information                        |
+| Flag                | Shorthand | Description                                       |
+| ------------------- | --------- | ------------------------------------------------- |
+| `--template <name>` | `-t`      | Directly choose template variant (see list below) |
+| `--overwrite`       |           | Remove existing files in target directory         |
+| `--help`            | `-h`      | Show help/usage information                       |
 
 ## Templates
 
@@ -53,8 +53,8 @@ Clone the repo, then:
 
 ```bash
 npm install
-npm run dev     # stub build for local development
-node index.js   # test the CLI locally
+npm run dev          # stub build for local development
+node dist/index.mjs  # test the CLI locally
 ```
 
 Or use `npm link` to test as if installed globally:
