@@ -1,11 +1,11 @@
+import { Entity } from '@playcanvas/react';
+import { Camera, Environment, Render, Script } from '@playcanvas/react/components';
+import { useEnvAtlas, useMaterial } from '@playcanvas/react/hooks';
 // @ts-expect-error - PlayCanvas ESM scripts don't have type declarations
 import { CameraControls } from 'playcanvas/scripts/esm/camera-controls.mjs';
 // @ts-expect-error - PlayCanvas ESM scripts don't have type declarations
 import { Grid } from 'playcanvas/scripts/esm/grid.mjs';
 import { useEffect, useState } from 'react';
-import { Entity } from '@playcanvas/react';
-import { useEnvAtlas, useMaterial } from '@playcanvas/react/hooks';
-import { Camera, Environment, Render, Script } from '@playcanvas/react/components';
 
 /**
  * The Scene renders a sphere with a grid and camera controls

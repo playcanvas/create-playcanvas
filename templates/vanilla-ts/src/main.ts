@@ -1,7 +1,7 @@
 import './style.css';
-import typescriptLogo from './assets/typescript.svg';
-import playcanvasLogo from './assets/playcanvas.png';
 import { setupApp } from './App';
+import playcanvasLogo from './assets/playcanvas.png';
+import typescriptLogo from './assets/typescript.svg';
 
 let count = 0;
 

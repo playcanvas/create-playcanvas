@@ -1,23 +1,31 @@
 {
     "name": "playcanvas-project",
-    "private": true,
     "version": "0.0.0",
+    "private": true,
+    "description": "A PlayCanvas TypeScript project",
     "type": "module",
     "scripts": {
+        "build": "tsc && vite build",
         "predev": "node ./scripts/ensure-node-version.cjs",
         "dev": "vite",
-        "build": "tsc && vite build",
+        "fmt": "prettier --check .",
+        "fmt:fix": "prettier --write .",
+        "lint": "eslint .",
+        "lint:fix": "eslint . --fix",
         "preview": "vite preview"
     },
     "dependencies": {
         "playcanvas": "^2.21.3"
     },
     "devDependencies": {
+        "@playcanvas/eslint-config": "3.0.0-beta.8",
+        "eslint": "^9.39.0",
+        "prettier": "^3.9.6",
         "semver": "^7.8.5",
-        "typescript": "~7.0.2",
+        "typescript": "~6.0.3",
         "vite": "^8.1.5"
     },
     "engines": {
-        "node": "^20.19.0 || >=22.12.0"
+        "node": ">=22.12.0"
     }
 }

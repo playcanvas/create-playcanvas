@@ -1,3 +1,4 @@
+import type { Layer, Texture } from 'playcanvas';
 import {
     createGraphicsDevice,
     AppBase,
@@ -17,19 +18,15 @@ import {
     EVENT_MOUSEUP,
     TouchDevice,
     Mouse,
-    MeshInstance,
     StandardMaterial,
-    Layer,
     Asset,
     AssetListLoader,
     TEXTURETYPE_RGBP
 } from 'playcanvas';
-
-// @ts-expect-error - PlayCanvas ESM scripts don't have type declarations
-import { Grid } from 'playcanvas/scripts/esm/grid.mjs';
-
 // @ts-expect-error - PlayCanvas ESM scripts don't have type declarations
 import { CameraControls } from 'playcanvas/scripts/esm/camera-controls.mjs';
+// @ts-expect-error - PlayCanvas ESM scripts don't have type declarations
+import { Grid } from 'playcanvas/scripts/esm/grid.mjs';
 
 import { throttle } from './utils';
 
@@ -94,7 +91,7 @@ async function setupApp(canvas: HTMLCanvasElement, onClick: () => void) {
     app.start();
 
     // Set up environment lighting (no skybox, just IBL)
-    app.scene.envAtlas = assets.envAtlas.resource;
+    app.scene.envAtlas = assets.envAtlas.resource as Texture;
     const skyboxLayer = app.scene.layers.getLayerByName('Skybox');
     if (skyboxLayer) {
         skyboxLayer.enabled = false;
@@ -152,12 +149,10 @@ async function setupApp(canvas: HTMLCanvasElement, onClick: () => void) {
 
         picker.prepare(camera.camera, app.scene, [layer]);
 
-        return picker
-            .getSelectionAsync(x * pickerScale, y * pickerScale, 1, 1)
-            .then((meshInstances: MeshInstance[]): boolean => {
-                if (meshInstances.length === 0) return false;
-                return meshInstances[0] === sphere.render?.meshInstances[0];
-            });
+        return picker.getSelectionAsync(x * pickerScale, y * pickerScale, 1, 1).then((items) => {
+            if (items.length === 0) return false;
+            return items[0] === sphere.render?.meshInstances[0];
+        });
     };
 
     // On mouse move, check if hovering over sphere and update cursor/color

@@ -1,7 +1,8 @@
 import { Application } from '@playcanvas/react';
 import { useState } from 'react';
-import reactLogo from './assets/react.svg';
+
 import playcanvasLogo from './assets/playcanvas.png';
+import reactLogo from './assets/react.svg';
 import './App.css';
 import Scene from './Scene';
 
@@ -19,10 +20,10 @@ function App() {
                 <div className="grow">
                     <header>
                         <h1>PlayCanvas + React</h1>
-                        <a href="https://developer.playcanvas.com/user-manual/react/" target="_blank">
+                        <a href="https://developer.playcanvas.com/user-manual/react/" target="_blank" rel="noreferrer">
                             <img src={playcanvasLogo} className="playcanvas-logo logo" alt="PlayCanvas logo" />
                         </a>
-                        <a href="https://react.dev" target="_blank">
+                        <a href="https://react.dev" target="_blank" rel="noreferrer">
                             <img src={reactLogo} className="logo react" alt="React logo" />
                         </a>
                     </header>

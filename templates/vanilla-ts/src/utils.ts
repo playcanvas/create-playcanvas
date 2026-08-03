@@ -4,10 +4,10 @@
  * @param interval - The interval in milliseconds
  * @returns A throttled function
  */
-export function throttle(fn: (...args: any[]) => void, interval = 100) {
+export function throttle<T extends unknown[]>(fn: (...args: T) => void, interval = 100) {
     // interval in ms
     let last = 0;
-    return (...args: any[]) => {
+    return (...args: T) => {
         const now = Date.now();
         if (now - last >= interval) {
             last = now;

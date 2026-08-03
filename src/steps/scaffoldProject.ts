@@ -62,7 +62,7 @@ export async function scaffoldProject(opts: Options): Promise<void> {
     const pkg = JSON.parse(fs.readFileSync(path.join(templateDir, 'package.json'), 'utf-8'));
 
     pkg.name = packageName;
-    write('package.json', JSON.stringify(pkg, null, 2) + '\n');
+    write('package.json', JSON.stringify(pkg, null, 4) + '\n');
 
     // Final instructions
     let doneMessage = '';
