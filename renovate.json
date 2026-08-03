@@ -9,7 +9,6 @@
             "matchDepTypes": ["dependencies", "optionalDependencies"],
             "groupName": "Template runtime deps",
             "groupSlug": "templates-runtime",
-            "separateMajorMinor": false,
             "separateMinorPatch": false,
             "labels": ["templates", "runtime"]
         },
@@ -20,9 +19,17 @@
             "matchDepTypes": ["devDependencies"],
             "groupName": "Template dev deps",
             "groupSlug": "templates-dev",
-            "separateMajorMinor": false,
             "separateMinorPatch": false,
             "labels": ["templates", "dev"]
+        },
+        {
+            "matchPackageNames": ["eslint"],
+            "allowedVersions": "<10.0.0"
+        },
+        {
+            "description": "typescript-eslint only supports TypeScript <6.1",
+            "matchPackageNames": ["typescript"],
+            "allowedVersions": "<6.1.0"
         }
     ]
 }
