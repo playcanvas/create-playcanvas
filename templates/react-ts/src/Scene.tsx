@@ -24,6 +24,10 @@ function Scene({ onClick }: SceneProps) {
     // change the mouse cursor based on the hover state
     useEffect(() => {
         document.body.style.cursor = hovering ? 'pointer' : 'default';
+
+        return () => {
+            document.body.style.cursor = '';
+        };
     }, [hovering]);
 
     // Don't render until the environment map is loaded

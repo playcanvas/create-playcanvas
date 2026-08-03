@@ -1,82 +1,56 @@
-# @playcanvas/react + TypeScript Starter
+# PlayCanvas React + TypeScript Starter
 
-A modern, batteries-included starter for building PlayCanvas experiences with React and TypeScript, HMR and ESLint.
+A Vite-powered `@playcanvas/react` project with TypeScript, hot module replacement, ESLint and Prettier.
 
 ## Prerequisites
 
-- **Node.js ≥ 20.19.0** (or ≥ 22.12.0). Use [nvm](https://github.com/nvm-sh/nvm) to install/switch:
+Node.js 22.23.2 or later.
+
+## Getting started
 
 ```bash
-nvm install 22 # or 20.19+
-nvm use 22
-```
-
----
-
-## Getting Started
-
-Scaffold and install dependencies:
-
-```bash
-npm create playcanvas@latest -t react-ts
+npm create playcanvas@latest playcanvas-project -- --template react-ts
 cd playcanvas-project
 npm install
-```
-
-Start the dev server with hot-module reload:
-
-```bash
 npm run dev
 ```
 
-Open <http://localhost:5173> to view the app. Any file changes trigger instant reloads.
-
----
+Open <http://localhost:5173>. Edit `src/Scene.tsx` to test hot module replacement.
 
 ## Scripts
 
-| Command           | Description                          |
-| ----------------- | ------------------------------------ |
-| `npm run dev`     | Start Vite dev server with HMR       |
-| `npm run build`   | Type-check & bundle for production   |
-| `npm run preview` | Preview the production build locally |
-| `npm run lint`    | Run ESLint over the codebase         |
+| Command           | Description                         |
+| ----------------- | ----------------------------------- |
+| `npm run dev`     | Start the Vite development server   |
+| `npm run build`   | Type-check and build for production |
+| `npm run preview` | Preview the production build        |
+| `npm run lint`    | Run ESLint                          |
+| `npm run fmt`     | Check formatting                    |
 
----
+## Project structure
 
-## Project Structure
-
-```
+```text
 .
-├── public/               # Static assets copied as-is
+├── public/
+│   └── environment-map.png
+├── scripts/
+│   └── ensure-node-version.cjs
 ├── src/
-│   ├── Scene.tsx         # React wrapper around a PlayCanvas application
-│   ├── App.tsx           # Entry component
-│   └── main.tsx          # Vite/React bootstrap
-├── vite.config.ts        # Vite + React plugin config
-└── ...
+│   ├── assets/
+│   ├── App.tsx
+│   ├── Scene.tsx
+│   └── main.tsx
+├── eslint.config.mjs
+├── index.html
+├── tsconfig.app.json
+└── vite.config.ts
 ```
 
-## Linting & Formatting
+Run `npm run build` to generate a deployable static site in `dist/`.
 
-ESLint is pre-configured with TypeScript, React hooks, React Refresh, and global browser/node globals. Adjust `eslint.config.js` as your codebase grows.
+## Further reading
 
----
-
-## Deployment
-
-Run `npm run build` to generate a static production bundle in `dist/`. Deploy the contents of that folder to any static hosting provider (Netlify, Vercel, GitHub Pages, Cloudflare Pages, etc.).
-
----
-
-## Further Reading
-
-- [PlayCanvas Engine Docs](https://developer.playcanvas.com)
-- [PlayCanvas React Docs](https://developer.playcanvas.com/user-manual/react/)
-- [React Docs](https://react.dev/)
-- [Vite Docs](https://vitejs.dev/)
-- [TypeScript Handbook](https://www.typescriptlang.org/docs/)
-
----
-
-Made with ❤️. PRs and issues welcome!
+- [PlayCanvas React manual](https://developer.playcanvas.com/user-manual/react/)
+- [React documentation](https://react.dev/)
+- [Vite documentation](https://vite.dev/)
+- [TypeScript documentation](https://www.typescriptlang.org/docs/)

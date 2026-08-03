@@ -9,11 +9,7 @@ fi
 
 git fetch --tags
 
-npm version "$TYPE" --no-git-tag-version >> /dev/null
-NEXT_VERSION=$(npm pkg get version | sed 's/"//g')
-git reset --hard >> /dev/null
-
-read -p "About to release 'v$NEXT_VERSION'. Continue? (y/N) " -r
+read -p "About to create a $TYPE release. Continue? (y/N) " -r
 if [[ ! $REPLY =~ ^[Yy]$ ]]; then
     echo "Release cancelled."
     exit 1

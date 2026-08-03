@@ -43,19 +43,8 @@ header {
     filter: drop-shadow(0 0 2em #61dafbaa);
 }
 
-.card {
-    padding: 2em;
-}
-
 .read-the-docs {
     color: #888;
-}
-
-.container {
-    position: absolute;
-    top: 0;
-    left: 0;
-    display: flex;
 }
 
 .overlay {

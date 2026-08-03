@@ -1,82 +1,21 @@
 import * as prompts from '@clack/prompts';
 
-export const chooseTemplate = async ({
-    argTemplate,
-    FRAMEWORKS,
-    TEMPLATES,
-    pkgInfo,
-    getFullCustomCommand,
-    cancel
-}: {
-    argTemplate?: string;
-    FRAMEWORKS: Framework[];
-    TEMPLATES: string[];
-    pkgInfo?: PkgInfo;
-    getFullCustomCommand: (customCommand: string, pkgInfo?: PkgInfo) => string;
-    cancel: () => never;
-}) => {
-    let template = argTemplate;
-    let hasInvalidArgTemplate = false;
+import { TEMPLATES } from '../../templates/index.js';
 
-    if (argTemplate && !TEMPLATES.includes(argTemplate)) {
-        template = undefined;
-        hasInvalidArgTemplate = true;
-    }
+export const chooseTemplate = async ({ argTemplate, cancel }: { argTemplate?: string; cancel: () => never }) => {
+    if (argTemplate && TEMPLATES.some((t) => t.name === argTemplate)) return argTemplate;
 
-    if (!template) {
-        const framework = await prompts.select({
-            message: hasInvalidArgTemplate
-                ? `"${argTemplate}" isn't a valid template. Please choose from below: `
-                : 'Select a framework:',
-            options: FRAMEWORKS.map((framework) => {
-                const frameworkColor = framework.color;
-                return {
-                    label: frameworkColor(framework.display || framework.name),
-                    value: framework,
-                    hint: framework.description
-                };
-            })
-        });
-        if (prompts.isCancel(framework)) return cancel();
+    const template = await prompts.select({
+        message: argTemplate
+            ? `"${argTemplate}" isn't a valid template. Please choose from below: `
+            : 'Select a template:',
+        options: TEMPLATES.map((t) => ({
+            label: t.color(t.display),
+            value: t.name,
+            hint: t.description
+        }))
+    });
+    if (prompts.isCancel(template)) cancel();
 
-        await prompts.select({
-            message: 'Select a variant:',
-            options: framework.variants.map((variant) => {
-                const variantColor = variant.color;
-                const command = variant.customCommand
-                    ? getFullCustomCommand(variant.customCommand, pkgInfo).replace(/ TARGET_DIR$/, '')
-                    : undefined;
-                return {
-                    label: variantColor(variant.display || variant.name),
-                    value: variant.name,
-                    hint: command
-                };
-            })
-        });
-
-        template = framework.variants[0].name;
-    }
-
-    return template!;
-};
-
-// Types replicated locally to avoid cross-file dependencies
-export type ColorFunc = (str: string | number) => string;
-
-export type FrameworkVariant = {
-    name: string;
-    display: string;
-    color: ColorFunc;
-    customCommand?: string;
-};
-export type Framework = {
-    name: string;
-    display: string;
-    color: ColorFunc;
-    description?: string;
-    variants: FrameworkVariant[];
-};
-type PkgInfo = {
-    name: string;
-    version: string;
+    return template as string;
 };
