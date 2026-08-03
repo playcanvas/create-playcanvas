@@ -35,8 +35,8 @@
         "dev": "unbuild --stub",
         "fmt": "prettier --check .",
         "fmt:fix": "prettier --write .",
-        "lint": "eslint .",
-        "lint:fix": "eslint . --fix",
+        "lint": "npm run build && eslint .",
+        "lint:fix": "npm run build && eslint . --fix",
         "prepublishOnly": "npm run build",
         "typecheck": "tsc --noEmit"
     },
