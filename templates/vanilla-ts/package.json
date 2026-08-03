@@ -11,7 +11,7 @@
         "fmt:fix": "prettier --write .",
         "lint": "eslint .",
         "lint:fix": "eslint . --fix",
-        "preview": "vite preview",
+        "start": "vite preview",
         "typecheck": "tsc --noEmit"
     },
     "dependencies": {

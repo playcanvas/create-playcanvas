@@ -23,7 +23,7 @@ Open <http://localhost:5173>. Edit `src/Scene.tsx` to test hot module replacemen
 | ------------------- | --------------------------------- |
 | `npm run dev`       | Start the Vite development server |
 | `npm run build`     | Build for production              |
-| `npm run preview`   | Preview the production build      |
+| `npm run start`     | Preview the production build      |
 | `npm run lint`      | Run ESLint                        |
 | `npm run fmt`       | Check formatting                  |
 | `npm run typecheck` | Run TypeScript checks             |
