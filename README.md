@@ -1,78 +1,70 @@
 # create-playcanvas
 
 [![NPM Version](https://img.shields.io/npm/v/create-playcanvas)](https://www.npmjs.com/package/create-playcanvas)
-[![CI](https://github.com/playcanvas/create-playcanvas/actions/workflows/ci.yml/badge.svg)](https://github.com/playcanvas/create-playcanvas/actions/workflows/ci.yml)
+[![NPM Downloads](https://img.shields.io/npm/dw/create-playcanvas)](https://npmtrends.com/create-playcanvas)
+[![License](https://img.shields.io/npm/l/create-playcanvas)](https://github.com/playcanvas/create-playcanvas/blob/main/LICENSE)
+[![Discord](https://img.shields.io/badge/Discord-5865F2?style=flat&logo=discord&logoColor=white&color=black)](https://discord.gg/RSaMRzg)
+[![Reddit](https://img.shields.io/badge/Reddit-FF4500?style=flat&logo=reddit&logoColor=white&color=black)](https://www.reddit.com/r/PlayCanvas)
+[![X](https://img.shields.io/badge/X-000000?style=flat&logo=x&logoColor=white&color=black)](https://x.com/intent/follow?screen_name=playcanvas)
 
-Spin up a ready-to-code [PlayCanvas](https://playcanvas.com/) project in seconds.
+| [Engine Manual](https://developer.playcanvas.com/user-manual/engine/) | [React Manual](https://developer.playcanvas.com/user-manual/react/) | [Examples](https://playcanvas.github.io/) | [Forum](https://forum.playcanvas.com/) |
+
+Scaffold a Vite-powered PlayCanvas project with TypeScript. Choose the PlayCanvas Engine directly or build with [`@playcanvas/react`](https://github.com/playcanvas/react).
+
+## Getting Started
+
+Requires Node.js 22.23.2 or later.
 
 ```bash
 npm create playcanvas@latest
+cd playcanvas-project
+npm install
+npm run dev
 ```
 
-Also works with other package managers:
+The interactive setup asks for a project name, handles an existing target directory, sets the package name and lets you choose a template.
+
+You can also use another package manager:
 
 ```bash
-pnpm create playcanvas
+pnpm create playcanvas@latest
 yarn create playcanvas
-bun create playcanvas
+bun x create-playcanvas@latest
 ```
-
-The CLI will prompt you for:
-
-1. **Project name** - folder to create (defaults to `playcanvas-project`)
-2. **Overwrite behavior** - if the folder already exists
-3. **Package name** - used in `package.json`
-4. **Framework & variant** - pick from templates below
-
-## Non-interactive Usage
-
-Skip the prompts when scripting or if you know what you want:
-
-```bash
-npm create playcanvas@latest my-game -- -t react-ts --overwrite
-```
-
-| Flag                | Shorthand | Description                                       |
-| ------------------- | --------- | ------------------------------------------------- |
-| `--template <name>` | `-t`      | Directly choose template variant (see list below) |
-| `--overwrite`       |           | Remove existing files in target directory         |
-| `--help`            | `-h`      | Show help/usage information                       |
 
 ## Templates
 
-| Template     | Description                            |
-| ------------ | -------------------------------------- |
-| `vanilla-ts` | Vanilla TypeScript + PlayCanvas Engine |
-| `react-ts`   | React + TypeScript + PlayCanvas React  |
+| Template     | Description                         |
+| ------------ | ----------------------------------- |
+| `vanilla-ts` | TypeScript with PlayCanvas Engine   |
+| `react-ts`   | TypeScript with `@playcanvas/react` |
 
-_To add your own template, drop a folder in `templates/<name>` and update `templates/index.js`._
+Both templates include Vite, hot module replacement, ESLint, Prettier and a production build.
+
+## CLI Options
+
+Pass a project name and template to skip the prompts:
+
+```bash
+npm create playcanvas@latest my-game -- --template react-ts
+```
+
+| Option              | Shorthand | Description                                             |
+| ------------------- | --------- | ------------------------------------------------------- |
+| `--template <name>` | `-t`      | Use a template from the list above                      |
+| `--overwrite`       |           | Remove existing files from a non-empty target directory |
+| `--help`            | `-h`      | Show command help                                       |
 
 ## Development
 
-Clone the repo, then:
-
 ```bash
 npm install
-npm run dev          # stub build for local development
-node dist/index.mjs  # test the CLI locally
+npm run build
+node dist/index.mjs
 ```
 
-Or use `npm link` to test as if installed globally:
-
-```bash
-npm link
-create-playcanvas
-```
-
-## Contributing
-
-Bug reports, feature requests and PRs are welcome! Want to create a new template? Please file an issue first if you plan major changes.
-
-1. Fork / clone
-2. Create a branch: `git checkout -b feat/my-awesome-idea`
-3. Commit with conventional-commit messages
-4. Push and open a PR
+Contributions are welcome. Please open an issue before proposing a new template or another substantial change.
 
 ## License
 
-MIT
+[MIT](LICENSE)
