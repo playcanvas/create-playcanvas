@@ -19,11 +19,11 @@
     },
     "devDependencies": {
         "@playcanvas/eslint-config": "3.0.0-beta.8",
-        "eslint": "^9.39.0",
+        "eslint": "^10.8.0",
         "prettier": "^3.9.6",
         "semver": "^7.8.5",
-        "typescript": "~6.0.3",
-        "vite": "^8.1.5"
+        "typescript": "~7.0.2",
+        "vite": "^8.2.0"
     },
     "engines": {
         "node": ">=22.23.2"
