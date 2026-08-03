@@ -34,7 +34,10 @@
     "dev": "unbuild --stub",
     "build": "unbuild",
     "typecheck": "tsc --noEmit",
+    "fmt": "prettier --check .",
+    "fmt:fix": "prettier --write .",
     "lint": "eslint .",
+    "lint:fix": "eslint . --fix",
     "prepublishOnly": "npm run build"
   },
   "license": "MIT",
@@ -46,6 +49,7 @@
     "eslint": "^9.39.0",
     "mri": "^1.2.0",
     "picocolors": "^1.1.1",
+    "prettier": "^3.9.6",
     "unbuild": "^3.6.1"
   },
   "engines": {
