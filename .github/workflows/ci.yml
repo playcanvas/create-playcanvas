@@ -96,11 +96,22 @@ jobs:
             - name: Scaffold template
               run: node dist/index.mjs "$RUNNER_TEMP/${{ matrix.template }}" --template "${{ matrix.template }}"
 
-            - name: Verify template
+            - name: Install template dependencies
               working-directory: ${{ runner.temp }}/${{ matrix.template }}
-              run: |
-                  npm install
-                  npm run typecheck
-                  npm run build
-                  npm run lint
-                  npm run fmt
+              run: npm install
+
+            - name: Check template formatting
+              working-directory: ${{ runner.temp }}/${{ matrix.template }}
+              run: npm run fmt
+
+            - name: Lint template
+              working-directory: ${{ runner.temp }}/${{ matrix.template }}
+              run: npm run lint
+
+            - name: Typecheck template
+              working-directory: ${{ runner.temp }}/${{ matrix.template }}
+              run: npm run typecheck
+
+            - name: Build template
+              working-directory: ${{ runner.temp }}/${{ matrix.template }}
+              run: npm run build
