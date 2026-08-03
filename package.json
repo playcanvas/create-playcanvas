@@ -24,7 +24,7 @@
     "author": "PlayCanvas <support@playcanvas.com>",
     "type": "module",
     "bin": {
-        "create-playcanvas": "index.js"
+        "create-playcanvas": "dist/index.mjs"
     },
     "files": [
         "templates",
@@ -35,15 +35,15 @@
         "dev": "unbuild --stub",
         "fmt": "prettier --check .",
         "fmt:fix": "prettier --write .",
-        "lint": "npm run build && eslint .",
-        "lint:fix": "npm run build && eslint . --fix",
+        "lint": "eslint .",
+        "lint:fix": "eslint . --fix",
         "prepublishOnly": "npm run build",
         "typecheck": "tsc --noEmit"
     },
     "devDependencies": {
         "@clack/prompts": "^1.7.0",
         "@playcanvas/eslint-config": "3.0.0-beta.8",
-        "@types/node": "^25.9.5",
+        "@types/node": "22.x",
         "cross-spawn": "^7.0.6",
         "eslint": "^9.39.0",
         "mri": "^1.2.0",
@@ -52,6 +52,6 @@
         "unbuild": "^3.6.1"
     },
     "engines": {
-        "node": "^18.0.0 || ^20.0.0 || >=22.0.0"
+        "node": ">=22.0.0"
     }
 }

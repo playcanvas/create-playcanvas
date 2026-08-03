@@ -53,8 +53,8 @@ Clone the repo, then:
 
 ```bash
 npm install
-npm run dev     # stub build for local development
-node index.js   # test the CLI locally
+npm run dev          # stub build for local development
+node dist/index.mjs  # test the CLI locally
 ```
 
 Or use `npm link` to test as if installed globally:
