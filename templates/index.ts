@@ -1,18 +1,39 @@
 import colors from 'picocolors';
 
-const { cyan, yellow } = colors;
+const { cyan, magenta, yellow } = colors;
 
 export const TEMPLATES = [
     {
-        name: 'vanilla-ts',
-        display: 'Vanilla',
-        description: 'with PlayCanvas Engine',
+        name: 'engine',
+        display: 'Engine',
+        description: 'with the PlayCanvas Engine API directly',
         color: yellow
     },
     {
-        name: 'react-ts',
+        name: 'react',
         display: 'React',
         description: 'with @playcanvas/react',
         color: cyan
+    },
+    {
+        name: 'web-components',
+        display: 'Web Components',
+        description: 'with @playcanvas/web-components',
+        color: magenta
+    }
+];
+
+// Every template holds a `base` directory of shared tooling plus one directory per boilerplate,
+// which is copied over the top. The first entry is the default.
+export const BOILERPLATES = [
+    {
+        name: 'spinning-cube',
+        display: 'Spinning Cube',
+        description: 'a rotating cube and a light'
+    },
+    {
+        name: 'interactive-sphere',
+        display: 'Interactive Sphere',
+        description: 'orbit controls, a grid and pointer picking'
     }
 ];

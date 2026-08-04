@@ -71,11 +71,12 @@ jobs:
               run: npm run typecheck
 
     templates:
-        name: Template (${{ matrix.template }})
+        name: Template (${{ matrix.template }} / ${{ matrix.boilerplate }})
         runs-on: ubuntu-latest
         strategy:
             matrix:
-                template: [vanilla-ts, react-ts]
+                template: [engine, react, web-components]
+                boilerplate: [spinning-cube, interactive-sphere]
         steps:
             - name: Check out code
               uses: actions/checkout@v7
@@ -94,24 +95,27 @@ jobs:
               run: npm run build
 
             - name: Scaffold template
-              run: node dist/index.mjs "$RUNNER_TEMP/${{ matrix.template }}" --template "${{ matrix.template }}"
+              run: |
+                  node dist/index.mjs "$RUNNER_TEMP/${{ matrix.template }}-${{ matrix.boilerplate }}" \
+                    --template "${{ matrix.template }}" \
+                    --boilerplate "${{ matrix.boilerplate }}"
 
             - name: Install template dependencies
-              working-directory: ${{ runner.temp }}/${{ matrix.template }}
+              working-directory: ${{ runner.temp }}/${{ matrix.template }}-${{ matrix.boilerplate }}
               run: npm install
 
             - name: Check template formatting
-              working-directory: ${{ runner.temp }}/${{ matrix.template }}
+              working-directory: ${{ runner.temp }}/${{ matrix.template }}-${{ matrix.boilerplate }}
               run: npm run fmt
 
             - name: Lint template
-              working-directory: ${{ runner.temp }}/${{ matrix.template }}
+              working-directory: ${{ runner.temp }}/${{ matrix.template }}-${{ matrix.boilerplate }}
               run: npm run lint
 
             - name: Typecheck template
-              working-directory: ${{ runner.temp }}/${{ matrix.template }}
+              working-directory: ${{ runner.temp }}/${{ matrix.template }}-${{ matrix.boilerplate }}
               run: npm run typecheck
 
             - name: Build template
-              working-directory: ${{ runner.temp }}/${{ matrix.template }}
+              working-directory: ${{ runner.temp }}/${{ matrix.template }}-${{ matrix.boilerplate }}
               run: npm run build

@@ -1,0 +1,59 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <link rel="icon" type="image/png" href="/src/assets/playcanvas.png" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>PlayCanvas + Web Components</title>
+    </head>
+    <body>
+        <pc-app>
+            <!-- Materials are declared once and referenced by id -->
+            <pc-material id="sphere-material" diffuse="lightgrey"></pc-material>
+
+            <pc-scene>
+                <!-- Camera. Orbit controls are attached in src/main.ts -->
+                <pc-entity name="camera" position="4 1 4">
+                    <pc-camera clear-color="#171717"></pc-camera>
+                </pc-entity>
+
+                <!-- Key and fill lights -->
+                <pc-entity name="key-light" rotation="45 45 0">
+                    <pc-light></pc-light>
+                </pc-entity>
+                <pc-entity name="fill-light" position="0 2 0">
+                    <pc-light type="omni" intensity="0.5"></pc-light>
+                </pc-entity>
+
+                <!-- Background grid. The grid script is attached in src/main.ts -->
+                <pc-entity name="grid" scale="1000 1000 1000"></pc-entity>
+
+                <!-- The sphere. pc-app dispatches pointer events onto whatever the pointer hits -->
+                <pc-entity name="sphere" position="0 0.5 0">
+                    <pc-render type="sphere" material="sphere-material"></pc-render>
+                </pc-entity>
+            </pc-scene>
+        </pc-app>
+
+        <div class="absolute overlay">
+            <div class="grow">
+                <header>
+                    <h1>PlayCanvas + Web Components</h1>
+                    <a href="https://developer.playcanvas.com/user-manual/web-components/" target="_blank">
+                        <img src="/src/assets/playcanvas.png" class="playcanvas-logo logo" alt="PlayCanvas logo" />
+                    </a>
+                    <a href="https://www.typescriptlang.org/" target="_blank">
+                        <img src="/src/assets/typescript.svg" class="logo typescript" alt="TypeScript logo" />
+                    </a>
+                </header>
+            </div>
+            <div>
+                <span id="counter" class="pill">Click Count: 0</span>
+                <p>Edit <code>index.html</code> and save to reload the scene</p>
+            </div>
+            <p class="read-the-docs">Click on the PlayCanvas and TypeScript logos to learn more</p>
+        </div>
+
+        <script type="module" src="/src/main.ts"></script>
+    </body>
+</html>

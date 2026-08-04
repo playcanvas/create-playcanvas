@@ -9,7 +9,7 @@
 
 | [Engine Manual](https://developer.playcanvas.com/user-manual/engine/) | [React Manual](https://developer.playcanvas.com/user-manual/react/) | [Examples](https://playcanvas.github.io/) | [Forum](https://forum.playcanvas.com/) |
 
-Scaffold a Vite-powered PlayCanvas project with TypeScript. Choose the PlayCanvas Engine directly or build with [`@playcanvas/react`](https://github.com/playcanvas/react).
+Scaffold a Vite-powered PlayCanvas project with TypeScript. Choose the PlayCanvas Engine directly, [`@playcanvas/react`](https://github.com/playcanvas/react) or [`@playcanvas/web-components`](https://github.com/playcanvas/web-components).
 
 ## Getting Started
 
@@ -22,7 +22,7 @@ npm install
 npm run dev
 ```
 
-The interactive setup asks for a project name, handles an existing target directory, sets the package name and lets you choose a template.
+The interactive setup asks for a project name, handles an existing target directory, sets the package name and lets you choose a template and a boilerplate.
 
 You can also use another package manager:
 
@@ -34,26 +34,39 @@ bun x create-playcanvas@latest
 
 ## Templates
 
-| Template     | Description                         |
-| ------------ | ----------------------------------- |
-| `vanilla-ts` | TypeScript with PlayCanvas Engine   |
-| `react-ts`   | TypeScript with `@playcanvas/react` |
+| Template         | Description                                  |
+| ---------------- | -------------------------------------------- |
+| `engine`         | The PlayCanvas Engine API directly           |
+| `react`          | `@playcanvas/react` components               |
+| `web-components` | `@playcanvas/web-components` custom elements |
 
-Both templates include Vite, hot module replacement, ESLint, Prettier and a production build.
+Every template is TypeScript, and includes Vite, ESLint, Prettier and a production build.
+
+## Boilerplates
+
+Each template offers a choice of starting scene. `spinning-cube` is the default.
+
+| Boilerplate          | Description                                |
+| -------------------- | ------------------------------------------ |
+| `spinning-cube`      | A rotating cube and a light                |
+| `interactive-sphere` | Orbit controls, a grid and pointer picking |
+
+A template is a `base` directory of shared tooling plus one directory per boilerplate, which is copied over the top.
 
 ## CLI Options
 
-Pass a project name and template to skip the prompts:
+Pass a project name, template and boilerplate to skip the prompts:
 
 ```bash
-npm create playcanvas@latest my-game -- --template react-ts
+npm create playcanvas@latest my-game -- --template react --boilerplate spinning-cube
 ```
 
-| Option              | Shorthand | Description                                             |
-| ------------------- | --------- | ------------------------------------------------------- |
-| `--template <name>` | `-t`      | Use a template from the list above                      |
-| `--overwrite`       |           | Remove existing files from a non-empty target directory |
-| `--help`            | `-h`      | Show command help                                       |
+| Option                 | Shorthand | Description                                             |
+| ---------------------- | --------- | ------------------------------------------------------- |
+| `--template <name>`    | `-t`      | Use a template from the list above                      |
+| `--boilerplate <name>` | `-b`      | Use a boilerplate from the list above                   |
+| `--overwrite`          |           | Remove existing files from a non-empty target directory |
+| `--help`               | `-h`      | Show command help                                       |
 
 ## Development
 

@@ -16,7 +16,7 @@ document.querySelector<HTMLDivElement>('#root')!.innerHTML = `
             <img src="${playcanvasLogo}" class="playcanvas-logo logo" alt="PlayCanvas logo" />
           </a>
           <a href="https://www.typescriptlang.org/" target="_blank">
-            <img src="${typescriptLogo}" class="logo vanilla" alt="TypeScript logo" />
+            <img src="${typescriptLogo}" class="logo typescript" alt="TypeScript logo" />
           </a>
         </header>
       </div>
