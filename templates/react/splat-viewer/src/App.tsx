@@ -3,7 +3,8 @@ import { Camera, GSplat, Script } from '@playcanvas/react/components';
 import { useSplat } from '@playcanvas/react/hooks';
 import { CameraControls } from 'playcanvas/scripts/esm/camera-controls.mjs';
 
-// Hosted so the template stays small. Drop a .sog or .ply in public/ and point this at it instead
+// Hosted so the template stays small. Capture or edit your own splat at https://superspl.at, then
+// drop the .sog or .ply in public/ and point this at it instead
 const SPLAT_URL = 'https://developer.playcanvas.com/assets/toy-cat.sog';
 
 function Splat() {
