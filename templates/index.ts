@@ -24,7 +24,8 @@ export const TEMPLATES = [
 ];
 
 // Every template holds a `base` directory of shared tooling plus one directory per boilerplate,
-// which is copied over the top. The first entry is the default.
+// which is copied over the top. Assets a boilerplate needs in every template live once in
+// `_shared/<boilerplate>` and are seeded in first. The first entry is the default.
 export const BOILERPLATES = [
     {
         name: 'spinning-cube',
