@@ -46,12 +46,14 @@ Every template is TypeScript, and includes Vite, ESLint, Prettier and a producti
 
 Each template offers a choice of starting scene. `spinning-cube` is the default.
 
-| Boilerplate          | Description                                |
-| -------------------- | ------------------------------------------ |
-| `spinning-cube`      | A rotating cube and a light                |
-| `interactive-sphere` | Orbit controls, a grid and pointer picking |
+| Boilerplate          | Description                                    |
+| -------------------- | ---------------------------------------------- |
+| `spinning-cube`      | A rotating cube and a light                    |
+| `interactive-sphere` | Orbit controls, a grid and pointer picking     |
+| `model-viewer`       | A glTF model, orbit controls, a procedural sky |
+| `splat-viewer`       | A Gaussian splat and orbit controls            |
 
-A template is a `base` directory of shared tooling plus one directory per boilerplate, which is copied over the top.
+A template is a `base` directory of shared tooling plus one directory per boilerplate, which is copied over the top. Assets a boilerplate needs in every template live once in `templates/_shared/<boilerplate>` and are seeded in first.
 
 ## CLI Options
 
