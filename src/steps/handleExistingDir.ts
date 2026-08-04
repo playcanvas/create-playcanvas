@@ -7,13 +7,20 @@ import { isEmpty, emptyDir } from '../utils/fs.js';
 export const handleExistingDir = async ({
     targetDir,
     argOverwrite,
+    yes,
     cancel
 }: {
     targetDir: string;
     argOverwrite?: boolean;
+    yes?: boolean;
     cancel: () => never;
 }) => {
     if (fs.existsSync(targetDir) && !isEmpty(targetDir)) {
+        // --yes takes the defaults, and no default deletes files - --overwrite is the explicit opt-in
+        if (yes && !argOverwrite) {
+            throw new Error(`Target directory "${targetDir}" is not empty. Pass --overwrite to remove its contents.`);
+        }
+
         const overwrite = argOverwrite
             ? 'yes'
             : await prompts.select({

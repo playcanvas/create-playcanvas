@@ -2,13 +2,23 @@ import * as prompts from '@clack/prompts';
 
 import { TEMPLATES } from '../../templates/index.js';
 
-export const chooseTemplate = async ({ argTemplate, cancel }: { argTemplate?: string; cancel: () => never }) => {
+export const chooseTemplate = async ({
+    argTemplate,
+    yes,
+    cancel
+}: {
+    argTemplate?: string;
+    yes?: boolean;
+    cancel: () => never;
+}) => {
     if (argTemplate && TEMPLATES.some((t) => t.name === argTemplate)) return argTemplate;
 
     // falling back to the picker would hang a scripted run, so fail loudly instead
-    if (argTemplate && !process.stdout.isTTY) {
+    if (argTemplate && (!process.stdout.isTTY || yes)) {
         throw new Error(`Unknown template: ${argTemplate}. Choose from: ${TEMPLATES.map((t) => t.name).join(', ')}`);
     }
+
+    if (yes) return TEMPLATES[0].name;
 
     const template = await prompts.select({
         message: argTemplate

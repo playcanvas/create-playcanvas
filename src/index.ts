@@ -16,9 +16,10 @@ const argv = mri<{
     boilerplate?: string;
     help?: boolean;
     overwrite?: boolean;
+    yes?: boolean;
 }>(process.argv.slice(2), {
-    alias: { h: 'help', t: 'template', b: 'boilerplate' },
-    boolean: ['help', 'overwrite'],
+    alias: { h: 'help', t: 'template', b: 'boilerplate', y: 'yes' },
+    boolean: ['help', 'overwrite', 'yes'],
     string: ['template', 'boilerplate']
 });
 
@@ -34,6 +35,7 @@ Options:
   -t, --template NAME        use a specific template
   -b, --boilerplate NAME     use a specific boilerplate
       --overwrite            remove existing files from a non-empty target directory
+  -y, --yes                  skip the prompts and take the defaults
   -h, --help                 show help
 `;
 
@@ -48,6 +50,7 @@ const init = async () => {
     const argTemplate = argv.template;
     const argBoilerplate = argv.boilerplate;
     const argOverwrite = argv.overwrite;
+    const yes = argv.yes;
 
     const help = argv.help;
     if (help) {
@@ -60,11 +63,11 @@ const init = async () => {
         process.exit(0);
     };
 
-    const targetDir = await getTargetDir({ argTargetDir, defaultTargetDir, cancel });
-    await handleExistingDir({ targetDir, argOverwrite, cancel });
-    const packageName = await getPackageName({ targetDir, cancel });
-    const template = await chooseTemplate({ argTemplate, cancel });
-    const boilerplate = await chooseBoilerplate({ argBoilerplate, cancel });
+    const targetDir = await getTargetDir({ argTargetDir, defaultTargetDir, yes, cancel });
+    await handleExistingDir({ targetDir, argOverwrite, yes, cancel });
+    const packageName = await getPackageName({ targetDir, yes, cancel });
+    const template = await chooseTemplate({ argTemplate, yes, cancel });
+    const boilerplate = await chooseBoilerplate({ argBoilerplate, yes, cancel });
 
     scaffoldProject({
         cwd,
@@ -77,6 +80,7 @@ const init = async () => {
 };
 
 init().catch((e) => {
-    console.error(e);
+    // a bad flag or a non-empty directory is a user error, so print the message rather than a stack
+    console.error(e instanceof Error ? e.message : e);
     process.exitCode = 1;
 });
