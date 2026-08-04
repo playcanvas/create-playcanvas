@@ -13,24 +13,18 @@ Scaffold a Vite-powered PlayCanvas project with TypeScript. Choose the PlayCanva
 
 ## Getting Started
 
-Requires Node.js 22.23.2 or later.
-
 ```bash
+# npm
 npm create playcanvas@latest
-cd playcanvas-project
-npm install
-npm run dev
-```
-
-The interactive setup asks for a project name, handles an existing target directory, sets the package name and lets you choose a template and a boilerplate.
-
-You can also use another package manager:
-
-```bash
+# pnpm
 pnpm create playcanvas@latest
+# yarn
 yarn create playcanvas
+# bun
 bun x create-playcanvas@latest
 ```
+
+Then follow the prompts. Requires Node.js 22.23.2 or later.
 
 ## Templates
 
@@ -68,7 +62,10 @@ npm create playcanvas@latest my-game -- --template react --boilerplate spinning-
 | `--template <name>`    | `-t`      | Use a template from the list above                      |
 | `--boilerplate <name>` | `-b`      | Use a boilerplate from the list above                   |
 | `--overwrite`          |           | Remove existing files from a non-empty target directory |
+| `--yes`                | `-y`      | Skip the prompts and take the defaults                  |
 | `--help`               | `-h`      | Show command help                                       |
+
+`--yes` takes `playcanvas-project`, the `engine` template and the `spinning-cube` boilerplate for anything you don't pass. It never deletes files, so a non-empty target directory still needs `--overwrite`.
 
 ## Development
 
