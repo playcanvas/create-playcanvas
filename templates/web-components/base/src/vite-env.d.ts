@@ -11,3 +11,9 @@ declare module 'playcanvas/scripts/esm/grid.mjs' {
 
     export const Grid: typeof Script & (new () => Script);
 }
+
+declare module 'playcanvas/scripts/esm/sky/procedural-sky.mjs' {
+    import type { Script } from 'playcanvas';
+
+    export const ProceduralSky: typeof Script & (new () => Script);
+}

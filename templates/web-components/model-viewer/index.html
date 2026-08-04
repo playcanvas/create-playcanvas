@@ -1,0 +1,34 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <link rel="icon" type="image/png" href="/src/assets/playcanvas.png" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>PlayCanvas + Web Components</title>
+    </head>
+    <body>
+        <pc-app>
+            <!-- Swap this for your own model - anything you drop in public/ is served from the site root -->
+            <pc-asset id="model" src="/playcanvas-cube.glb"></pc-asset>
+
+            <pc-scene>
+                <!-- Camera. Orbit controls are attached in src/main.ts. The sky is HDR, so it needs
+                     tone mapping to bring it back into displayable range - without it the whole
+                     image blows out to white -->
+                <pc-entity name="camera" position="0 0 3">
+                    <pc-camera tonemap="aces2"></pc-camera>
+                </pc-entity>
+
+                <!-- The procedural sky is both the background and the image-based lighting, so no
+                     light or environment map asset is needed. The script is attached in src/main.ts -->
+                <pc-entity name="sky"></pc-entity>
+
+                <pc-entity name="model">
+                    <pc-model asset="model"></pc-model>
+                </pc-entity>
+            </pc-scene>
+        </pc-app>
+
+        <script type="module" src="/src/main.ts"></script>
+    </body>
+</html>

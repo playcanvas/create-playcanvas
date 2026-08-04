@@ -1,0 +1,30 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <link rel="icon" type="image/png" href="/src/assets/playcanvas.png" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>PlayCanvas + Web Components</title>
+    </head>
+    <body>
+        <!-- Antialiasing is disabled - splat rendering is fragment bound, so MSAA costs a lot and adds little -->
+        <pc-app antialias="false" high-resolution="false">
+            <!-- Hosted so the template stays small. Drop a .sog or .ply in public/ and point this at it instead -->
+            <pc-asset id="splat" src="https://developer.playcanvas.com/assets/toy-cat.sog"></pc-asset>
+
+            <pc-scene>
+                <!-- Camera. Orbit controls are attached in src/main.ts -->
+                <pc-entity name="camera" position="0 0 2.5">
+                    <pc-camera></pc-camera>
+                </pc-entity>
+
+                <!-- Splats are captured in their own space, so this one needs offsetting and flipping upright -->
+                <pc-entity name="toy cat" position="0 -0.7 0" rotation="0 0 180">
+                    <pc-gsplat asset="splat"></pc-gsplat>
+                </pc-entity>
+            </pc-scene>
+        </pc-app>
+
+        <script type="module" src="/src/main.ts"></script>
+    </body>
+</html>

@@ -35,5 +35,15 @@ export const BOILERPLATES = [
         name: 'interactive-sphere',
         display: 'Interactive Sphere',
         description: 'orbit controls, a grid and pointer picking'
+    },
+    {
+        name: 'model-viewer',
+        display: 'Model Viewer',
+        description: 'a glTF model, orbit controls and a procedural sky'
+    },
+    {
+        name: 'splat-viewer',
+        display: 'Splat Viewer',
+        description: 'a Gaussian splat and orbit controls'
     }
 ];
