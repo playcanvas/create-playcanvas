@@ -5,7 +5,7 @@
         {
             "description": "Batch RUNTIME deps in templates",
             "matchManagers": ["npm"],
-            "matchFileNames": ["templates/*/package.json"],
+            "matchFileNames": ["templates/*/base/package.json"],
             "matchDepTypes": ["dependencies", "optionalDependencies"],
             "groupName": "Template runtime deps",
             "groupSlug": "templates-runtime",
@@ -15,7 +15,7 @@
         {
             "description": "Batch DEV deps in templates",
             "matchManagers": ["npm"],
-            "matchFileNames": ["templates/*/package.json"],
+            "matchFileNames": ["templates/*/base/package.json"],
             "matchDepTypes": ["devDependencies"],
             "groupName": "Template dev deps",
             "groupSlug": "templates-dev",
