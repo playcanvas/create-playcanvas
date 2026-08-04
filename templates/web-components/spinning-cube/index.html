@@ -1,0 +1,29 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <link rel="icon" type="image/png" href="/src/assets/playcanvas.png" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>PlayCanvas + Web Components</title>
+    </head>
+    <body>
+        <pc-app>
+            <pc-scene>
+                <pc-entity name="camera" position="0 0 3">
+                    <pc-camera clear-color="#8099e6"></pc-camera>
+                </pc-entity>
+
+                <pc-entity name="light" rotation="45 0 0">
+                    <pc-light></pc-light>
+                </pc-entity>
+
+                <!-- The rotate script is attached in src/main.ts -->
+                <pc-entity name="cube">
+                    <pc-render type="box"></pc-render>
+                </pc-entity>
+            </pc-scene>
+        </pc-app>
+
+        <script type="module" src="/src/main.ts"></script>
+    </body>
+</html>

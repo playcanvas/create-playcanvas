@@ -9,6 +9,7 @@
         "template",
         "vite",
         "react",
+        "web-components",
         "typescript",
         "webgl",
         "webgpu",

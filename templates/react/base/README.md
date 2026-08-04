@@ -9,13 +9,13 @@ Node.js 22.23.2 or later.
 ## Getting started
 
 ```bash
-npm create playcanvas@latest playcanvas-project -- --template react-ts
+npm create playcanvas@latest playcanvas-project -- --template react
 cd playcanvas-project
 npm install
 npm run dev
 ```
 
-Open <http://localhost:5173>. Edit `src/Scene.tsx` to test hot module replacement.
+Open <http://localhost:5173>. Edit the files under `src/` and save to see the scene update.
 
 ## Scripts
 
@@ -27,23 +27,6 @@ Open <http://localhost:5173>. Edit `src/Scene.tsx` to test hot module replacemen
 | `npm run lint`      | Run ESLint                        |
 | `npm run fmt`       | Check formatting                  |
 | `npm run typecheck` | Run TypeScript checks             |
-
-## Project structure
-
-```text
-.
-├── public/
-│   └── environment-map.png
-├── src/
-│   ├── assets/
-│   ├── App.tsx
-│   ├── Scene.tsx
-│   └── main.tsx
-├── eslint.config.mjs
-├── index.html
-├── tsconfig.json
-└── vite.config.ts
-```
 
 Run `npm run build` to generate a deployable static site in `dist/`.
 

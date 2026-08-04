@@ -8,12 +8,13 @@ type Options = {
     cwd: string;
     targetDir: string;
     template: string;
+    boilerplate: string;
     packageName: string;
-    renameFiles: Record<string, string | undefined>;
+    renameFiles: Record<string, string>;
 };
 
 export const scaffoldProject = (opts: Options) => {
-    const { cwd, targetDir, template, packageName, renameFiles } = opts;
+    const { cwd, targetDir, template, boilerplate, packageName, renameFiles } = opts;
 
     const root = path.resolve(cwd, targetDir);
     fs.mkdirSync(root, { recursive: true });
@@ -34,24 +35,28 @@ export const scaffoldProject = (opts: Options) => {
         throw new Error(`Template directory not found for: ${template}`);
     }
 
-    const write = (file: string, content?: string) => {
-        const targetPath = path.join(root, renameFiles[file] ?? file);
-        if (content !== undefined) {
-            fs.writeFileSync(targetPath, content);
-        } else {
-            fs.cpSync(path.join(templateDir, file), targetPath, { recursive: true });
+    // Shared tooling first, then the boilerplate over the top - a boilerplate file of the same name
+    // wins. ponytail: a boilerplate needing extra dependencies has to ship a whole package.json;
+    // merge the dependency maps instead if that becomes common.
+    for (const layer of ['base', boilerplate]) {
+        const layerDir = path.join(templateDir, layer);
+        if (!fs.existsSync(layerDir)) {
+            throw new Error(`Boilerplate directory not found: ${template}/${layer}`);
         }
-    };
-
-    const files = fs.readdirSync(templateDir);
-    for (const file of files.filter((f) => f !== 'package.json')) {
-        write(file);
+        fs.cpSync(layerDir, root, { recursive: true });
     }
 
-    const pkg = JSON.parse(fs.readFileSync(path.join(templateDir, 'package.json'), 'utf-8'));
+    for (const [from, to] of Object.entries(renameFiles)) {
+        const fromPath = path.join(root, from);
+        if (fs.existsSync(fromPath)) {
+            fs.renameSync(fromPath, path.join(root, to));
+        }
+    }
 
+    const pkgPath = path.join(root, 'package.json');
+    const pkg = JSON.parse(fs.readFileSync(pkgPath, 'utf-8'));
     pkg.name = packageName;
-    write('package.json', JSON.stringify(pkg, null, 4) + '\n');
+    fs.writeFileSync(pkgPath, JSON.stringify(pkg, null, 4) + '\n');
 
     let doneMessage = 'Project created. Now run:\n';
     const cdProjectName = path.isAbsolute(targetDir) ? root : path.relative(cwd, root);

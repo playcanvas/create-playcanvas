@@ -1,4 +1,4 @@
-# PlayCanvas + TypeScript Starter
+# PlayCanvas Engine + TypeScript Starter
 
 A Vite-powered PlayCanvas Engine project with TypeScript, hot module replacement, ESLint and Prettier.
 
@@ -9,13 +9,13 @@ Node.js 22.23.2 or later.
 ## Getting started
 
 ```bash
-npm create playcanvas@latest playcanvas-project -- --template vanilla-ts
+npm create playcanvas@latest playcanvas-project -- --template engine
 cd playcanvas-project
 npm install
 npm run dev
 ```
 
-Open <http://localhost:5173>. Edit `src/App.ts` to test hot module replacement.
+Open <http://localhost:5173>. Edit the files under `src/` and save to see the scene update.
 
 ## Scripts
 
@@ -27,22 +27,6 @@ Open <http://localhost:5173>. Edit `src/App.ts` to test hot module replacement.
 | `npm run lint`      | Run ESLint                        |
 | `npm run fmt`       | Check formatting                  |
 | `npm run typecheck` | Run TypeScript checks             |
-
-## Project structure
-
-```text
-.
-├── public/
-│   └── environment-map.png
-├── src/
-│   ├── assets/
-│   ├── App.ts
-│   ├── main.ts
-│   └── style.css
-├── eslint.config.mjs
-├── index.html
-└── tsconfig.json
-```
 
 Run `npm run build` to generate a deployable static site in `dist/`.
 
