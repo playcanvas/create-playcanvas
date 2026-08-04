@@ -12,7 +12,7 @@ class Rotate extends Script {
     }
 }
 
-// engine scripts are resolved by the bundler, so they are attached through the entity rather than
+// Engine scripts are resolved by the bundler, so they are attached through the entity rather than
 // with <pc-script name="...">, which only resolves scripts fetched at runtime by <pc-asset>
 const cube = await whenReady<EntityElement>('pc-entity[name="cube"]');
 

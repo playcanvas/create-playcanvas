@@ -30,6 +30,7 @@ device.maxPixelRatio = Math.min(window.devicePixelRatio, 2);
 const createOptions = new AppOptions();
 createOptions.graphicsDevice = device;
 createOptions.componentSystems = [CameraComponentSystem, GSplatComponentSystem, ScriptComponentSystem];
+
 // TextureHandler is required as well as GSplatHandler - a .sog is a container whose splat data is
 // stored as textures, and without it the splat loads but silently renders nothing
 createOptions.resourceHandlers = [TextureHandler, GSplatHandler];

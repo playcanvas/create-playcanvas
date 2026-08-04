@@ -10,7 +10,7 @@ import './style.css';
 const HOVER_COLOR = 'orange';
 const DEFAULT_COLOR = 'lightgrey';
 
-// the camera is awaited as <pc-camera> rather than the <pc-entity> holding it - an entity becomes
+// The camera is awaited as <pc-camera> rather than the <pc-entity> holding it - an entity becomes
 // ready before its component children do, and CameraControls needs the camera component to exist
 const [appElement, cameraComponent, grid, sphere] = await Promise.all([
     whenReady('pc-app'),
@@ -19,7 +19,7 @@ const [appElement, cameraComponent, grid, sphere] = await Promise.all([
     whenReady<EntityElement>('pc-entity[name="sphere"]')
 ]);
 
-// this is a pre-generated environment atlas rather than an equirectangular image, so it is applied
+// This is a pre-generated environment atlas rather than an equirectangular image, so it is applied
 // straight to the scene instead of through <pc-sky>
 const app = appElement.app!;
 const envAtlas = new Asset(
@@ -38,14 +38,14 @@ await new Promise<void>((resolve) => {
     app.assets.load(envAtlas);
 });
 
-// light the scene from the environment, with the skybox itself left hidden
+// Light the scene from the environment, with the skybox itself left hidden
 app.scene.envAtlas = envAtlas.resource as Texture;
 const skyboxLayer = app.scene.layers.getLayerByName('Skybox');
 if (skyboxLayer) {
     skyboxLayer.enabled = false;
 }
 
-// engine scripts are resolved by the bundler, so they are attached through the entity rather than
+// Engine scripts are resolved by the bundler, so they are attached through the entity rather than
 // with <pc-script name="...">, which only resolves scripts fetched at runtime by <pc-asset>
 const camera = cameraComponent.closestEntity;
 camera?.entity?.addComponent('script');

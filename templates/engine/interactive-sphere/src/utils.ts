@@ -5,7 +5,6 @@
  * @returns A throttled function
  */
 export const throttle = <T extends unknown[]>(fn: (...args: T) => void, interval = 100) => {
-    // interval in ms
     let last = 0;
     return (...args: T) => {
         const now = Date.now();

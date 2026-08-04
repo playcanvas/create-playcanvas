@@ -21,10 +21,9 @@ function Splat() {
     );
 }
 
+// Antialiasing is disabled - splat rendering is fragment bound, so MSAA costs a lot and adds little
 function App() {
     return (
-        // Antialiasing is disabled - splat rendering is fragment bound, so MSAA costs a lot and
-        // adds little
         <Application graphicsDeviceOptions={{ antialias: false }}>
             {/* Create a camera entity with orbit controls */}
             <Entity name="camera" position={[0, 0, 2.5]}>

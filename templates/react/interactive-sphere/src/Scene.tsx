@@ -9,7 +9,6 @@ import { useEffect, useState } from 'react';
  * The Scene renders a sphere with a grid and camera controls
  */
 function Scene({ onClick }: SceneProps) {
-    // Track the hover state and set the color based on the hover state
     const [hovering, setHovering] = useState(false);
 
     // Set a material color based on the hover state
@@ -21,7 +20,7 @@ function Scene({ onClick }: SceneProps) {
     // Load the environment map
     const { asset: envMap } = useEnvAtlas('/environment-map.png');
 
-    // change the mouse cursor based on the hover state
+    // Change the mouse cursor based on the hover state
     useEffect(() => {
         document.body.style.cursor = hovering ? 'pointer' : 'default';
 
