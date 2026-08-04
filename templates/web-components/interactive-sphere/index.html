@@ -17,13 +17,7 @@
                     <pc-camera clear-color="#171717"></pc-camera>
                 </pc-entity>
 
-                <!-- Key and fill lights -->
-                <pc-entity name="key-light" rotation="45 45 0">
-                    <pc-light></pc-light>
-                </pc-entity>
-                <pc-entity name="fill-light" position="0 2 0">
-                    <pc-light type="omni" intensity="0.5"></pc-light>
-                </pc-entity>
+                <!-- Lighting comes from the environment map, which is applied in src/main.ts -->
 
                 <!-- Background grid. The grid script is attached in src/main.ts -->
                 <pc-entity name="grid" scale="1000 1000 1000"></pc-entity>

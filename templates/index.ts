@@ -24,7 +24,8 @@ export const TEMPLATES = [
 ];
 
 // Every template holds a `base` directory of shared tooling plus one directory per boilerplate,
-// which is copied over the top. The first entry is the default.
+// which is copied over the top. Assets a boilerplate needs in every template live once in
+// `_shared/<boilerplate>` and are seeded in first. The first entry is the default.
 export const BOILERPLATES = [
     {
         name: 'spinning-cube',
@@ -35,5 +36,15 @@ export const BOILERPLATES = [
         name: 'interactive-sphere',
         display: 'Interactive Sphere',
         description: 'orbit controls, a grid and pointer picking'
+    },
+    {
+        name: 'model-viewer',
+        display: 'Model Viewer',
+        description: 'a glTF model, orbit controls and a procedural sky'
+    },
+    {
+        name: 'splat-viewer',
+        display: 'Splat Viewer',
+        description: 'a Gaussian splat and orbit controls'
     }
 ];

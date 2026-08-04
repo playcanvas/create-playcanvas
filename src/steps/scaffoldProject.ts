@@ -27,12 +27,20 @@ export const scaffoldProject = (opts: Options) => {
     const __filename = fileURLToPath(import.meta.url);
     const __dirname = path.dirname(__filename);
     const possiblePaths = [
-        path.resolve(__dirname, '../templates', template), // prod: dist/index.mjs → ../templates
-        path.resolve(__dirname, '../../templates', template) // dev: src/steps/scaffoldProject.ts → ../../templates
+        path.resolve(__dirname, '../templates'), // prod: dist/index.mjs → ../templates
+        path.resolve(__dirname, '../../templates') // dev: src/steps/scaffoldProject.ts → ../../templates
     ];
-    const templateDir = possiblePaths.find((p) => fs.existsSync(p));
-    if (!templateDir) {
+    const templatesDir = possiblePaths.find((p) => fs.existsSync(path.join(p, template)));
+    if (!templatesDir) {
         throw new Error(`Template directory not found for: ${template}`);
+    }
+    const templateDir = path.join(templatesDir, template);
+
+    // Assets a boilerplate needs in every template are held once in _shared and seeded from there,
+    // so a model or texture is not duplicated per template
+    const sharedDir = path.join(templatesDir, '_shared', boilerplate);
+    if (fs.existsSync(sharedDir)) {
+        fs.cpSync(sharedDir, root, { recursive: true });
     }
 
     // Shared tooling first, then the boilerplate over the top - a boilerplate file of the same name
