@@ -11,7 +11,7 @@ jobs:
     skills:
         name: Update Skills
         runs-on: ubuntu-latest
-        if: github.repository == 'playcanvas/create-playcanvas'
+        if: ${{ github.repository_owner == 'playcanvas' }}
         steps:
             - name: Generate app token
               id: app-token
