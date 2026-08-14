@@ -32,7 +32,7 @@ Run `npm run build` to generate a deployable static site in `dist/`.
 
 ## Agent skills
 
-This project includes the [PlayCanvas Engine skills](https://github.com/playcanvas/skills) under `.claude/skills/` and `.agents/skills/`, so Claude Code, Codex and Cursor pick up PlayCanvas-specific workflows automatically.
+This project includes [`@playcanvas/skills`](https://github.com/playcanvas/skills) under `.claude/skills/` and `.agents/skills/`, so Claude Code, Codex and Cursor pick up PlayCanvas-specific workflows automatically.
 
 ## Further reading
 
