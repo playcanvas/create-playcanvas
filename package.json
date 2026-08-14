@@ -28,6 +28,7 @@
         "create-playcanvas": "dist/index.mjs"
     },
     "files": [
+        "skills",
         "templates",
         "dist"
     ],
@@ -38,6 +39,7 @@
         "fmt:fix": "prettier --write .",
         "lint": "eslint .",
         "lint:fix": "eslint . --fix",
+        "sync-skills": "node scripts/sync-skills.mjs",
         "typecheck": "tsc --noEmit"
     },
     "devDependencies": {
