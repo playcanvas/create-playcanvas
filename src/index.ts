@@ -4,6 +4,7 @@ import * as prompts from '@clack/prompts';
 import mri from 'mri';
 
 import { chooseBoilerplate } from './steps/chooseBoilerplate.js';
+import { chooseSkills } from './steps/chooseSkills.js';
 import { chooseTemplate } from './steps/chooseTemplate.js';
 import { getPackageName } from './steps/getPackageName.js';
 import { getTargetDir } from './steps/getTargetDir.js';
@@ -17,6 +18,7 @@ const argv = mri<{
     help?: boolean;
     overwrite?: boolean;
     yes?: boolean;
+    skills?: boolean;
 }>(process.argv.slice(2), {
     alias: { h: 'help', t: 'template', b: 'boilerplate', y: 'yes' },
     boolean: ['help', 'overwrite', 'yes'],
@@ -35,6 +37,7 @@ Options:
   -t, --template NAME        use a specific template
   -b, --boilerplate NAME     use a specific boilerplate
       --overwrite            remove existing files from a non-empty target directory
+      --no-skills            omit the PlayCanvas agent skills
   -y, --yes                  skip the prompts and take the defaults
   -h, --help                 show help
 `;
@@ -68,6 +71,7 @@ const init = async () => {
     const packageName = await getPackageName({ targetDir, yes, cancel });
     const template = await chooseTemplate({ argTemplate, yes, cancel });
     const boilerplate = await chooseBoilerplate({ argBoilerplate, yes, cancel });
+    const skills = await chooseSkills({ argSkills: argv.skills, yes, cancel });
 
     scaffoldProject({
         cwd,
@@ -75,6 +79,7 @@ const init = async () => {
         template,
         boilerplate,
         packageName,
+        skills,
         renameFiles
     });
 };
