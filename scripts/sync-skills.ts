@@ -13,12 +13,10 @@ const dest = path.join(root, 'skills');
 const tmp = fs.mkdtempSync(path.join(os.tmpdir(), 'pc-skills-'));
 
 execFileSync('git', ['clone', '--depth', '1', '--branch', REF, REPO, tmp], { stdio: 'inherit' });
-const commit = execFileSync('git', ['rev-parse', 'HEAD'], { cwd: tmp }).toString().trim();
 
 fs.rmSync(dest, { recursive: true, force: true });
 fs.mkdirSync(dest, { recursive: true });
 fs.cpSync(path.join(tmp, SRC), dest, { recursive: true });
-fs.writeFileSync(path.join(dest, 'SOURCE.json'), `${JSON.stringify({ repo: REPO, ref: REF, commit }, null, 4)}\n`);
 
 fs.rmSync(tmp, { recursive: true, force: true });
-console.log(`synced ${dest} from ${REF} (${commit})`);
+console.log(`synced ${dest} from ${REF}`);
