@@ -39,7 +39,6 @@
         "fmt:fix": "prettier --write .",
         "lint": "eslint .",
         "lint:fix": "eslint . --fix",
-        "skills:sync": "node scripts/sync-skills.ts",
         "typecheck": "tsc --noEmit"
     },
     "devDependencies": {

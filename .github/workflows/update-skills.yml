@@ -25,11 +25,6 @@ jobs:
               with:
                   token: ${{ steps.app-token.outputs.token }}
 
-            - name: Set up Node.js
-              uses: actions/setup-node@v7
-              with:
-                  node-version: 22.23.2
-
             - name: Configure Git user
               run: |
                   git config user.email "playcanvas[bot]@users.noreply.github.com"
@@ -44,8 +39,12 @@ jobs:
                       exit 1
                   fi
                   echo "Latest skills tag: $latest"
-                  sed -i "s/const REF = '.*';/const REF = '$latest';/" scripts/sync-skills.ts
-                  npm run skills:sync
+                  tmp=$(mktemp -d)
+                  git clone --depth 1 --branch "$latest" https://github.com/playcanvas/skills.git "$tmp"
+                  rm -rf skills
+                  mkdir -p skills
+                  cp -R "$tmp/plugins/engine/skills/." skills/
+                  rm -rf "$tmp"
                   echo "ref=$latest" >> "$GITHUB_OUTPUT"
 
             - name: Open pull request if skills changed
@@ -59,7 +58,7 @@ jobs:
                   fi
                   branch="update-skills/$REF"
                   git switch -c "$branch"
-                  git add scripts/sync-skills.ts skills
+                  git add skills
                   git commit -m "chore: update playcanvas skills to $REF"
                   git push -f origin "$branch"
                   if [ -z "$(gh pr list --head "$branch" --state open --json number --jq '.[0].number')" ]; then
