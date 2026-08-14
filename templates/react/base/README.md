@@ -9,7 +9,7 @@ Node.js 22.23.2 or later.
 ## Getting started
 
 ```bash
-npm create playcanvas@latest playcanvas-project -- --template react
+npm create playcanvas@latest playcanvas-project -- --format react
 cd playcanvas-project
 npm install
 npm run dev

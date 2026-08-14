@@ -1,0 +1,34 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <link rel="icon" type="image/png" href="/src/assets/playcanvas.png" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>VR Starter</title>
+    </head>
+    <body>
+        <pc-app>
+            <pc-scene>
+                <pc-entity name="light" rotation="45 30 0"
+                    ><pc-light type="directional" intensity="2"></pc-light
+                ></pc-entity>
+                <pc-entity name="floor" scale="10 1 10"><pc-render type="plane"></pc-render></pc-entity>
+                <pc-entity position="0 0.5 -3" scale="0.4 0.4 0.4"><pc-render type="box"></pc-render></pc-entity>
+                <pc-entity position="2 1.1 -2" scale="0.4 0.4 0.4"><pc-render type="box"></pc-render></pc-entity>
+                <pc-entity position="-2 1.7 -2" scale="0.4 0.4 0.4"><pc-render type="box"></pc-render></pc-entity>
+                <pc-entity name="xr-rig"
+                    ><pc-entity name="camera" position="0 1.6 4"
+                        ><pc-camera clear-color="#0a0f17"></pc-camera></pc-entity
+                ></pc-entity>
+            </pc-scene>
+        </pc-app>
+        <div class="hud">
+            <section class="panel">
+                <h1>VR Starter</h1>
+                <p id="xr-status">Checking VR support…</p>
+                <div class="controls"><button id="xr-button" disabled>Enter VR</button></div>
+            </section>
+        </div>
+        <script type="module" src="/src/main.ts"></script>
+    </body>
+</html>

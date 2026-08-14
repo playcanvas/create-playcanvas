@@ -4,18 +4,27 @@ import { fileURLToPath } from 'node:url';
 
 import * as prompts from '@clack/prompts';
 
+import { FORMATS, STARTERS } from '../../templates/index.js';
+
+const PACKAGE_MAPS = ['scripts', 'dependencies', 'devDependencies', 'peerDependencies', 'engines'] as const;
+const TEMPLATE_ENTRIES: Record<string, string> = {
+    engine: 'src/main.ts',
+    react: 'src/App.tsx',
+    'web-components': 'src/main.ts'
+};
+
 type Options = {
     cwd: string;
     targetDir: string;
-    template: string;
-    boilerplate: string;
+    format: string;
+    starter: string;
     packageName: string;
     skills: boolean;
     renameFiles: Record<string, string>;
 };
 
 export const scaffoldProject = (opts: Options) => {
-    const { cwd, targetDir, template, boilerplate, packageName, skills, renameFiles } = opts;
+    const { cwd, targetDir, format, starter, packageName, skills, renameFiles } = opts;
 
     const root = path.resolve(cwd, targetDir);
     fs.mkdirSync(root, { recursive: true });
@@ -31,28 +40,41 @@ export const scaffoldProject = (opts: Options) => {
         path.resolve(__dirname, '../templates'), // prod: dist/index.mjs → ../templates
         path.resolve(__dirname, '../../templates') // dev: src/steps/scaffoldProject.ts → ../../templates
     ];
-    const templatesDir = possiblePaths.find((p) => fs.existsSync(path.join(p, template)));
+    const templatesDir = possiblePaths.find((p) => fs.existsSync(path.join(p, format)));
     if (!templatesDir) {
-        throw new Error(`Template directory not found for: ${template}`);
+        throw new Error(`Format directory not found for: ${format}`);
     }
-    const templateDir = path.join(templatesDir, template);
+    const formatDir = path.join(templatesDir, format);
 
-    // Assets a boilerplate needs in every template are held once in _shared and seeded from there,
-    // so a model or texture is not duplicated per template
-    const sharedDir = path.join(templatesDir, '_shared', boilerplate);
-    if (fs.existsSync(sharedDir)) {
-        fs.cpSync(sharedDir, root, { recursive: true });
-    }
-
-    // Shared tooling first, then the boilerplate over the top - a boilerplate file of the same name
-    // wins. ponytail: a boilerplate needing extra dependencies has to ship a whole package.json;
-    // merge the dependency maps instead if that becomes common.
-    for (const layer of ['base', boilerplate]) {
-        const layerDir = path.join(templateDir, layer);
-        if (!fs.existsSync(layerDir)) {
-            throw new Error(`Boilerplate directory not found: ${template}/${layer}`);
+    for (const f of FORMATS) {
+        for (const s of STARTERS) {
+            const dir = path.join(templatesDir, f.name, s.name);
+            const entry = TEMPLATE_ENTRIES[f.name];
+            if (!entry || !fs.existsSync(path.join(dir, entry))) {
+                throw new Error(`Incomplete starter matrix: ${f.name}/${s.name}`);
+            }
         }
-        fs.cpSync(layerDir, root, { recursive: true });
+    }
+
+    // shared concept files, format tooling, then format-specific scene files
+    const dirs = [
+        path.join(templatesDir, '_shared', starter),
+        path.join(formatDir, 'base'),
+        path.join(formatDir, starter)
+    ];
+    const manifests = dirs.map((dir) => {
+        const file = path.join(dir, 'package.json');
+        return fs.existsSync(file) ? (JSON.parse(fs.readFileSync(file, 'utf-8')) as Record<string, unknown>) : {};
+    });
+    const mergeOrder = [manifests[1], manifests[0], manifests[2]];
+
+    for (const dir of dirs) {
+        if (dir === dirs[2] && !fs.existsSync(dir)) {
+            throw new Error(`Starter directory not found: ${format}/${starter}`);
+        }
+        if (fs.existsSync(dir)) {
+            fs.cpSync(dir, root, { recursive: true });
+        }
     }
 
     for (const [from, to] of Object.entries(renameFiles)) {
@@ -63,7 +85,15 @@ export const scaffoldProject = (opts: Options) => {
     }
 
     const pkgPath = path.join(root, 'package.json');
-    const pkg = JSON.parse(fs.readFileSync(pkgPath, 'utf-8'));
+    const pkg = Object.assign({}, ...mergeOrder) as Record<string, unknown>;
+    for (const key of PACKAGE_MAPS) {
+        const value = Object.assign(
+            {},
+            ...mergeOrder.map((part) => part?.[key] as Record<string, unknown> | undefined)
+        );
+        if (Object.keys(value).length) pkg[key] = value;
+        else delete pkg[key];
+    }
     pkg.name = packageName;
     fs.writeFileSync(pkgPath, JSON.stringify(pkg, null, 4) + '\n');
 

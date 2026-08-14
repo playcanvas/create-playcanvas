@@ -1,0 +1,29 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <link rel="icon" type="image/png" href="/src/assets/playcanvas.png" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Sprite Game</title>
+    </head>
+    <body>
+        <pc-app>
+            <pc-scene>
+                <pc-entity name="camera" position="0 1 10"
+                    ><pc-camera projection="orthographic" ortho-height="5" clear-color="#0d121c"></pc-camera
+                ></pc-entity>
+                <pc-entity name="ground" position="0 -2.1 0" scale="20 0.2 1"
+                    ><pc-render type="box"></pc-render
+                ></pc-entity>
+                <pc-entity name="game"></pc-entity>
+            </pc-scene>
+        </pc-app>
+        <div class="hud">
+            <section class="panel">
+                <h1>Sprite Game</h1>
+                <p>Use A/D or the arrow keys to move and Space to jump.</p>
+            </section>
+        </div>
+        <script type="module" src="/src/main.ts"></script>
+    </body>
+</html>

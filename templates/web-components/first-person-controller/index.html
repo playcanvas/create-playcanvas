@@ -1,0 +1,45 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <link rel="icon" type="image/png" href="/src/assets/playcanvas.png" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>First-Person Controller</title>
+    </head>
+    <body>
+        <pc-app>
+            <pc-scene>
+                <pc-entity name="light" rotation="50 30 0"
+                    ><pc-light type="directional" intensity="2.5"></pc-light
+                ></pc-entity>
+                <pc-entity name="floor" position="0 -0.1 0" scale="18 0.2 18"
+                    ><pc-render type="box"></pc-render><pc-collision type="box"></pc-collision
+                    ><pc-rigidbody type="static"></pc-rigidbody
+                ></pc-entity>
+                <pc-entity name="crate" position="-2 0.75 -3" scale="1.5 1.5 1.5"
+                    ><pc-render type="box"></pc-render><pc-collision type="box"></pc-collision
+                    ><pc-rigidbody type="static"></pc-rigidbody
+                ></pc-entity>
+                <pc-entity name="crate" position="3 0.5 1" scale="2.5 1 1"
+                    ><pc-render type="box"></pc-render><pc-collision type="box"></pc-collision
+                    ><pc-rigidbody type="static"></pc-rigidbody
+                ></pc-entity>
+                <pc-entity name="player" position="0 1 5">
+                    <pc-collision type="capsule" radius="0.45" height="1.8"></pc-collision>
+                    <pc-rigidbody type="dynamic" mass="80" angular-factor="0 0 0"></pc-rigidbody>
+                    <pc-entity name="camera" position="0 0.65 0"
+                        ><pc-camera clear-color="#0f1421"></pc-camera
+                    ></pc-entity>
+                </pc-entity>
+            </pc-scene>
+        </pc-app>
+        <div class="hud">
+            <section class="panel">
+                <h1>First-Person Controller</h1>
+                <p>Click the scene, then use WASD, mouse look and Space to jump.</p>
+            </section>
+            <span class="crosshair"></span>
+        </div>
+        <script type="module" src="/src/main.ts"></script>
+    </body>
+</html>

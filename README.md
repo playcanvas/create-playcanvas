@@ -9,7 +9,7 @@
 
 | [Engine Manual](https://developer.playcanvas.com/user-manual/engine/) | [React Manual](https://developer.playcanvas.com/user-manual/react/) | [Examples](https://playcanvas.github.io/) | [Forum](https://forum.playcanvas.com/) |
 
-Scaffold a Vite-powered PlayCanvas project with TypeScript. Choose the PlayCanvas Engine directly, [`@playcanvas/react`](https://github.com/playcanvas/react) or [`@playcanvas/web-components`](https://github.com/playcanvas/web-components).
+Scaffold a Vite-powered PlayCanvas project with TypeScript. Pick a format and a runnable starter, then build from there.
 
 ## Getting Started
 
@@ -26,47 +26,55 @@ bun x create-playcanvas@latest
 
 Then follow the prompts. Requires Node.js 22.23.2 or later.
 
-## Templates
+## Formats
 
-| Template         | Description                                  |
+| Format           | Description                                  |
 | ---------------- | -------------------------------------------- |
 | `engine`         | The PlayCanvas Engine API directly           |
 | `react`          | `@playcanvas/react` components               |
 | `web-components` | `@playcanvas/web-components` custom elements |
 
-Every template is TypeScript, and includes Vite, ESLint, Prettier and a production build.
+Every format uses TypeScript and includes Vite, ESLint, Prettier and a production build.
 
-## Boilerplates
+## Starters
 
-Each template offers a choice of starting scene. `spinning-cube` is the default.
+Every starter is available in every format. `spinning-cube` is the default.
 
-| Boilerplate          | Description                                    |
-| -------------------- | ---------------------------------------------- |
-| `spinning-cube`      | A rotating cube and a light                    |
-| `interactive-sphere` | Orbit controls, a grid and pointer picking     |
-| `model-viewer`       | A glTF model, orbit controls, a procedural sky |
-| `splat-viewer`       | A Gaussian splat and orbit controls            |
+| Starter                   | Category | Description                                         |
+| ------------------------- | -------- | --------------------------------------------------- |
+| `spinning-cube`           | Basics   | A rotating cube and a light                         |
+| `interactive-sphere`      | Basics   | Orbit controls, a grid and pointer picking          |
+| `model-viewer`            | Viewers  | A glTF model, orbit controls and a procedural sky   |
+| `splat-viewer`            | Viewers  | A Gaussian splat and orbit controls                 |
+| `product-configurator`    | Viewers  | Product variants, materials and orbit controls      |
+| `physics-playground`      | Games    | Rigid bodies, collisions, spawning and reset        |
+| `first-person-controller` | Games    | First-person movement, mouse look and jumping       |
+| `third-person-controller` | Games    | An animated character, follow camera and locomotion |
+| `sprite-game`             | Games    | An orthographic camera, sprite animation and input  |
+| `scene-editor`            | Tools    | Selection plus translate, rotate and scale gizmos   |
+| `vr-starter`              | XR       | Immersive VR, controllers and locomotion            |
+| `ar-placement`            | XR       | Mobile AR, hit testing and object placement         |
 
-A template is a `base` directory of shared tooling plus one directory per boilerplate, which is copied over the top. Assets a boilerplate needs in every template live once in `templates/_shared/<boilerplate>` and are seeded in first.
+Internally, each format has a `base` directory plus one directory per starter. Code and assets shared by all formats live in `templates/_shared/<starter>`.
 
 ## CLI Options
 
-Pass a project name, template and boilerplate to skip the prompts:
+Pass a project name, format and starter to skip the prompts:
 
 ```bash
-npm create playcanvas@latest my-game -- --template react --boilerplate spinning-cube
+npm create playcanvas@latest my-game -- --format react --starter spinning-cube
 ```
 
-| Option                 | Shorthand | Description                                             |
-| ---------------------- | --------- | ------------------------------------------------------- |
-| `--template <name>`    | `-t`      | Use a template from the list above                      |
-| `--boilerplate <name>` | `-b`      | Use a boilerplate from the list above                   |
-| `--overwrite`          |           | Remove existing files from a non-empty target directory |
-| `--no-skills`          |           | Omit the PlayCanvas agent skills (included by default)  |
-| `--yes`                | `-y`      | Skip the prompts and take the defaults                  |
-| `--help`               | `-h`      | Show command help                                       |
+| Option             | Shorthand | Description                                             |
+| ------------------ | --------- | ------------------------------------------------------- |
+| `--format <name>`  | `-f`      | Use a format from the list above                        |
+| `--starter <name>` | `-s`      | Use a starter from the list above                       |
+| `--overwrite`      |           | Remove existing files from a non-empty target directory |
+| `--no-skills`      |           | Omit the PlayCanvas agent skills (included by default)  |
+| `--yes`            | `-y`      | Skip the prompts and take the defaults                  |
+| `--help`           | `-h`      | Show command help                                       |
 
-`--yes` takes `playcanvas-project`, the `engine` template and the `spinning-cube` boilerplate for anything you don't pass. It never deletes files, so a non-empty target directory still needs `--overwrite`.
+`--yes` takes `playcanvas-project`, the `engine` format and the `spinning-cube` starter for anything you don't pass. It never deletes files, so a non-empty target directory still needs `--overwrite`. The previous `--template` and `--boilerplate` long flags remain accepted for compatibility.
 
 ## Agent skills
 
@@ -80,7 +88,7 @@ npm run build
 node dist/index.mjs
 ```
 
-Contributions are welcome. Please open an issue before proposing a new template or another substantial change.
+Contributions are welcome. Please open an issue before proposing a new format, starter or another substantial change.
 
 ## License
 

@@ -3,8 +3,8 @@
 import * as prompts from '@clack/prompts';
 import mri from 'mri';
 
-import { chooseBoilerplate } from './steps/chooseBoilerplate.js';
-import { chooseTemplate } from './steps/chooseTemplate.js';
+import { chooseFormat } from './steps/chooseFormat.js';
+import { chooseStarter } from './steps/chooseStarter.js';
 import { getPackageName } from './steps/getPackageName.js';
 import { getTargetDir } from './steps/getTargetDir.js';
 import { handleExistingDir } from './steps/handleExistingDir.js';
@@ -12,6 +12,8 @@ import { scaffoldProject } from './steps/scaffoldProject.js';
 import { formatTargetDir } from './utils/fs.js';
 
 const argv = mri<{
+    format?: string;
+    starter?: string;
     template?: string;
     boilerplate?: string;
     help?: boolean;
@@ -19,9 +21,9 @@ const argv = mri<{
     yes?: boolean;
     skills?: boolean;
 }>(process.argv.slice(2), {
-    alias: { h: 'help', t: 'template', b: 'boilerplate', y: 'yes' },
+    alias: { b: 'boilerplate', f: 'format', h: 'help', s: 'starter', t: 'template', y: 'yes' },
     boolean: ['help', 'overwrite', 'yes'],
-    string: ['template', 'boilerplate']
+    string: ['format', 'starter', 'template', 'boilerplate']
 });
 
 const cwd = process.cwd();
@@ -33,8 +35,8 @@ Create a new PlayCanvas project with TypeScript.
 With no arguments, start the CLI in interactive mode.
 
 Options:
-  -t, --template NAME        use a specific template
-  -b, --boilerplate NAME     use a specific boilerplate
+  -f, --format NAME          use a specific format
+  -s, --starter NAME         use a specific starter
       --overwrite            remove existing files from a non-empty target directory
       --no-skills            omit the PlayCanvas agent skills
   -y, --yes                  skip the prompts and take the defaults
@@ -49,8 +51,8 @@ const defaultTargetDir = 'playcanvas-project';
 
 const init = async () => {
     const argTargetDir = argv._[0] ? formatTargetDir(String(argv._[0])) : undefined;
-    const argTemplate = argv.template;
-    const argBoilerplate = argv.boilerplate;
+    const argFormat = argv.format ?? argv.template;
+    const argStarter = argv.starter ?? argv.boilerplate;
     const argOverwrite = argv.overwrite;
     const yes = argv.yes;
 
@@ -68,8 +70,8 @@ const init = async () => {
     const targetDir = await getTargetDir({ argTargetDir, defaultTargetDir, yes, cancel });
     await handleExistingDir({ targetDir, argOverwrite, yes, cancel });
     const packageName = await getPackageName({ targetDir, yes, cancel });
-    const template = await chooseTemplate({ argTemplate, yes, cancel });
-    const boilerplate = await chooseBoilerplate({ argBoilerplate, yes, cancel });
+    const format = await chooseFormat({ argFormat, yes, cancel });
+    const starter = await chooseStarter({ argStarter, yes, cancel });
 
     // included by default; --no-skills opts out
     const skills = argv.skills ?? true;
@@ -77,8 +79,8 @@ const init = async () => {
     scaffoldProject({
         cwd,
         targetDir,
-        template,
-        boilerplate,
+        format,
+        starter,
         packageName,
         skills,
         renameFiles

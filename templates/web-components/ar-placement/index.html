@@ -1,0 +1,28 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <link rel="icon" type="image/png" href="/src/assets/playcanvas.png" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>AR Placement</title>
+    </head>
+    <body>
+        <pc-app alpha>
+            <pc-scene>
+                <pc-entity name="camera"><pc-camera clear-color="0 0 0 0"></pc-camera></pc-entity>
+                <pc-entity name="light" rotation="45 30 0"
+                    ><pc-light type="directional" intensity="2"></pc-light
+                ></pc-entity>
+                <pc-entity name="placement"></pc-entity>
+            </pc-scene>
+        </pc-app>
+        <div class="hud">
+            <section class="panel">
+                <h1>AR Placement</h1>
+                <p id="xr-status">Checking AR support…</p>
+                <div class="controls"><button id="xr-button" disabled>Start AR</button></div>
+            </section>
+        </div>
+        <script type="module" src="/src/main.ts"></script>
+    </body>
+</html>

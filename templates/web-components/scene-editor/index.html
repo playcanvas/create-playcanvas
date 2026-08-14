@@ -1,0 +1,39 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <link rel="icon" type="image/png" href="/src/assets/playcanvas.png" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Scene Editor</title>
+    </head>
+    <body>
+        <pc-app>
+            <pc-scene>
+                <pc-entity name="camera" position="5 4 6" rotation="-20 40 0"
+                    ><pc-camera clear-color="#0a0f17"></pc-camera
+                ></pc-entity>
+                <pc-entity name="light" rotation="45 30 0"
+                    ><pc-light type="directional" intensity="2.5"></pc-light
+                ></pc-entity>
+                <pc-entity name="grid" scale="100 100 100"></pc-entity>
+                <pc-entity name="cube" position="-1.2 0.5 0"><pc-render type="box"></pc-render></pc-entity>
+                <pc-entity name="sphere" position="1.2 0.5 0"><pc-render type="sphere"></pc-render></pc-entity>
+                <pc-entity name="editor"></pc-entity>
+            </pc-scene>
+        </pc-app>
+        <div class="hud">
+            <section class="panel">
+                <h1>Scene Editor</h1>
+                <p>Select an object, then translate, rotate or scale it.</p>
+                <div class="controls">
+                    <button data-target="0" aria-pressed="true">Cube</button><button data-target="1">Sphere</button>
+                </div>
+                <div class="controls">
+                    <button data-mode="translate" aria-pressed="true">Move</button
+                    ><button data-mode="rotate">Rotate</button><button data-mode="scale">Scale</button>
+                </div>
+            </section>
+        </div>
+        <script type="module" src="/src/main.ts"></script>
+    </body>
+</html>

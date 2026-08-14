@@ -1,0 +1,77 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <link rel="icon" type="image/png" href="/src/assets/playcanvas.png" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Product Configurator</title>
+    </head>
+    <body>
+        <pc-app>
+            <pc-material id="finish" diffuse="#41b6e6" metalness="0.15" gloss="0.65"></pc-material>
+            <pc-scene>
+                <pc-entity name="camera" position="4 2.6 5"><pc-camera clear-color="#0a0f17"></pc-camera></pc-entity>
+                <pc-entity name="light" rotation="45 35 0"
+                    ><pc-light type="directional" intensity="2.5"></pc-light
+                ></pc-entity>
+                <pc-entity name="chair" data-product>
+                    <pc-entity position="0 0.8 0" scale="1.6 0.18 1.6"
+                        ><pc-render type="box" material="finish"></pc-render
+                    ></pc-entity>
+                    <pc-entity position="0 1.65 0.7" scale="1.6 1.5 0.18"
+                        ><pc-render type="box" material="finish"></pc-render
+                    ></pc-entity>
+                    <pc-entity position="-0.65 0.35 -0.65" scale="0.14 0.7 0.14"
+                        ><pc-render type="cylinder" material="finish"></pc-render
+                    ></pc-entity>
+                    <pc-entity position="0.65 0.35 -0.65" scale="0.14 0.7 0.14"
+                        ><pc-render type="cylinder" material="finish"></pc-render
+                    ></pc-entity>
+                    <pc-entity position="-0.65 0.35 0.65" scale="0.14 0.7 0.14"
+                        ><pc-render type="cylinder" material="finish"></pc-render
+                    ></pc-entity>
+                    <pc-entity position="0.65 0.35 0.65" scale="0.14 0.7 0.14"
+                        ><pc-render type="cylinder" material="finish"></pc-render
+                    ></pc-entity>
+                </pc-entity>
+                <pc-entity name="lamp" data-product enabled="false">
+                    <pc-entity position="0 0.12 0" scale="1.3 0.24 1.3"
+                        ><pc-render type="cylinder" material="finish"></pc-render
+                    ></pc-entity>
+                    <pc-entity position="0 1.25 0" scale="0.16 2.3 0.16"
+                        ><pc-render type="cylinder" material="finish"></pc-render
+                    ></pc-entity>
+                    <pc-entity position="0 2.35 0" scale="1.4 1.2 1.4"
+                        ><pc-render type="cone" material="finish"></pc-render
+                    ></pc-entity>
+                </pc-entity>
+                <pc-entity name="speaker" data-product enabled="false">
+                    <pc-entity position="0 1.15 0" scale="1.5 2.3 0.8"
+                        ><pc-render type="box" material="finish"></pc-render
+                    ></pc-entity>
+                    <pc-entity position="0 0.85 0.43" rotation="90 0 0" scale="0.75 0.12 0.75"
+                        ><pc-render type="cylinder" material="finish"></pc-render
+                    ></pc-entity>
+                    <pc-entity position="0 1.65 0.43" rotation="90 0 0" scale="0.35 0.12 0.35"
+                        ><pc-render type="cylinder" material="finish"></pc-render
+                    ></pc-entity>
+                </pc-entity>
+            </pc-scene>
+        </pc-app>
+        <div class="hud">
+            <section class="panel">
+                <h1>Product Configurator</h1>
+                <p>Switch the model and finish, then drag to orbit.</p>
+                <div class="controls" id="products">
+                    <button aria-pressed="true">Chair</button><button>Lamp</button><button>Speaker</button>
+                </div>
+                <div class="controls" id="colors">
+                    <button class="swatch" style="--color: #41b6e6" aria-label="blue"></button
+                    ><button class="swatch" style="--color: #ff6b6b" aria-label="red"></button
+                    ><button class="swatch" style="--color: #f7c948" aria-label="yellow"></button>
+                </div>
+            </section>
+        </div>
+        <script type="module" src="/src/main.ts"></script>
+    </body>
+</html>

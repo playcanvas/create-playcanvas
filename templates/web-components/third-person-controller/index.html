@@ -1,0 +1,52 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <link rel="icon" type="image/png" href="/src/assets/playcanvas.png" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Third-Person Controller</title>
+    </head>
+    <body>
+        <pc-app>
+            <pc-scene>
+                <pc-entity name="camera" position="0 3 6"><pc-camera clear-color="#0f1421"></pc-camera></pc-entity>
+                <pc-entity name="light" rotation="45 30 0"
+                    ><pc-light type="directional" intensity="2.5" cast-shadows></pc-light
+                ></pc-entity>
+                <pc-entity name="ground" position="0 -0.1 0" scale="20 0.2 20"
+                    ><pc-render type="box"></pc-render><pc-collision type="box"></pc-collision
+                    ><pc-rigidbody type="static"></pc-rigidbody
+                ></pc-entity>
+                <pc-entity name="player" position="0 1 0">
+                    <pc-collision type="capsule" radius="0.45" height="1.8"></pc-collision>
+                    <pc-rigidbody type="dynamic" mass="70" angular-factor="0 0 0"></pc-rigidbody>
+                    <pc-entity name="robot">
+                        <pc-entity name="body" scale="0.8 0.9 0.45"><pc-render type="box"></pc-render></pc-entity>
+                        <pc-entity name="head" position="0 0.72 0" scale="0.55 0.55 0.55"
+                            ><pc-render type="sphere"></pc-render
+                        ></pc-entity>
+                        <pc-entity name="left-arm" position="-0.58 0 0" scale="0.22 0.85 0.22"
+                            ><pc-render type="box"></pc-render
+                        ></pc-entity>
+                        <pc-entity name="right-arm" position="0.58 0 0" scale="0.22 0.85 0.22"
+                            ><pc-render type="box"></pc-render
+                        ></pc-entity>
+                        <pc-entity name="left-leg" position="-0.24 -0.85 0" scale="0.28 0.8 0.3"
+                            ><pc-render type="box"></pc-render
+                        ></pc-entity>
+                        <pc-entity name="right-leg" position="0.24 -0.85 0" scale="0.28 0.8 0.3"
+                            ><pc-render type="box"></pc-render
+                        ></pc-entity>
+                    </pc-entity>
+                </pc-entity>
+            </pc-scene>
+        </pc-app>
+        <div class="hud">
+            <section class="panel">
+                <h1>Third-Person Controller</h1>
+                <p>Use WASD to move, Space to jump and drag to orbit.</p>
+            </section>
+        </div>
+        <script type="module" src="/src/main.ts"></script>
+    </body>
+</html>
