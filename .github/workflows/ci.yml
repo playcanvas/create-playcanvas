@@ -106,6 +106,15 @@ jobs:
                   test -d .claude/skills/build-app
                   test -d .agents/skills/build-app
 
+            - name: Assert --no-skills omits skills
+              run: |
+                  node dist/index.mjs "$RUNNER_TEMP/no-skills-${{ matrix.template }}-${{ matrix.boilerplate }}" \
+                    --template "${{ matrix.template }}" \
+                    --boilerplate "${{ matrix.boilerplate }}" \
+                    --no-skills
+                  test ! -d "$RUNNER_TEMP/no-skills-${{ matrix.template }}-${{ matrix.boilerplate }}/.claude"
+                  test ! -d "$RUNNER_TEMP/no-skills-${{ matrix.template }}-${{ matrix.boilerplate }}/.agents"
+
             - name: Install template dependencies
               working-directory: ${{ runner.temp }}/${{ matrix.template }}-${{ matrix.boilerplate }}
               run: npm install
@@ -124,45 +133,4 @@ jobs:
 
             - name: Build template
               working-directory: ${{ runner.temp }}/${{ matrix.template }}-${{ matrix.boilerplate }}
-              run: npm run build
-
-    templates-no-skills:
-        name: Template (--no-skills)
-        runs-on: ubuntu-latest
-        steps:
-            - name: Check out code
-              uses: actions/checkout@v7
-
-            - name: Set up Node.js
-              uses: actions/setup-node@v7
-              with:
-                  node-version: 22.23.2
-                  cache: 'npm'
-                  registry-url: 'https://registry.npmjs.org/'
-
-            - name: Install dependencies
-              run: npm ci
-
-            - name: Build CLI
-              run: npm run build
-
-            - name: Scaffold without skills
-              run: |
-                  node dist/index.mjs "$RUNNER_TEMP/no-skills" \
-                    --template engine \
-                    --boilerplate spinning-cube \
-                    --no-skills
-
-            - name: Assert skills absent
-              working-directory: ${{ runner.temp }}/no-skills
-              run: |
-                  test ! -d .claude
-                  test ! -d .agents
-
-            - name: Install template dependencies
-              working-directory: ${{ runner.temp }}/no-skills
-              run: npm install
-
-            - name: Build template
-              working-directory: ${{ runner.temp }}/no-skills
               run: npm run build
