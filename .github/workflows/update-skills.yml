@@ -1,0 +1,70 @@
+name: Update Skills
+
+on:
+    workflow_dispatch:
+
+permissions:
+    contents: write
+    pull-requests: write
+
+jobs:
+    update-skills:
+        name: Update Skills
+        runs-on: ubuntu-latest
+        if: github.repository == 'playcanvas/create-playcanvas'
+        steps:
+            - name: Generate app token
+              id: app-token
+              uses: actions/create-github-app-token@v3
+              with:
+                  app-id: ${{ secrets.APP_ID }}
+                  private-key: ${{ secrets.APP_KEY }}
+
+            - name: Check out code
+              uses: actions/checkout@v7
+              with:
+                  token: ${{ steps.app-token.outputs.token }}
+
+            - name: Configure Git user
+              run: |
+                  git config user.email "playcanvas[bot]@users.noreply.github.com"
+                  git config user.name "PlayCanvas [bot]"
+
+            - name: Sync skills to the latest release
+              id: sync
+              run: |
+                  latest=$(git ls-remote --tags --refs --sort=-v:refname https://github.com/playcanvas/skills.git 'v*' | head -n1 | sed 's#.*/tags/##')
+                  if [ -z "$latest" ]; then
+                      echo "Could not resolve the latest playcanvas/skills tag"
+                      exit 1
+                  fi
+                  echo "Latest skills tag: $latest"
+                  tmp=$(mktemp -d)
+                  git clone --depth 1 --branch "$latest" https://github.com/playcanvas/skills.git "$tmp"
+                  rm -rf skills
+                  mkdir -p skills
+                  cp -R "$tmp/plugins/engine/skills/." skills/
+                  rm -rf "$tmp"
+                  echo "ref=$latest" >> "$GITHUB_OUTPUT"
+
+            - name: Open pull request if skills changed
+              env:
+                  GH_TOKEN: ${{ steps.app-token.outputs.token }}
+                  REF: ${{ steps.sync.outputs.ref }}
+              run: |
+                  if git diff --quiet; then
+                      echo "Skills already at $REF; nothing to do"
+                      exit 0
+                  fi
+                  branch="update-skills/$REF"
+                  git switch -c "$branch"
+                  git add skills
+                  git commit -m "chore: update playcanvas skills to $REF"
+                  git push -f origin "$branch"
+                  if [ -z "$(gh pr list --head "$branch" --state open --json number --jq '.[0].number')" ]; then
+                      gh pr create --base main --head "$branch" \
+                          --title "chore: update playcanvas skills to $REF" \
+                          --body "Automated update of the vendored PlayCanvas skills to \`$REF\`, opened by the Update Skills workflow."
+                  else
+                      echo "PR already open for $branch; updated by push"
+                  fi

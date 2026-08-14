@@ -100,6 +100,21 @@ jobs:
                     --template "${{ matrix.template }}" \
                     --boilerplate "${{ matrix.boilerplate }}"
 
+            - name: Assert skills present
+              working-directory: ${{ runner.temp }}/${{ matrix.template }}-${{ matrix.boilerplate }}
+              run: |
+                  test -d .claude/skills/build-app
+                  test -d .agents/skills/build-app
+
+            - name: Assert --no-skills omits skills
+              run: |
+                  node dist/index.mjs "$RUNNER_TEMP/no-skills-${{ matrix.template }}-${{ matrix.boilerplate }}" \
+                    --template "${{ matrix.template }}" \
+                    --boilerplate "${{ matrix.boilerplate }}" \
+                    --no-skills
+                  test ! -d "$RUNNER_TEMP/no-skills-${{ matrix.template }}-${{ matrix.boilerplate }}/.claude"
+                  test ! -d "$RUNNER_TEMP/no-skills-${{ matrix.template }}-${{ matrix.boilerplate }}/.agents"
+
             - name: Install template dependencies
               working-directory: ${{ runner.temp }}/${{ matrix.template }}-${{ matrix.boilerplate }}
               run: npm install

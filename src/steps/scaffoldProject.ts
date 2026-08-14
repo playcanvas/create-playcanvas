@@ -10,11 +10,12 @@ type Options = {
     template: string;
     boilerplate: string;
     packageName: string;
+    skills: boolean;
     renameFiles: Record<string, string>;
 };
 
 export const scaffoldProject = (opts: Options) => {
-    const { cwd, targetDir, template, boilerplate, packageName, renameFiles } = opts;
+    const { cwd, targetDir, template, boilerplate, packageName, skills, renameFiles } = opts;
 
     const root = path.resolve(cwd, targetDir);
     fs.mkdirSync(root, { recursive: true });
@@ -65,6 +66,30 @@ export const scaffoldProject = (opts: Options) => {
     const pkg = JSON.parse(fs.readFileSync(pkgPath, 'utf-8'));
     pkg.name = packageName;
     fs.writeFileSync(pkgPath, JSON.stringify(pkg, null, 4) + '\n');
+
+    if (skills) {
+        const skillsDir = [
+            path.resolve(__dirname, '../skills'), // prod: dist/index.mjs → ../skills
+            path.resolve(__dirname, '../../skills') // dev: src/steps → ../../skills
+        ].find((p) => fs.existsSync(p));
+        if (!skillsDir) {
+            throw new Error('Skills directory not found');
+        }
+
+        // one skill set feeds every agent: .claude/skills for Claude Code, .agents/skills for Codex and Cursor
+        const names = fs
+            .readdirSync(skillsDir, { withFileTypes: true })
+            .filter((d) => d.isDirectory())
+            .map((d) => d.name);
+        for (const dir of ['.claude/skills', '.agents/skills']) {
+            for (const name of names) {
+                fs.cpSync(path.join(skillsDir, name), path.join(root, dir, name), {
+                    recursive: true
+                });
+            }
+        }
+        prompts.log.step('Added PlayCanvas agent skills (opt out with --no-skills)');
+    }
 
     let doneMessage = 'Project created. Now run:\n';
     const cdProjectName = path.isAbsolute(targetDir) ? root : path.relative(cwd, root);

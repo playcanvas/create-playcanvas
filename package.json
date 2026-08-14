@@ -28,6 +28,7 @@
         "create-playcanvas": "dist/index.mjs"
     },
     "files": [
+        "skills",
         "templates",
         "dist"
     ],

@@ -58,6 +58,10 @@ JetBrains IDEs pick it up automatically. For VS Code, add to `.vscode/settings.j
 }
 ```
 
+## Agent skills
+
+This project includes the [PlayCanvas Engine skills](https://github.com/playcanvas/skills) under `.claude/skills/` and `.agents/skills/`, so Claude Code, Codex and Cursor pick up PlayCanvas-specific workflows automatically.
+
 ## Further reading
 
 - [PlayCanvas Web Components manual](https://developer.playcanvas.com/user-manual/web-components/)
