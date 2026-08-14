@@ -15,7 +15,7 @@
         "typecheck": "tsc --noEmit"
     },
     "dependencies": {
-        "playcanvas": "^2.21.3"
+        "playcanvas": "^2.21.4"
     },
     "devDependencies": {
         "@playcanvas/eslint-config": "3.0.0-beta.8",
