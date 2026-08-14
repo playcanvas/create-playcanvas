@@ -28,8 +28,13 @@
         },
         {
             "description": "Node.js updates are coordinated manually across PlayCanvas packages",
-            "matchPackageNames": ["node"],
+            "matchDepNames": ["node"],
             "enabled": false
+        },
+        {
+            "description": "Node.js types stay on the coordinated LTS major",
+            "matchPackageNames": ["@types/node"],
+            "allowedVersions": "22.x"
         },
         {
             "description": "typescript-eslint only supports TypeScript <6.1",
