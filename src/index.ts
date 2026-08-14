@@ -4,7 +4,6 @@ import * as prompts from '@clack/prompts';
 import mri from 'mri';
 
 import { chooseBoilerplate } from './steps/chooseBoilerplate.js';
-import { chooseSkills } from './steps/chooseSkills.js';
 import { chooseTemplate } from './steps/chooseTemplate.js';
 import { getPackageName } from './steps/getPackageName.js';
 import { getTargetDir } from './steps/getTargetDir.js';
@@ -71,7 +70,9 @@ const init = async () => {
     const packageName = await getPackageName({ targetDir, yes, cancel });
     const template = await chooseTemplate({ argTemplate, yes, cancel });
     const boilerplate = await chooseBoilerplate({ argBoilerplate, yes, cancel });
-    const skills = await chooseSkills({ argSkills: argv.skills, yes, cancel });
+
+    // included by default; --no-skills opts out
+    const skills = argv.skills ?? true;
 
     scaffoldProject({
         cwd,

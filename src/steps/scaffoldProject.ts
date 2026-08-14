@@ -75,6 +75,7 @@ export const scaffoldProject = (opts: Options) => {
         if (!skillsDir) {
             throw new Error('Skills directory not found');
         }
+
         // one skill set feeds every agent: .claude/skills for Claude Code, .agents/skills for Codex and Cursor
         const names = fs
             .readdirSync(skillsDir, { withFileTypes: true })
@@ -87,7 +88,7 @@ export const scaffoldProject = (opts: Options) => {
                 });
             }
         }
-        prompts.log.step('Added PlayCanvas agent skills');
+        prompts.log.step('Added PlayCanvas agent skills (opt out with --no-skills)');
     }
 
     let doneMessage = 'Project created. Now run:\n';
