@@ -8,7 +8,7 @@ permissions:
     pull-requests: write
 
 jobs:
-    update-skills:
+    skills:
         name: Update Skills
         runs-on: ubuntu-latest
         if: github.repository == 'playcanvas/create-playcanvas'
@@ -56,7 +56,7 @@ jobs:
                       echo "Skills already at $REF; nothing to do"
                       exit 0
                   fi
-                  branch="update-skills/$REF"
+                  branch="skills/$REF"
                   git switch -c "$branch"
                   git add skills
                   git commit -m "chore: update playcanvas skills to $REF"
