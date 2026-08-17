@@ -8,16 +8,28 @@
     </head>
     <body>
         <pc-app>
+            <pc-material id="coral" diffuse="#ff5145"></pc-material>
+            <pc-material id="cyan" diffuse="#24addf"></pc-material>
             <pc-scene>
-                <pc-entity name="camera" position="5 4 6" rotation="-20 40 0"
+                <pc-entity name="camera" position="4 3.2 5" rotation="-18 39 0"
                     ><pc-camera clear-color="#0a0f17"></pc-camera
                 ></pc-entity>
                 <pc-entity name="light" rotation="45 30 0"
-                    ><pc-light type="directional" intensity="2.5"></pc-light
+                    ><pc-light
+                        type="directional"
+                        intensity="2.5"
+                        cast-shadows
+                        shadow-bias="0.2"
+                        normal-offset-bias="0.05"
+                    ></pc-light
                 ></pc-entity>
-                <pc-entity name="grid" scale="100 100 100"></pc-entity>
-                <pc-entity name="cube" position="-1.2 0.5 0"><pc-render type="box"></pc-render></pc-entity>
-                <pc-entity name="sphere" position="1.2 0.5 0"><pc-render type="sphere"></pc-render></pc-entity>
+                <pc-entity name="grid" scale="12 12 12"></pc-entity>
+                <pc-entity name="cube" position="-1.2 0.5 0"
+                    ><pc-render type="box" material="coral"></pc-render
+                ></pc-entity>
+                <pc-entity name="sphere" position="1.2 0.5 0"
+                    ><pc-render type="sphere" material="cyan"></pc-render
+                ></pc-entity>
                 <pc-entity name="editor"></pc-entity>
             </pc-scene>
         </pc-app>

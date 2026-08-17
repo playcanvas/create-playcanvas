@@ -2,6 +2,7 @@ import type { SpriteComponent } from 'playcanvas';
 import {
     ADDRESS_CLAMP_TO_EDGE,
     Asset,
+    Color,
     Entity,
     FILTER_NEAREST,
     PIXELFORMAT_RGBA8,
@@ -9,6 +10,7 @@ import {
     SPRITE_RENDERMODE_SIMPLE,
     SPRITETYPE_ANIMATED,
     Sprite,
+    StandardMaterial,
     Texture,
     TextureAtlas,
     Vec2,
@@ -84,7 +86,28 @@ class SpriteGame extends Script {
         this.player.addComponent('sprite', { type: SPRITETYPE_ANIMATED });
         this.player.sprite!.addClip({ name: 'run', fps: 10, loop: true, spriteAsset: asset.id });
         this.player.sprite!.autoPlayClip = 'run';
+        this.player.setLocalScale(2.5, 2.5, 2.5);
         this.entity.addChild(this.player);
+
+        const sky = new StandardMaterial();
+        sky.emissive = new Color(0.86, 0.95, 1);
+        sky.update();
+        const decoration = (
+            name: string,
+            type: 'box' | 'sphere',
+            position: [number, number, number],
+            scale: [number, number, number],
+            material: StandardMaterial
+        ) => {
+            const entity = new Entity(name);
+            entity.addComponent('render', { type, material });
+            entity.setLocalPosition(...position);
+            entity.setLocalScale(...scale);
+            this.entity.addChild(entity);
+        };
+        decoration('cloud-left', 'sphere', [-3.8, 4, -1], [1.2, 0.5, 0.2], sky);
+        decoration('cloud-center', 'sphere', [-2.9, 4.1, -1], [1.4, 0.65, 0.2], sky);
+        decoration('cloud-right', 'sphere', [3.6, 3.6, -1], [1.7, 0.6, 0.2], sky);
 
         window.addEventListener('keydown', this.onKeyDown);
         window.addEventListener('keyup', this.onKeyUp);
@@ -92,6 +115,7 @@ class SpriteGame extends Script {
             window.removeEventListener('keydown', this.onKeyDown);
             window.removeEventListener('keyup', this.onKeyUp);
             texture.destroy();
+            sky.destroy();
         });
     }
 
@@ -121,7 +145,7 @@ class SpriteGame extends Script {
         }
 
         this.player.setLocalPosition(x, y, position.z);
-        this.player.setLocalScale(direction < 0 ? -1 : 1, 1, 1);
+        this.player.setLocalScale(direction < 0 ? -2.5 : 2.5, 2.5, 2.5);
         const component = this.player.sprite as SpriteComponent;
         component.speed = direction ? 1 : 0;
     }

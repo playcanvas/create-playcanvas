@@ -12,4 +12,4 @@ const cameraComponent = await whenReady('pc-camera');
 // with <pc-script name="...">, which only resolves scripts fetched at runtime by <pc-asset>
 const camera = cameraComponent.closestEntity;
 camera?.entity?.addComponent('script');
-camera?.entity?.script?.create(CameraControls);
+camera?.entity?.script?.create(CameraControls, { properties: { sceneSize: 2 } });

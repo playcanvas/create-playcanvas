@@ -34,34 +34,45 @@ app.start();
 app.setCanvasFillMode(FILLMODE_FILL_WINDOW);
 app.setCanvasResolution(RESOLUTION_AUTO);
 
-const material = new StandardMaterial();
-material.diffuse = new Color(0.18, 0.58, 0.85);
-material.update();
+app.scene.ambientLight = new Color(0.25, 0.28, 0.34);
+
+const coral = new StandardMaterial();
+coral.diffuse = new Color(1, 0.32, 0.27);
+coral.update();
+const cyan = new StandardMaterial();
+cyan.diffuse = new Color(0.14, 0.68, 0.88);
+cyan.update();
 
 const cube = new Entity('cube');
-cube.addComponent('render', { type: 'box', material });
+cube.addComponent('render', { type: 'box', material: coral });
 cube.setPosition(-1.2, 0.5, 0);
 app.root.addChild(cube);
 
 const sphere = new Entity('sphere');
-sphere.addComponent('render', { type: 'sphere', material });
+sphere.addComponent('render', { type: 'sphere', material: cyan });
 sphere.setPosition(1.2, 0.5, 0);
 app.root.addChild(sphere);
 
 const grid = new Entity('grid');
 grid.addComponent('script');
 grid.script!.create(Grid);
-grid.setLocalScale(100, 100, 100);
+grid.setLocalScale(12, 12, 12);
 app.root.addChild(grid);
 
 const camera = new Entity('camera');
 camera.addComponent('camera', { clearColor: new Color(0.04, 0.06, 0.09) });
-camera.setPosition(5, 4, 6);
+camera.setPosition(4, 3.2, 5);
 camera.lookAt(0, 0.5, 0);
 app.root.addChild(camera);
 
 const light = new Entity('light');
-light.addComponent('light', { type: 'directional', intensity: 2.5 });
+light.addComponent('light', {
+    type: 'directional',
+    intensity: 2.5,
+    castShadows: true,
+    shadowBias: 0.2,
+    normalOffsetBias: 0.05
+});
 light.setEulerAngles(45, 30, 0);
 app.root.addChild(light);
 

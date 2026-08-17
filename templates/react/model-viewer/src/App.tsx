@@ -30,9 +30,9 @@ function App() {
             {/* Create a camera entity with orbit controls. The sky is HDR, so it needs tone
                 mapping to bring it back into displayable range - without it the whole image blows
                 out to white */}
-            <Entity name="camera" position={[0, 0, 3]}>
+            <Entity name="camera" position={[2.6, 1.5, 3.2]} rotation={[-16, 39, 0]}>
                 <Camera toneMapping={TONEMAP_ACES2} />
-                <Script script={CameraControls} />
+                <Script script={CameraControls} sceneSize={2.5} />
             </Entity>
 
             <Model />

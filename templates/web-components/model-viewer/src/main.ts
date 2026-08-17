@@ -17,7 +17,7 @@ const [cameraComponent, sky] = await Promise.all([
 // with <pc-script name="...">, which only resolves scripts fetched at runtime by <pc-asset>
 const camera = cameraComponent.closestEntity;
 camera?.entity?.addComponent('script');
-camera?.entity?.script?.create(CameraControls);
+camera?.entity?.script?.create(CameraControls, { properties: { sceneSize: 2.5 } });
 
 sky.entity?.addComponent('script');
 

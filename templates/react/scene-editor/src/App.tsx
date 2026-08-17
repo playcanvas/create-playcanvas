@@ -1,6 +1,6 @@
 import { Application, Entity } from '@playcanvas/react';
 import { Camera, Light, Render, Script } from '@playcanvas/react/components';
-import { useApp } from '@playcanvas/react/hooks';
+import { useApp, useMaterial } from '@playcanvas/react/hooks';
 import type { Entity as PcEntity } from 'playcanvas';
 import { Grid } from 'playcanvas/scripts/esm/grid.mjs';
 import { useEffect, useRef } from 'react';
@@ -14,6 +14,8 @@ function Scene() {
     const camera = useRef<PcEntity>(null);
     const cube = useRef<PcEntity>(null);
     const sphere = useRef<PcEntity>(null);
+    const coral = useMaterial({ diffuse: '#ff5145' });
+    const cyan = useMaterial({ diffuse: '#24addf' });
 
     useEffect(() => {
         const node = host.current;
@@ -30,20 +32,20 @@ function Scene() {
 
     return (
         <>
-            <Entity name="camera" ref={camera} position={[5, 4, 6]} rotation={[-20, 40, 0]}>
+            <Entity name="camera" ref={camera} position={[4, 3.2, 5]} rotation={[-18, 39, 0]}>
                 <Camera clearColor="#0a0f17" />
             </Entity>
             <Entity name="light" rotation={[45, 30, 0]}>
-                <Light type="directional" intensity={2.5} />
+                <Light type="directional" intensity={2.5} castShadows shadowBias={0.2} normalOffsetBias={0.05} />
             </Entity>
-            <Entity name="grid" scale={[100, 100, 100]}>
+            <Entity name="grid" scale={[12, 12, 12]}>
                 <Script script={Grid} />
             </Entity>
             <Entity name="cube" ref={cube} position={[-1.2, 0.5, 0]}>
-                <Render type="box" />
+                <Render type="box" material={coral} />
             </Entity>
             <Entity name="sphere" ref={sphere} position={[1.2, 0.5, 0]}>
-                <Render type="sphere" />
+                <Render type="sphere" material={cyan} />
             </Entity>
             <Entity name="editor" ref={host} />
         </>

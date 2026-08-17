@@ -75,7 +75,8 @@ const camera = new Entity('camera');
 camera.addComponent('camera', {
     toneMapping: TONEMAP_ACES2
 });
-camera.setPosition(0, 0, 3);
+camera.setPosition(2.6, 1.5, 3.2);
+camera.lookAt(0, 0, 0);
 camera.addComponent('script');
-camera.script?.create(CameraControls);
+camera.script?.create(CameraControls, { properties: { sceneSize: 2.5 } });
 app.root.addChild(camera);

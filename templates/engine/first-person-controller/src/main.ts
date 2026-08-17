@@ -31,7 +31,7 @@ await new Promise<void>((resolve) => {
 
 document.body.insertAdjacentHTML(
     'beforeend',
-    '<div class="hud"><section class="panel"><h1>First-Person Controller</h1><p>Click the scene, then use WASD, mouse look and Space to jump.</p></section><span class="crosshair"></span></div>'
+    '<div class="hud"><section class="panel"><h1>First-Person Controller</h1><p>Click the scene, then use WASD, mouse look and Space to jump.</p></section></div>'
 );
 
 const canvas = document.getElementById('application-canvas') as HTMLCanvasElement;
@@ -56,14 +56,15 @@ app.setCanvasResolution(RESOLUTION_AUTO);
 const material = (color: Color) => {
     const result = new StandardMaterial();
     result.diffuse = color;
+    result.emissive = new Color(color.r * 0.2, color.g * 0.2, color.b * 0.2);
     result.update();
     return result;
 };
 
-const floor = material(new Color(0.18, 0.24, 0.2));
-const wall = material(new Color(0.12, 0.34, 0.48));
-const orange = material(new Color(0.86, 0.32, 0.12));
-const yellow = material(new Color(0.92, 0.66, 0.18));
+const floor = material(new Color(0.67, 0.61, 0.52));
+const wall = material(new Color(0.76, 0.74, 0.68));
+const blue = material(new Color(0.08, 0.29, 0.48));
+const green = material(new Color(0.18, 0.4, 0.22));
 
 const block = (
     name: string,
@@ -87,8 +88,8 @@ block('floor', [0, -0.1, 0], [18, 0.2, 18], floor);
 block('back-wall', [0, 1.5, -9], [18, 3, 0.3], wall);
 block('left-wall', [-9, 1.5, 0], [0.3, 3, 18], wall);
 block('right-wall', [9, 1.5, 0], [0.3, 3, 18], wall);
-block('orange-crate', [-2, 0.75, -3], [1.5, 1.5, 1.5], orange);
-block('yellow-crate', [3, 0.5, 1], [2.5, 1, 1], yellow);
+block('blue-crate', [-2, 0.75, -3], [1.5, 1.5, 1.5], blue);
+block('green-crate', [3, 0.5, 1], [2.5, 1, 1], green);
 
 const player = new Entity('player');
 player.setPosition(0, 1, 5);
@@ -97,14 +98,25 @@ player.addComponent('rigidbody', { type: 'dynamic', mass: 80, angularFactor: Vec
 app.root.addChild(player);
 
 const camera = new Entity('camera');
-camera.addComponent('camera', { clearColor: new Color(0.06, 0.08, 0.13) });
+camera.addComponent('camera', { clearColor: new Color(0.38, 0.64, 0.86), fov: 80 });
 camera.setLocalPosition(0, 0.65, 0);
 player.addChild(camera);
 addFirstPersonController(player, camera);
 
 const light = new Entity('light');
-light.addComponent('light', { type: 'directional', intensity: 2.5 });
+light.addComponent('light', {
+    type: 'directional',
+    intensity: 2.5,
+    castShadows: true,
+    shadowBias: 0.2,
+    normalOffsetBias: 0.05
+});
 light.setEulerAngles(50, 30, 0);
 app.root.addChild(light);
+
+const fill = new Entity('fill');
+fill.addComponent('light', { type: 'directional', intensity: 0.8 });
+fill.setEulerAngles(-25, -140, 0);
+app.root.addChild(fill);
 
 window.addEventListener('resize', () => app.resizeCanvas());

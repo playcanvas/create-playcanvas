@@ -14,18 +14,23 @@ class ArPlacement extends Script {
     static scriptName = 'arPlacement';
 
     camera!: Entity;
+    preview?: Entity;
     reticle!: Entity;
+    material!: StandardMaterial;
     position?: Vec3;
     rotation?: Quat;
     source?: XrHitTestSource;
 
     initialize() {
-        const material = new StandardMaterial();
-        material.diffuse = new Color(1, 0.35, 0.15);
-        material.update();
+        const reticleMaterial = new StandardMaterial();
+        reticleMaterial.diffuse = new Color(1, 0.35, 0.15);
+        reticleMaterial.update();
+        this.material = new StandardMaterial();
+        this.material.diffuse = new Color(0.1, 0.7, 0.9);
+        this.material.update();
 
         this.reticle = new PcEntity('reticle');
-        this.reticle.addComponent('render', { type: 'cylinder', material });
+        this.reticle.addComponent('render', { type: 'cylinder', material: reticleMaterial });
         this.reticle.setLocalScale(0.15, 0.01, 0.15);
         this.reticle.enabled = false;
         this.app.root.addChild(this.reticle);
@@ -34,14 +39,20 @@ class ArPlacement extends Script {
         button.onclick = () => this.start();
         this.app.xr?.hitTest.on('available', this.startHitTest, this);
         this.app.xr?.input.on('select', this.place, this);
+        this.app.xr?.on('start', this.onStart, this);
+        this.app.xr?.on('end', this.onEnd, this);
         this.app.xr?.on(`available:${XRTYPE_AR}`, this.updateStatus, this);
         this.updateStatus(this.app.xr?.isAvailable(XRTYPE_AR) ?? false);
 
         this.on('destroy', () => {
             button.onclick = null;
             this.reticle.destroy();
+            this.material.destroy();
+            reticleMaterial.destroy();
             this.app.xr?.hitTest.off('available', this.startHitTest, this);
             this.app.xr?.input.off('select', this.place, this);
+            this.app.xr?.off('start', this.onStart, this);
+            this.app.xr?.off('end', this.onEnd, this);
             this.app.xr?.off(`available:${XRTYPE_AR}`, this.updateStatus, this);
         });
     }
@@ -81,11 +92,19 @@ class ArPlacement extends Script {
     place() {
         if (!this.position || !this.rotation) return;
         const box = new PcEntity('placed-box');
-        box.addComponent('render', { type: 'box' });
+        box.addComponent('render', { type: 'box', material: this.material });
         box.setLocalScale(0.2, 0.2, 0.2);
         box.setPosition(this.position.x, this.position.y + 0.1, this.position.z);
         box.setRotation(this.rotation);
         this.app.root.addChild(box);
+    }
+
+    onStart() {
+        if (this.preview) this.preview.enabled = false;
+    }
+
+    onEnd() {
+        if (this.preview) this.preview.enabled = true;
     }
 
     updateStatus(available: boolean) {

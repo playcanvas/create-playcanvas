@@ -9,6 +9,7 @@ import {
     RESOLUTION_AUTO,
     ScriptComponentSystem,
     SpriteComponentSystem,
+    StandardMaterial,
     createGraphicsDevice
 } from 'playcanvas';
 
@@ -37,19 +38,33 @@ app.setCanvasResolution(RESOLUTION_AUTO);
 const camera = new Entity('camera');
 camera.addComponent('camera', {
     projection: 1,
-    orthoHeight: 5,
-    clearColor: new Color(0.05, 0.07, 0.13)
+    orthoHeight: 4,
+    clearColor: new Color(0.36, 0.73, 0.9)
 });
-camera.setPosition(0, 1, 10);
+camera.setPosition(0, 0, 10);
 app.root.addChild(camera);
 
-const ground = new Entity('ground');
-ground.addComponent('render', { type: 'box' });
-ground.setLocalScale(20, 0.2, 1);
-ground.setPosition(0, -2.1, 0);
-app.root.addChild(ground);
+const dirtMaterial = new StandardMaterial();
+dirtMaterial.emissive = new Color(0.45, 0.28, 0.16);
+dirtMaterial.update();
+const grassMaterial = new StandardMaterial();
+grassMaterial.emissive = new Color(0.28, 0.62, 0.34);
+grassMaterial.update();
+
+const dirt = new Entity('dirt');
+dirt.addComponent('render', { type: 'box', material: dirtMaterial });
+dirt.setLocalScale(20, 2.1, 1);
+dirt.setPosition(0, -3.14, 0);
+app.root.addChild(dirt);
+
+const grass = new Entity('grass');
+grass.addComponent('render', { type: 'box', material: grassMaterial });
+grass.setLocalScale(20, 0.18, 1);
+grass.setPosition(0, -2, 0);
+app.root.addChild(grass);
 
 const game = new Entity('game');
+game.setPosition(0, -2.15, 0);
 game.addComponent('script');
 game.script!.create(SpriteGame);
 app.root.addChild(game);

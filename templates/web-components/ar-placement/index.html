@@ -8,11 +8,27 @@
     </head>
     <body>
         <pc-app alpha>
+            <pc-material id="surface-material" diffuse="#474d57"></pc-material>
+            <pc-material id="cyan" diffuse="#1ab3e6"></pc-material>
+            <pc-material id="coral" diffuse="#ff5926"></pc-material>
             <pc-scene>
-                <pc-entity name="camera"><pc-camera clear-color="0 0 0 0"></pc-camera></pc-entity>
+                <pc-entity name="camera" position="3 2.4 4" rotation="-20 37 0"
+                    ><pc-camera clear-color="#0d141f"></pc-camera
+                ></pc-entity>
                 <pc-entity name="light" rotation="45 30 0"
                     ><pc-light type="directional" intensity="2"></pc-light
                 ></pc-entity>
+                <pc-entity name="preview">
+                    <pc-entity name="surface" scale="4 0.15 4"
+                        ><pc-render type="cylinder" material="surface-material"></pc-render
+                    ></pc-entity>
+                    <pc-entity name="box" position="0 0.65 0"
+                        ><pc-render type="box" material="cyan"></pc-render
+                    ></pc-entity>
+                    <pc-entity name="reticle" position="0 0.12 0" scale="1.5 0.03 1.5"
+                        ><pc-render type="cylinder" material="coral"></pc-render
+                    ></pc-entity>
+                </pc-entity>
                 <pc-entity name="placement"></pc-entity>
             </pc-scene>
         </pc-app>

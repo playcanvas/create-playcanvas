@@ -8,14 +8,19 @@
     </head>
     <body>
         <pc-app>
+            <pc-material id="dirt-material" emissive="#734729"></pc-material>
+            <pc-material id="grass-material" emissive="#479e57"></pc-material>
             <pc-scene>
-                <pc-entity name="camera" position="0 1 10"
-                    ><pc-camera projection="orthographic" ortho-height="5" clear-color="#0d121c"></pc-camera
+                <pc-entity name="camera" position="0 0 10"
+                    ><pc-camera projection="orthographic" ortho-height="4" clear-color="#5cb9e6"></pc-camera
                 ></pc-entity>
-                <pc-entity name="ground" position="0 -2.1 0" scale="20 0.2 1"
-                    ><pc-render type="box"></pc-render
+                <pc-entity name="dirt" position="0 -3.14 0" scale="20 2.1 1"
+                    ><pc-render type="box" material="dirt-material"></pc-render
                 ></pc-entity>
-                <pc-entity name="game"></pc-entity>
+                <pc-entity name="grass" position="0 -2 0" scale="20 0.18 1"
+                    ><pc-render type="box" material="grass-material"></pc-render
+                ></pc-entity>
+                <pc-entity name="game" position="0 -2.15 0"></pc-entity>
             </pc-scene>
         </pc-app>
         <div class="hud">

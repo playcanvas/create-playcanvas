@@ -8,10 +8,10 @@
     </head>
     <body>
         <pc-app>
-            <pc-material id="floor-material" diffuse="#2e3d33" gloss="0.25"></pc-material>
-            <pc-material id="wall-material" diffuse="#1f577a" gloss="0.35"></pc-material>
-            <pc-material id="orange-material" diffuse="#dc5220" gloss="0.4"></pc-material>
-            <pc-material id="yellow-material" diffuse="#eba82e" gloss="0.4"></pc-material>
+            <pc-material id="floor-material" diffuse="#ab9c85" emissive="#22201b" gloss="0.2"></pc-material>
+            <pc-material id="wall-material" diffuse="#c2bdb0" emissive="#272623" gloss="0.25"></pc-material>
+            <pc-material id="blue-material" diffuse="#154a7a" emissive="#040f18" gloss="0.4"></pc-material>
+            <pc-material id="green-material" diffuse="#2e6638" emissive="#09140b" gloss="0.2"></pc-material>
             <pc-module
                 name="Ammo"
                 glue="/ammo/ammo.wasm.js"
@@ -20,7 +20,16 @@
             ></pc-module>
             <pc-scene>
                 <pc-entity name="light" rotation="50 30 0"
-                    ><pc-light type="directional" intensity="2.5"></pc-light
+                    ><pc-light
+                        type="directional"
+                        intensity="2.5"
+                        cast-shadows
+                        shadow-bias="0.2"
+                        normal-offset-bias="0.05"
+                    ></pc-light
+                ></pc-entity>
+                <pc-entity name="fill" rotation="-25 -140 0"
+                    ><pc-light type="directional" intensity="0.8"></pc-light
                 ></pc-entity>
                 <pc-entity name="floor" position="0 -0.1 0" scale="18 0.2 18"
                     ><pc-render type="box" material="floor-material"></pc-render
@@ -42,13 +51,13 @@
                     ><pc-collision type="box" half-extents="0.15 1.5 9"></pc-collision
                     ><pc-rigidbody type="static"></pc-rigidbody
                 ></pc-entity>
-                <pc-entity name="orange-crate" position="-2 0.75 -3" scale="1.5 1.5 1.5"
-                    ><pc-render type="box" material="orange-material"></pc-render
+                <pc-entity name="blue-crate" position="-2 0.75 -3" scale="1.5 1.5 1.5"
+                    ><pc-render type="box" material="blue-material"></pc-render
                     ><pc-collision type="box" half-extents="0.75 0.75 0.75"></pc-collision
                     ><pc-rigidbody type="static"></pc-rigidbody
                 ></pc-entity>
-                <pc-entity name="yellow-crate" position="3 0.5 1" scale="2.5 1 1"
-                    ><pc-render type="box" material="yellow-material"></pc-render
+                <pc-entity name="green-crate" position="3 0.5 1" scale="2.5 1 1"
+                    ><pc-render type="box" material="green-material"></pc-render
                     ><pc-collision type="box" half-extents="1.25 0.5 0.5"></pc-collision
                     ><pc-rigidbody type="static"></pc-rigidbody
                 ></pc-entity>
@@ -56,7 +65,7 @@
                     <pc-collision type="capsule" radius="0.45" height="1.8"></pc-collision>
                     <pc-rigidbody type="dynamic" mass="80" angular-factor="0 0 0"></pc-rigidbody>
                     <pc-entity name="camera" position="0 0.65 0"
-                        ><pc-camera clear-color="#0f1421"></pc-camera
+                        ><pc-camera clear-color="#61a3db" fov="80"></pc-camera
                     ></pc-entity>
                 </pc-entity>
             </pc-scene>
@@ -66,7 +75,6 @@
                 <h1>First-Person Controller</h1>
                 <p>Click the scene, then use WASD, mouse look and Space to jump.</p>
             </section>
-            <span class="crosshair"></span>
         </div>
         <script type="module" src="/src/main.ts"></script>
     </body>

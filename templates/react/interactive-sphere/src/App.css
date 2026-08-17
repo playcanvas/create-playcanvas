@@ -1,75 +1,25 @@
-#root {
-    display: flex;
-    flex-direction: column;
-    height: 100vh;
-    width: 100vw;
-}
-
-header {
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    padding: 2rem;
-}
-
-.absolute {
-    position: absolute;
-    top: 0;
-    left: 0;
-}
-
 .full-bleed {
     width: 100vw;
     height: 100vh;
     overflow: hidden;
 }
 
-.logo {
-    height: 2em;
-    padding: 0.5em;
-    will-change: filter;
-    transition: filter 300ms;
-}
-
-.playcanvas-logo {
-    border-radius: 100%;
-}
-
-.logo:hover {
-    filter: drop-shadow(0 0 2em #646cffaa);
-}
-
-.logo.react:hover {
-    filter: drop-shadow(0 0 2em #61dafbaa);
-}
-
-.read-the-docs {
-    color: #888;
-}
-
-.overlay {
-    margin: 0 auto;
-    text-align: center;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: stretch;
-    width: 100vw;
-    height: 100vh;
-    pointer-events: none;
-}
-
-.overlay a {
-    pointer-events: auto;
-}
-
-.overlay > .grow {
-    flex-grow: 1;
-}
-
-.pill {
-    background-color: #000;
-    color: #fff;
-    padding: 0.5rem 1rem;
-    border-radius: 0.5rem;
+.counter {
+    position: fixed;
+    bottom: 22px;
+    left: 50%;
+    z-index: 2;
+    margin: 0;
+    padding: 9px 13px;
+    border: 1px solid #ffffff24;
+    border-radius: 999px;
+    background: #07101bd9;
+    color: #f8fafc;
+    font:
+        650 12px Inter,
+        ui-sans-serif,
+        system-ui,
+        sans-serif;
+    translate: -50% 0;
+    backdrop-filter: blur(10px);
 }

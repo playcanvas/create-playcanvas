@@ -8,6 +8,11 @@
     </head>
     <body>
         <pc-app>
+            <pc-material id="ground-material" diffuse="#527a45"></pc-material>
+            <pc-material id="rock-material" diffuse="#61696e"></pc-material>
+            <pc-material id="shirt-material" diffuse="#268bd2"></pc-material>
+            <pc-material id="skin-material" diffuse="#c78759"></pc-material>
+            <pc-material id="pants-material" diffuse="#2e4a85"></pc-material>
             <pc-module
                 name="Ammo"
                 glue="/ammo/ammo.wasm.js"
@@ -15,33 +20,54 @@
                 fallback="/ammo/ammo.js"
             ></pc-module>
             <pc-scene>
-                <pc-entity name="camera" position="0 3 6"><pc-camera clear-color="#0f1421"></pc-camera></pc-entity>
+                <pc-entity name="camera" position="0 3 6"><pc-camera clear-color="#7ab8e6"></pc-camera></pc-entity>
                 <pc-entity name="light" rotation="45 30 0"
-                    ><pc-light type="directional" intensity="2.5" cast-shadows></pc-light
+                    ><pc-light
+                        type="directional"
+                        intensity="2.5"
+                        cast-shadows
+                        shadow-bias="0.2"
+                        normal-offset-bias="0.05"
+                    ></pc-light
                 ></pc-entity>
                 <pc-entity name="ground" position="0 -0.1 0" scale="20 0.2 20"
-                    ><pc-render type="box"></pc-render><pc-collision type="box" half-extents="10 0.1 10"></pc-collision
+                    ><pc-render type="box" material="ground-material"></pc-render
+                    ><pc-collision type="box" half-extents="10 0.1 10"></pc-collision
                     ><pc-rigidbody type="static"></pc-rigidbody
+                ></pc-entity>
+                <pc-entity position="-4.5 0.25 -3.5" scale="0.9 0.5 0.7"
+                    ><pc-render type="box" material="rock-material"></pc-render
+                ></pc-entity>
+                <pc-entity position="4.2 0.2 -2.8" rotation="0 25 0" scale="0.9 0.5 0.7"
+                    ><pc-render type="box" material="rock-material"></pc-render
+                ></pc-entity>
+                <pc-entity position="-3.7 0.18 3.2" rotation="0 50 0" scale="0.9 0.5 0.7"
+                    ><pc-render type="box" material="rock-material"></pc-render
+                ></pc-entity>
+                <pc-entity position="3.8 0.28 3.6" rotation="0 75 0" scale="0.9 0.5 0.7"
+                    ><pc-render type="box" material="rock-material"></pc-render
                 ></pc-entity>
                 <pc-entity name="player" position="0 1 0">
                     <pc-collision type="capsule" radius="0.45" height="1.8"></pc-collision>
                     <pc-rigidbody type="dynamic" mass="70" angular-factor="0 0 0"></pc-rigidbody>
-                    <pc-entity name="robot">
-                        <pc-entity name="body" scale="0.8 0.9 0.45"><pc-render type="box"></pc-render></pc-entity>
-                        <pc-entity name="head" position="0 0.72 0" scale="0.55 0.55 0.55"
-                            ><pc-render type="sphere"></pc-render
+                    <pc-entity name="character">
+                        <pc-entity name="body" scale="0.56 0.88 0.38"
+                            ><pc-render type="box" material="shirt-material"></pc-render
                         ></pc-entity>
-                        <pc-entity name="left-arm" position="-0.58 0 0" scale="0.22 0.85 0.22"
-                            ><pc-render type="box"></pc-render
+                        <pc-entity name="head" position="0 0.76 0" scale="0.52 0.6 0.52"
+                            ><pc-render type="box" material="skin-material"></pc-render
                         ></pc-entity>
-                        <pc-entity name="right-arm" position="0.58 0 0" scale="0.22 0.85 0.22"
-                            ><pc-render type="box"></pc-render
+                        <pc-entity name="left-arm" position="-0.38 0 0" scale="0.18 0.88 0.32"
+                            ><pc-render type="box" material="shirt-material"></pc-render
                         ></pc-entity>
-                        <pc-entity name="left-leg" position="-0.24 -0.85 0" scale="0.28 0.8 0.3"
-                            ><pc-render type="box"></pc-render
+                        <pc-entity name="right-arm" position="0.38 0 0" scale="0.18 0.88 0.32"
+                            ><pc-render type="box" material="shirt-material"></pc-render
                         ></pc-entity>
-                        <pc-entity name="right-leg" position="0.24 -0.85 0" scale="0.28 0.8 0.3"
-                            ><pc-render type="box"></pc-render
+                        <pc-entity name="left-leg" position="-0.15 -0.87 0" scale="0.26 0.86 0.34"
+                            ><pc-render type="box" material="pants-material"></pc-render
+                        ></pc-entity>
+                        <pc-entity name="right-leg" position="0.15 -0.87 0" scale="0.26 0.86 0.34"
+                            ><pc-render type="box" material="pants-material"></pc-render
                         ></pc-entity>
                     </pc-entity>
                 </pc-entity>
@@ -50,7 +76,7 @@
         <div class="hud">
             <section class="panel">
                 <h1>Third-Person Controller</h1>
-                <p>Use WASD to move, Space to jump and drag to orbit.</p>
+                <p>Click the scene, then use WASD to move, mouse to orbit and Space to jump.</p>
             </section>
         </div>
         <script type="module" src="/src/main.ts"></script>

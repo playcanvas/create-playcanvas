@@ -18,7 +18,7 @@ class RobotAnimation extends Script {
         this.entity.findByName('right-arm')?.setLocalEulerAngles(-swing, 0, 0);
         this.entity.findByName('left-leg')?.setLocalEulerAngles(-swing, 0, 0);
         this.entity.findByName('right-leg')?.setLocalEulerAngles(swing, 0, 0);
-        this.entity.setLocalPosition(0, -1 + Math.abs(Math.sin(this.time)) * Math.min(speed * 0.01, 0.04), 0);
+        this.entity.setLocalPosition(0, Math.abs(Math.sin(this.time)) * Math.min(speed * 0.01, 0.04), 0);
     }
 }
 
@@ -28,9 +28,10 @@ export const addThirdPersonController = (player: Entity, camera: Entity, model: 
         properties: {
             camera,
             characterModel: model,
-            cameraDistance: 6,
-            cameraHeight: 1.2,
-            initialPitch: 20,
+            cameraDistance: 5,
+            cameraHeight: 0.5,
+            initialPitch: 15,
+            invertLookY: true,
             jumpForce: 520,
             speedGround: 60
         }

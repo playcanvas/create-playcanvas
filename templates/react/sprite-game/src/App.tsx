@@ -1,20 +1,27 @@
 import { Application, Entity } from '@playcanvas/react';
 import { Camera, Render, Script } from '@playcanvas/react/components';
+import { useMaterial } from '@playcanvas/react/hooks';
 
 import { SpriteGame } from './sprite-game';
 import './starter.css';
 
 function App() {
+    const dirt = useMaterial({ emissive: '#734729' });
+    const grass = useMaterial({ emissive: '#479e57' });
+
     return (
         <>
             <Application>
-                <Entity name="camera" position={[0, 1, 10]}>
-                    <Camera projection={1} orthoHeight={5} clearColor="#0d121c" />
+                <Entity name="camera" position={[0, 0, 10]}>
+                    <Camera projection={1} orthoHeight={4} clearColor="#5cb9e6" />
                 </Entity>
-                <Entity name="ground" position={[0, -2.1, 0]} scale={[20, 0.2, 1]}>
-                    <Render type="box" />
+                <Entity name="dirt" position={[0, -3.14, 0]} scale={[20, 2.1, 1]}>
+                    <Render type="box" material={dirt} />
                 </Entity>
-                <Entity name="game">
+                <Entity name="grass" position={[0, -2, 0]} scale={[20, 0.18, 1]}>
+                    <Render type="box" material={grass} />
+                </Entity>
+                <Entity name="game" position={[0, -2.15, 0]}>
                     <Script script={SpriteGame} />
                 </Entity>
             </Application>

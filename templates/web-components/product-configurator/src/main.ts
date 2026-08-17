@@ -8,7 +8,7 @@ const COLORS = ['#41b6e6', '#ff6b6b', '#f7c948'];
 
 const camera = (await whenReady('pc-camera')).closestEntity!.entity!;
 camera.addComponent('script');
-camera.script!.create(CameraControls, { properties: { sceneSize: 4 } });
+camera.script!.create(CameraControls, { properties: { sceneSize: 5.5 } });
 
 const products = Array.from(document.querySelectorAll<EntityElement>('[data-product]'));
 document.querySelectorAll<HTMLButtonElement>('#products button').forEach((button, i) => {
