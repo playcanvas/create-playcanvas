@@ -8,13 +8,19 @@
     </head>
     <body>
         <pc-app>
+            <pc-module
+                name="Ammo"
+                glue="/ammo/ammo.wasm.js"
+                wasm="/ammo/ammo.wasm.wasm"
+                fallback="/ammo/ammo.js"
+            ></pc-module>
             <pc-scene>
                 <pc-entity name="camera" position="0 3 6"><pc-camera clear-color="#0f1421"></pc-camera></pc-entity>
                 <pc-entity name="light" rotation="45 30 0"
                     ><pc-light type="directional" intensity="2.5" cast-shadows></pc-light
                 ></pc-entity>
                 <pc-entity name="ground" position="0 -0.1 0" scale="20 0.2 20"
-                    ><pc-render type="box"></pc-render><pc-collision type="box"></pc-collision
+                    ><pc-render type="box"></pc-render><pc-collision type="box" half-extents="10 0.1 10"></pc-collision
                     ><pc-rigidbody type="static"></pc-rigidbody
                 ></pc-entity>
                 <pc-entity name="player" position="0 1 0">

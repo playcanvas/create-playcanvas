@@ -2,7 +2,7 @@ import reactConfig from '@playcanvas/eslint-config/react';
 import typescriptConfig from '@playcanvas/eslint-config/typescript';
 
 export default [
-    { ignores: ['.claude', '.agents'] },
+    { ignores: ['.claude', '.agents', 'public/ammo'] },
     ...typescriptConfig,
     ...reactConfig,
     {

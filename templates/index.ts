@@ -23,8 +23,15 @@ export const FORMATS = [
     }
 ];
 
-// Every format holds a `base` directory of shared tooling plus one directory per starter.
-// Assets a starter needs in every format live once in `_shared/<starter>`. The first entry is the default.
+export const FEATURES: Record<string, Record<string, string[]>> = {
+    physics: {
+        engine: ['assets', 'engine'],
+        react: ['react'],
+        'web-components': ['assets']
+    }
+};
+
+// every format holds a base plus one directory per starter; the first starter is the default
 export const STARTERS = [
     {
         name: 'spinning-cube',
@@ -60,19 +67,22 @@ export const STARTERS = [
         name: 'physics-playground',
         display: 'Physics Playground',
         category: 'Games',
-        description: 'rigid bodies, collisions, spawning and reset'
+        description: 'rigid bodies, collisions, spawning and reset',
+        features: ['physics']
     },
     {
         name: 'first-person-controller',
         display: 'First-Person Controller',
         category: 'Games',
-        description: 'first-person movement, mouse look and jumping'
+        description: 'first-person movement, mouse look and jumping',
+        features: ['physics']
     },
     {
         name: 'third-person-controller',
         display: 'Third-Person Controller',
         category: 'Games',
-        description: 'an animated character, follow camera and locomotion'
+        description: 'an animated character, follow camera and locomotion',
+        features: ['physics']
     },
     {
         name: 'sprite-game',

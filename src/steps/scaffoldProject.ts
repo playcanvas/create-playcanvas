@@ -4,7 +4,7 @@ import { fileURLToPath } from 'node:url';
 
 import * as prompts from '@clack/prompts';
 
-import { FORMATS, STARTERS } from '../../templates/index.js';
+import { FEATURES, FORMATS, STARTERS } from '../../templates/index.js';
 
 const PACKAGE_MAPS = ['scripts', 'dependencies', 'devDependencies', 'peerDependencies', 'engines'] as const;
 const TEMPLATE_ENTRIES: Record<string, string> = {
@@ -53,25 +53,44 @@ export const scaffoldProject = (opts: Options) => {
             if (!entry || !fs.existsSync(path.join(dir, entry))) {
                 throw new Error(`Incomplete starter matrix: ${f.name}/${s.name}`);
             }
+            for (const feature of s.features ?? []) {
+                const layers = FEATURES[feature]?.[f.name];
+                if (
+                    !layers?.length ||
+                    layers.some((layer) => !fs.existsSync(path.join(templatesDir, '_features', feature, layer)))
+                ) {
+                    throw new Error(`Incomplete feature matrix: ${feature}/${f.name}`);
+                }
+            }
         }
     }
 
-    // shared concept files, format tooling, then format-specific scene files
-    const dirs = [
-        path.join(templatesDir, '_shared', starter),
-        path.join(formatDir, 'base'),
-        path.join(formatDir, starter)
-    ];
+    const selected = STARTERS.find((s) => s.name === starter);
+    if (!selected) {
+        throw new Error(`Starter not found: ${starter}`);
+    }
+
+    const sharedDir = path.join(templatesDir, '_shared', starter);
+    const baseDir = path.join(formatDir, 'base');
+    const starterDir = path.join(formatDir, starter);
+    const features = selected.features ?? [];
+    const featureDirs = features.flatMap((feature) =>
+        FEATURES[feature][format].map((layer) => path.join(templatesDir, '_features', feature, layer))
+    );
+
+    // shared concept files, format tooling, features, then format-specific scene files
+    const dirs = [sharedDir, baseDir, ...featureDirs, starterDir];
     const manifests = dirs.map((dir) => {
         const file = path.join(dir, 'package.json');
         return fs.existsSync(file) ? (JSON.parse(fs.readFileSync(file, 'utf-8')) as Record<string, unknown>) : {};
     });
-    const mergeOrder = [manifests[1], manifests[0], manifests[2]];
+    const mergeOrder = [manifests[1], manifests[0], ...manifests.slice(2)];
+
+    if (!fs.existsSync(starterDir)) {
+        throw new Error(`Starter directory not found: ${format}/${starter}`);
+    }
 
     for (const dir of dirs) {
-        if (dir === dirs[2] && !fs.existsSync(dir)) {
-            throw new Error(`Starter directory not found: ${format}/${starter}`);
-        }
         if (fs.existsSync(dir)) {
             fs.cpSync(dir, root, { recursive: true });
         }

@@ -32,7 +32,7 @@ function App() {
                 </Entity>
                 <Entity name="floor" position={[0, -0.1, 0]} scale={[10, 0.2, 10]}>
                     <Render type="box" />
-                    <Collision type="box" />
+                    <Collision type="box" halfExtents={[5, 0.1, 5]} />
                     <RigidBody type="static" />
                 </Entity>
                 {Array.from({ length: count }, (_, i) => (

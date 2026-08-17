@@ -25,17 +25,17 @@ function Scene() {
             </Entity>
             <Entity name="floor" position={[0, -0.1, 0]} scale={[18, 0.2, 18]}>
                 <Render type="box" />
-                <Collision type="box" />
+                <Collision type="box" halfExtents={[9, 0.1, 9]} />
                 <RigidBody type="static" />
             </Entity>
             <Entity name="crate" position={[-2, 0.75, -3]} scale={[1.5, 1.5, 1.5]}>
                 <Render type="box" />
-                <Collision type="box" />
+                <Collision type="box" halfExtents={[0.75, 0.75, 0.75]} />
                 <RigidBody type="static" />
             </Entity>
             <Entity name="crate" position={[3, 0.5, 1]} scale={[2.5, 1, 1]}>
                 <Render type="box" />
-                <Collision type="box" />
+                <Collision type="box" halfExtents={[1.25, 0.5, 0.5]} />
                 <RigidBody type="static" />
             </Entity>
             <Entity name="player" ref={player} position={[0, 1, 5]}>

@@ -55,7 +55,7 @@ Every starter is available in every format. `spinning-cube` is the default.
 | `vr-starter`              | XR       | Immersive VR, controllers and locomotion            |
 | `ar-placement`            | XR       | Mobile AR, hit testing and object placement         |
 
-Internally, each format has a `base` directory plus one directory per starter. Code and assets shared by all formats live in `templates/_shared/<starter>`.
+Internally, each format has a `base` directory plus one directory per starter. Code and assets shared by all formats live in `templates/_shared/<starter>`. Reusable capabilities with format-specific setup live in `templates/_features/<feature>`; the physics feature provides pinned Ammo.js assets for Engine and Web Components while React keeps its framework adapter.
 
 ## CLI Options
 

@@ -16,10 +16,10 @@ import {
 } from 'playcanvas';
 
 import { addThirdPersonController } from './controller';
+import { loadPhysics } from './load-physics';
 import './starter.css';
 
-const { default: Ammo } = await import('sync-ammo');
-Object.assign(globalThis, { Ammo });
+await loadPhysics();
 
 document.body.insertAdjacentHTML(
     'beforeend',

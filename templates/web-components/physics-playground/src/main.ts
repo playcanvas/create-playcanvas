@@ -1,15 +1,11 @@
-import type { EntityElement } from '@playcanvas/web-components';
+import { whenReady } from '@playcanvas/web-components';
 import { CameraControls } from 'playcanvas/scripts/esm/camera-controls.mjs';
 
 import './starter.css';
 
-const { default: Ammo } = await import('sync-ammo');
-Object.assign(globalThis, { Ammo });
-const { whenReady } = await import('@playcanvas/web-components');
-
-const camera = await whenReady<EntityElement>('pc-entity[name="camera"]');
-camera.entity!.addComponent('script');
-camera.entity!.script!.create(CameraControls, { properties: { sceneSize: 8 } });
+const camera = (await whenReady('pc-camera')).closestEntity!.entity!;
+camera.addComponent('script');
+camera.script!.create(CameraControls, { properties: { sceneSize: 8 } });
 
 const bodies = document.getElementById('bodies')!;
 let count = 0;

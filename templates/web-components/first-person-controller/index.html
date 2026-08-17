@@ -8,20 +8,28 @@
     </head>
     <body>
         <pc-app>
+            <pc-module
+                name="Ammo"
+                glue="/ammo/ammo.wasm.js"
+                wasm="/ammo/ammo.wasm.wasm"
+                fallback="/ammo/ammo.js"
+            ></pc-module>
             <pc-scene>
                 <pc-entity name="light" rotation="50 30 0"
                     ><pc-light type="directional" intensity="2.5"></pc-light
                 ></pc-entity>
                 <pc-entity name="floor" position="0 -0.1 0" scale="18 0.2 18"
-                    ><pc-render type="box"></pc-render><pc-collision type="box"></pc-collision
+                    ><pc-render type="box"></pc-render><pc-collision type="box" half-extents="9 0.1 9"></pc-collision
                     ><pc-rigidbody type="static"></pc-rigidbody
                 ></pc-entity>
                 <pc-entity name="crate" position="-2 0.75 -3" scale="1.5 1.5 1.5"
-                    ><pc-render type="box"></pc-render><pc-collision type="box"></pc-collision
+                    ><pc-render type="box"></pc-render
+                    ><pc-collision type="box" half-extents="0.75 0.75 0.75"></pc-collision
                     ><pc-rigidbody type="static"></pc-rigidbody
                 ></pc-entity>
                 <pc-entity name="crate" position="3 0.5 1" scale="2.5 1 1"
-                    ><pc-render type="box"></pc-render><pc-collision type="box"></pc-collision
+                    ><pc-render type="box"></pc-render
+                    ><pc-collision type="box" half-extents="1.25 0.5 0.5"></pc-collision
                     ><pc-rigidbody type="static"></pc-rigidbody
                 ></pc-entity>
                 <pc-entity name="player" position="0 1 5">

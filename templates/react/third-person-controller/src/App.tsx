@@ -29,7 +29,7 @@ function Scene() {
             </Entity>
             <Entity name="ground" position={[0, -0.1, 0]} scale={[20, 0.2, 20]}>
                 <Render type="box" />
-                <Collision type="box" />
+                <Collision type="box" halfExtents={[10, 0.1, 10]} />
                 <RigidBody type="static" />
             </Entity>
             <Entity name="player" ref={player} position={[0, 1, 0]}>
