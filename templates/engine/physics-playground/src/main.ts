@@ -89,10 +89,10 @@ const reset = () => {
 };
 
 const camera = new Entity('camera');
+camera.setPosition(8, 6, 8);
 camera.addComponent('camera', { clearColor: new Color(0.05, 0.07, 0.11) });
 camera.addComponent('script');
 camera.script!.create(CameraControls, { properties: { sceneSize: 8 } });
-camera.setPosition(8, 6, 8);
 app.root.addChild(camera);
 
 const light = new Entity('light');

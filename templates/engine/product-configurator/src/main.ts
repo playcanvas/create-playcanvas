@@ -83,10 +83,10 @@ products.forEach((product, i) => {
 });
 
 const camera = new Entity('camera');
+camera.setPosition(4, 2.6, 5);
 camera.addComponent('camera', { clearColor: new Color(0.04, 0.06, 0.09) });
 camera.addComponent('script');
 camera.script!.create(CameraControls, { properties: { sceneSize: 4 } });
-camera.setPosition(4, 2.6, 5);
 app.root.addChild(camera);
 
 const light = new Entity('light');
