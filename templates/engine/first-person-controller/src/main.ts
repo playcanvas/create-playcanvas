@@ -12,6 +12,7 @@ import {
     RigidBodyComponentSystem,
     ScriptComponentSystem,
     StandardMaterial,
+    Vec3,
     WasmModule,
     createGraphicsDevice
 } from 'playcanvas';
@@ -52,34 +53,47 @@ app.start();
 app.setCanvasFillMode(FILLMODE_FILL_WINDOW);
 app.setCanvasResolution(RESOLUTION_AUTO);
 
-const material = new StandardMaterial();
-material.diffuse = new Color(0.18, 0.45, 0.68);
-material.update();
+const material = (color: Color) => {
+    const result = new StandardMaterial();
+    result.diffuse = color;
+    result.update();
+    return result;
+};
 
-const block = (name: string, position: [number, number, number], scale: [number, number, number]) => {
+const floor = material(new Color(0.18, 0.24, 0.2));
+const wall = material(new Color(0.12, 0.34, 0.48));
+const orange = material(new Color(0.86, 0.32, 0.12));
+const yellow = material(new Color(0.92, 0.66, 0.18));
+
+const block = (
+    name: string,
+    position: [number, number, number],
+    scale: [number, number, number],
+    blockMaterial: StandardMaterial
+) => {
     const entity = new Entity(name);
-    entity.addComponent('render', { type: 'box', material });
-    entity.addComponent('collision', {
-        type: 'box',
-        halfExtents: { x: scale[0] / 2, y: scale[1] / 2, z: scale[2] / 2 }
-    });
-    entity.addComponent('rigidbody', { type: 'static' });
     entity.setPosition(...position);
     entity.setLocalScale(...scale);
+    entity.addComponent('render', { type: 'box', material: blockMaterial });
+    entity.addComponent('collision', {
+        type: 'box',
+        halfExtents: new Vec3(scale[0] / 2, scale[1] / 2, scale[2] / 2)
+    });
+    entity.addComponent('rigidbody', { type: 'static' });
     app.root.addChild(entity);
 };
 
-block('floor', [0, -0.1, 0], [18, 0.2, 18]);
-block('wall', [0, 1.5, -9], [18, 3, 0.3]);
-block('wall', [-9, 1.5, 0], [0.3, 3, 18]);
-block('wall', [9, 1.5, 0], [0.3, 3, 18]);
-block('crate', [-2, 0.75, -3], [1.5, 1.5, 1.5]);
-block('crate', [3, 0.5, 1], [2.5, 1, 1]);
+block('floor', [0, -0.1, 0], [18, 0.2, 18], floor);
+block('back-wall', [0, 1.5, -9], [18, 3, 0.3], wall);
+block('left-wall', [-9, 1.5, 0], [0.3, 3, 18], wall);
+block('right-wall', [9, 1.5, 0], [0.3, 3, 18], wall);
+block('orange-crate', [-2, 0.75, -3], [1.5, 1.5, 1.5], orange);
+block('yellow-crate', [3, 0.5, 1], [2.5, 1, 1], yellow);
 
 const player = new Entity('player');
-player.addComponent('collision', { type: 'capsule', radius: 0.45, height: 1.8 });
-player.addComponent('rigidbody', { type: 'dynamic', mass: 80, angularFactor: { x: 0, y: 0, z: 0 } });
 player.setPosition(0, 1, 5);
+player.addComponent('collision', { type: 'capsule', radius: 0.45, height: 1.8 });
+player.addComponent('rigidbody', { type: 'dynamic', mass: 80, angularFactor: Vec3.ZERO });
 app.root.addChild(player);
 
 const camera = new Entity('camera');

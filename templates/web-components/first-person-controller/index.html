@@ -8,6 +8,10 @@
     </head>
     <body>
         <pc-app>
+            <pc-material id="floor-material" diffuse="#2e3d33" gloss="0.25"></pc-material>
+            <pc-material id="wall-material" diffuse="#1f577a" gloss="0.35"></pc-material>
+            <pc-material id="orange-material" diffuse="#dc5220" gloss="0.4"></pc-material>
+            <pc-material id="yellow-material" diffuse="#eba82e" gloss="0.4"></pc-material>
             <pc-module
                 name="Ammo"
                 glue="/ammo/ammo.wasm.js"
@@ -19,16 +23,32 @@
                     ><pc-light type="directional" intensity="2.5"></pc-light
                 ></pc-entity>
                 <pc-entity name="floor" position="0 -0.1 0" scale="18 0.2 18"
-                    ><pc-render type="box"></pc-render><pc-collision type="box" half-extents="9 0.1 9"></pc-collision
+                    ><pc-render type="box" material="floor-material"></pc-render
+                    ><pc-collision type="box" half-extents="9 0.1 9"></pc-collision
                     ><pc-rigidbody type="static"></pc-rigidbody
                 ></pc-entity>
-                <pc-entity name="crate" position="-2 0.75 -3" scale="1.5 1.5 1.5"
-                    ><pc-render type="box"></pc-render
+                <pc-entity name="back-wall" position="0 1.5 -9" scale="18 3 0.3"
+                    ><pc-render type="box" material="wall-material"></pc-render
+                    ><pc-collision type="box" half-extents="9 1.5 0.15"></pc-collision
+                    ><pc-rigidbody type="static"></pc-rigidbody
+                ></pc-entity>
+                <pc-entity name="left-wall" position="-9 1.5 0" scale="0.3 3 18"
+                    ><pc-render type="box" material="wall-material"></pc-render
+                    ><pc-collision type="box" half-extents="0.15 1.5 9"></pc-collision
+                    ><pc-rigidbody type="static"></pc-rigidbody
+                ></pc-entity>
+                <pc-entity name="right-wall" position="9 1.5 0" scale="0.3 3 18"
+                    ><pc-render type="box" material="wall-material"></pc-render
+                    ><pc-collision type="box" half-extents="0.15 1.5 9"></pc-collision
+                    ><pc-rigidbody type="static"></pc-rigidbody
+                ></pc-entity>
+                <pc-entity name="orange-crate" position="-2 0.75 -3" scale="1.5 1.5 1.5"
+                    ><pc-render type="box" material="orange-material"></pc-render
                     ><pc-collision type="box" half-extents="0.75 0.75 0.75"></pc-collision
                     ><pc-rigidbody type="static"></pc-rigidbody
                 ></pc-entity>
-                <pc-entity name="crate" position="3 0.5 1" scale="2.5 1 1"
-                    ><pc-render type="box"></pc-render
+                <pc-entity name="yellow-crate" position="3 0.5 1" scale="2.5 1 1"
+                    ><pc-render type="box" material="yellow-material"></pc-render
                     ><pc-collision type="box" half-extents="1.25 0.5 0.5"></pc-collision
                     ><pc-rigidbody type="static"></pc-rigidbody
                 ></pc-entity>

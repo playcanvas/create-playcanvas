@@ -1,6 +1,6 @@
 import { Application, Entity } from '@playcanvas/react';
 import { Camera, Collision, Light, Render, RigidBody } from '@playcanvas/react/components';
-import { usePhysics } from '@playcanvas/react/hooks';
+import { useMaterial, usePhysics } from '@playcanvas/react/hooks';
 import type { Entity as PcEntity } from 'playcanvas';
 import { useEffect, useRef } from 'react';
 
@@ -11,6 +11,10 @@ function Scene() {
     const player = useRef<PcEntity>(null);
     const camera = useRef<PcEntity>(null);
     const { isPhysicsLoaded } = usePhysics();
+    const floor = useMaterial({ diffuse: '#2e3d33', gloss: 0.25 });
+    const wall = useMaterial({ diffuse: '#1f577a', gloss: 0.35 });
+    const orange = useMaterial({ diffuse: '#dc5220', gloss: 0.4 });
+    const yellow = useMaterial({ diffuse: '#eba82e', gloss: 0.4 });
 
     useEffect(() => {
         if (isPhysicsLoaded && player.current && camera.current) {
@@ -24,17 +28,32 @@ function Scene() {
                 <Light type="directional" intensity={2.5} />
             </Entity>
             <Entity name="floor" position={[0, -0.1, 0]} scale={[18, 0.2, 18]}>
-                <Render type="box" />
+                <Render type="box" material={floor} />
                 <Collision type="box" halfExtents={[9, 0.1, 9]} />
                 <RigidBody type="static" />
             </Entity>
-            <Entity name="crate" position={[-2, 0.75, -3]} scale={[1.5, 1.5, 1.5]}>
-                <Render type="box" />
+            <Entity name="back-wall" position={[0, 1.5, -9]} scale={[18, 3, 0.3]}>
+                <Render type="box" material={wall} />
+                <Collision type="box" halfExtents={[9, 1.5, 0.15]} />
+                <RigidBody type="static" />
+            </Entity>
+            <Entity name="left-wall" position={[-9, 1.5, 0]} scale={[0.3, 3, 18]}>
+                <Render type="box" material={wall} />
+                <Collision type="box" halfExtents={[0.15, 1.5, 9]} />
+                <RigidBody type="static" />
+            </Entity>
+            <Entity name="right-wall" position={[9, 1.5, 0]} scale={[0.3, 3, 18]}>
+                <Render type="box" material={wall} />
+                <Collision type="box" halfExtents={[0.15, 1.5, 9]} />
+                <RigidBody type="static" />
+            </Entity>
+            <Entity name="orange-crate" position={[-2, 0.75, -3]} scale={[1.5, 1.5, 1.5]}>
+                <Render type="box" material={orange} />
                 <Collision type="box" halfExtents={[0.75, 0.75, 0.75]} />
                 <RigidBody type="static" />
             </Entity>
-            <Entity name="crate" position={[3, 0.5, 1]} scale={[2.5, 1, 1]}>
-                <Render type="box" />
+            <Entity name="yellow-crate" position={[3, 0.5, 1]} scale={[2.5, 1, 1]}>
+                <Render type="box" material={yellow} />
                 <Collision type="box" halfExtents={[1.25, 0.5, 0.5]} />
                 <RigidBody type="static" />
             </Entity>

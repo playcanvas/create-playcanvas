@@ -12,6 +12,7 @@ import {
     RigidBodyComponentSystem,
     ScriptComponentSystem,
     StandardMaterial,
+    Vec3,
     WasmModule,
     createGraphicsDevice
 } from 'playcanvas';
@@ -53,17 +54,17 @@ app.setCanvasFillMode(FILLMODE_FILL_WINDOW);
 app.setCanvasResolution(RESOLUTION_AUTO);
 
 const ground = new Entity('ground');
-ground.addComponent('render', { type: 'box' });
-ground.addComponent('collision', { type: 'box', halfExtents: { x: 10, y: 0.1, z: 10 } });
-ground.addComponent('rigidbody', { type: 'static' });
 ground.setLocalScale(20, 0.2, 20);
 ground.setPosition(0, -0.1, 0);
+ground.addComponent('render', { type: 'box' });
+ground.addComponent('collision', { type: 'box', halfExtents: new Vec3(10, 0.1, 10) });
+ground.addComponent('rigidbody', { type: 'static' });
 app.root.addChild(ground);
 
 const player = new Entity('player');
-player.addComponent('collision', { type: 'capsule', radius: 0.45, height: 1.8 });
-player.addComponent('rigidbody', { type: 'dynamic', mass: 70, angularFactor: { x: 0, y: 0, z: 0 } });
 player.setPosition(0, 1, 0);
+player.addComponent('collision', { type: 'capsule', radius: 0.45, height: 1.8 });
+player.addComponent('rigidbody', { type: 'dynamic', mass: 70, angularFactor: Vec3.ZERO });
 app.root.addChild(player);
 
 const blue = new StandardMaterial();

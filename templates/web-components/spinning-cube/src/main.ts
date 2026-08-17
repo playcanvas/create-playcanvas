@@ -2,6 +2,7 @@ import type { EntityElement } from '@playcanvas/web-components';
 import { whenReady } from '@playcanvas/web-components';
 import { Script } from 'playcanvas';
 
+import './starter.css';
 import './style.css';
 
 class Rotate extends Script {

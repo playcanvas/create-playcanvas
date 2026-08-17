@@ -5,6 +5,7 @@ import { Asset, TEXTURETYPE_RGBP } from 'playcanvas';
 import { CameraControls } from 'playcanvas/scripts/esm/camera-controls.mjs';
 import { Grid } from 'playcanvas/scripts/esm/grid.mjs';
 
+import './starter.css';
 import './style.css';
 
 const HOVER_COLOR = 'orange';

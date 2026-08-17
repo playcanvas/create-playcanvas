@@ -12,6 +12,7 @@ import {
     RigidBodyComponentSystem,
     ScriptComponentSystem,
     StandardMaterial,
+    Vec3,
     WasmModule,
     createGraphicsDevice
 } from 'playcanvas';
@@ -58,22 +59,27 @@ material.diffuse = new Color(0.22, 0.62, 0.88);
 material.update();
 
 const floor = new Entity('floor');
-floor.addComponent('render', { type: 'box' });
-floor.addComponent('collision', { type: 'box', halfExtents: { x: 5, y: 0.1, z: 5 } });
-floor.addComponent('rigidbody', { type: 'static' });
 floor.setLocalScale(10, 0.2, 10);
 floor.setPosition(0, -0.1, 0);
+floor.addComponent('render', { type: 'box' });
+floor.addComponent('collision', { type: 'box', halfExtents: new Vec3(5, 0.1, 5) });
+floor.addComponent('rigidbody', { type: 'static' });
 app.root.addChild(floor);
 
 const bodies: Entity[] = [];
 const spawn = () => {
-    const type = Math.random() > 0.5 ? 'box' : 'sphere';
+    const i = bodies.length;
+    const type = i % 2 ? 'sphere' : 'box';
     const entity = new Entity(type);
+    entity.setPosition((i % 3) - 1, 3 + i * 0.7, (i % 2) - 0.5);
+    entity.setEulerAngles(i * 13, i * 29, 0);
     entity.addComponent('render', { type, material });
-    entity.addComponent('collision', { type, halfExtents: { x: 0.5, y: 0.5, z: 0.5 }, radius: 0.5 });
+    entity.addComponent('collision', {
+        type,
+        halfExtents: new Vec3(0.5, 0.5, 0.5),
+        radius: 0.5
+    });
     entity.addComponent('rigidbody', { type: 'dynamic', mass: 1, restitution: 0.35 });
-    entity.setPosition(Math.random() * 3 - 1.5, 5 + bodies.length * 0.7, Math.random() * 3 - 1.5);
-    entity.setEulerAngles(Math.random() * 90, Math.random() * 90, 0);
     app.root.addChild(entity);
     bodies.push(entity);
 };

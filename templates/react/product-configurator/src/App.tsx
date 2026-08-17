@@ -62,22 +62,31 @@ function Product({ product, material }: { product: number; material: StandardMat
     );
 }
 
-function App() {
-    const [product, setProduct] = useState(0);
-    const [color, setColor] = useState(COLORS[0]);
+function Scene({ product, color }: { product: number; color: string }) {
     const material = useMaterial({ diffuse: color, metalness: 0.15, gloss: 0.65 });
 
     return (
         <>
+            <Entity name="camera" position={[4, 2.6, 5]}>
+                <Camera clearColor="#0a0f17" />
+                <Script script={CameraControls} sceneSize={4} />
+            </Entity>
+            <Entity name="light" rotation={[45, 35, 0]}>
+                <Light type="directional" intensity={2.5} />
+            </Entity>
+            <Product product={product} material={material} />
+        </>
+    );
+}
+
+function App() {
+    const [product, setProduct] = useState(0);
+    const [color, setColor] = useState(COLORS[0]);
+
+    return (
+        <>
             <Application>
-                <Entity name="camera" position={[4, 2.6, 5]}>
-                    <Camera clearColor="#0a0f17" />
-                    <Script script={CameraControls} sceneSize={4} />
-                </Entity>
-                <Entity name="light" rotation={[45, 35, 0]}>
-                    <Light type="directional" intensity={2.5} />
-                </Entity>
-                <Product product={product} material={material} />
+                <Scene product={product} color={color} />
             </Application>
             <div className="hud">
                 <section className="panel">

@@ -39,6 +39,7 @@ class ArPlacement extends Script {
 
         this.on('destroy', () => {
             button.onclick = null;
+            this.reticle.destroy();
             this.app.xr?.hitTest.off('available', this.startHitTest, this);
             this.app.xr?.input.off('select', this.place, this);
             this.app.xr?.off(`available:${XRTYPE_AR}`, this.updateStatus, this);
