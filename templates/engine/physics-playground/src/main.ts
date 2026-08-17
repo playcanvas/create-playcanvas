@@ -12,14 +12,21 @@ import {
     RigidBodyComponentSystem,
     ScriptComponentSystem,
     StandardMaterial,
+    WasmModule,
     createGraphicsDevice
 } from 'playcanvas';
 import { CameraControls } from 'playcanvas/scripts/esm/camera-controls.mjs';
 
-import { loadPhysics } from './load-physics';
 import './starter.css';
 
-await loadPhysics();
+WasmModule.setConfig('Ammo', {
+    glueUrl: '/ammo/ammo.wasm.js',
+    wasmUrl: '/ammo/ammo.wasm.wasm',
+    fallbackUrl: '/ammo/ammo.js'
+});
+await new Promise<void>((resolve) => {
+    WasmModule.getInstance('Ammo', () => resolve());
+});
 
 document.body.insertAdjacentHTML(
     'beforeend',

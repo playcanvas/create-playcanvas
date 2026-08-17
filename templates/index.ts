@@ -25,7 +25,7 @@ export const FORMATS = [
 
 export const FEATURES: Record<string, Record<string, string[]>> = {
     physics: {
-        engine: ['assets', 'engine'],
+        engine: ['assets'],
         react: ['react'],
         'web-components': ['assets']
     }
