@@ -1,30 +1,46 @@
+import type { ContainerResource, RenderComponent } from 'playcanvas';
 import {
     AppBase,
     AppOptions,
+    Asset,
+    AssetListLoader,
     CameraComponentSystem,
     Color,
+    ContainerHandler,
+    CylinderGeometry,
     Entity,
     FILLMODE_FILL_WINDOW,
     LightComponentSystem,
+    Mesh,
+    MeshInstance,
     RenderComponentSystem,
     RESOLUTION_AUTO,
     ScriptComponentSystem,
     StandardMaterial,
+    TextureHandler,
+    TONEMAP_ACES2,
     Vec2,
     Vec3,
     createGraphicsDevice
 } from 'playcanvas';
 import { CameraControls } from 'playcanvas/scripts/esm/camera-controls.mjs';
+import { ProceduralSky } from 'playcanvas/scripts/esm/sky/procedural-sky.mjs';
 
+import './product.css';
 import './starter.css';
 
-const COLORS = ['#41b6e6', '#ff6b6b', '#f7c948'];
-const CAMERA_FOCUS = new Vec3(0, 1.1, 0);
+const PRODUCT_URL = 'https://developer.playcanvas.com/assets/lambo.glb';
+const PAINTS = [
+    { name: 'Crimson', color: '#d6293e', shade: '#9b1731' },
+    { name: 'Arctic', color: '#d8e4e9', shade: '#8fa8b5' },
+    { name: 'Volt', color: '#9acb34', shade: '#3c742d' }
+];
+const CAMERA_FOCUS = new Vec3(0, 0.8, 0);
 const CAMERA_PITCH = new Vec2(-85, -4);
 
 document.body.insertAdjacentHTML(
     'beforeend',
-    `<div class="hud"><section class="panel"><h1>Product Configurator</h1><p>Switch the model and finish, then drag to orbit.</p><div class="controls" id="products"><button aria-pressed="true">Chair</button><button>Lamp</button><button>Speaker</button></div><div class="controls" id="colors">${COLORS.map((color) => `<button class="swatch" style="--color:${color}" aria-label="${color}"></button>`).join('')}</div></section></div>`
+    `<div class="hud"><section class="panel"><h1>Product Configurator</h1><p>Choose a paint finish, then drag to orbit.</p><div class="controls variants" id="paints">${PAINTS.map(({ name, color }, i) => `<button aria-pressed="${i === 0}" data-color="${color}"><span class="finish" style="--color:${color}"></span>${name}</button>`).join('')}</div></section></div>`
 );
 
 const canvas = document.getElementById('application-canvas') as HTMLCanvasElement;
@@ -34,88 +50,57 @@ device.maxPixelRatio = Math.min(device.maxPixelRatio, 2);
 const options = new AppOptions();
 options.graphicsDevice = device;
 options.componentSystems = [RenderComponentSystem, CameraComponentSystem, LightComponentSystem, ScriptComponentSystem];
+options.resourceHandlers = [TextureHandler, ContainerHandler];
 
 const app = new AppBase(canvas);
 app.init(options);
-app.start();
 app.setCanvasFillMode(FILLMODE_FILL_WINDOW);
 app.setCanvasResolution(RESOLUTION_AUTO);
 
-const material = new StandardMaterial();
-material.diffuse = new Color().fromString(COLORS[0]);
-material.metalness = 0.15;
-material.gloss = 0.65;
-material.update();
+const product = new Asset('car', 'container', { url: PRODUCT_URL });
+await new Promise<void>((resolve) => new AssetListLoader([product], app.assets).load(() => resolve()));
 
-const neutral = new StandardMaterial();
-neutral.diffuse = new Color(0.06, 0.08, 0.11);
-neutral.metalness = 0.55;
-neutral.gloss = 0.75;
-neutral.update();
+app.start();
 
-const studio = new StandardMaterial();
-studio.diffuse = new Color(0.22, 0.24, 0.28);
-studio.gloss = 0.2;
-studio.update();
+const car = (product.resource as ContainerResource).instantiateRenderEntity();
+car.setLocalEulerAngles(-90, -25, 0);
+app.root.addChild(car);
+app.root.syncHierarchy();
 
-const part = (
-    parent: Entity,
-    name: string,
-    type: 'box' | 'cone' | 'cylinder' | 'sphere',
-    position: [number, number, number],
-    scale: [number, number, number],
-    partMaterial = material
-) => {
-    const entity = new Entity(name);
-    entity.addComponent('render', { type, material: partMaterial });
-    entity.setLocalPosition(...position);
-    entity.setLocalScale(...scale);
-    parent.addChild(entity);
-};
+const meshes = (car.findComponents('render') as RenderComponent[]).flatMap((render) => render.meshInstances);
+const bounds = meshes[0].aabb.clone();
+meshes.slice(1).forEach((mesh) => bounds.add(mesh.aabb));
+const scale = 5 / Math.max(bounds.halfExtents.x * 2, bounds.halfExtents.z * 2);
+car.setLocalScale(scale, scale, scale);
+app.root.syncHierarchy();
+bounds.copy(meshes[0].aabb);
+meshes.slice(1).forEach((mesh) => bounds.add(mesh.aabb));
+car.setPosition(-bounds.center.x, 0.03 - bounds.getMin().y, -bounds.center.z);
 
-const chair = new Entity('chair');
-part(chair, 'seat', 'box', [0, 0.8, 0], [1.6, 0.18, 1.6]);
-part(chair, 'back', 'box', [0, 1.65, 0.7], [1.6, 1.5, 0.18]);
-for (const x of [-0.65, 0.65]) {
-    for (const z of [-0.65, 0.65]) {
-        part(chair, 'leg', 'cylinder', [x, 0.35, z], [0.14, 0.7, 0.14], neutral);
-    }
-}
+const body = meshes.filter((mesh) => mesh.material.name === 'material');
+const panels = meshes.filter((mesh) => mesh.material.name === 'material_1');
+const paint = body[0].material.clone() as StandardMaterial;
+const shade = panels[0].material.clone() as StandardMaterial;
+body.forEach((mesh) => (mesh.material = paint));
+panels.forEach((mesh) => (mesh.material = shade));
+paint.diffuse.fromString(PAINTS[0].color);
+shade.diffuse.fromString(PAINTS[0].shade);
+paint.update();
+shade.update();
 
-const lamp = new Entity('lamp');
-part(lamp, 'base', 'cylinder', [0, 0.12, 0], [1.3, 0.24, 1.3], neutral);
-part(lamp, 'stem', 'cylinder', [0, 1.25, 0], [0.16, 2.3, 0.16], neutral);
-part(lamp, 'shade', 'cone', [0, 2.35, 0], [1.4, 1.2, 1.4]);
-
-const speaker = new Entity('speaker');
-part(speaker, 'case', 'box', [0, 1.15, 0], [1.5, 2.3, 0.8]);
-part(speaker, 'woofer', 'cylinder', [0, 0.85, 0.43], [0.75, 0.12, 0.75], neutral);
-part(speaker, 'tweeter', 'cylinder', [0, 1.65, 0.43], [0.35, 0.12, 0.35], neutral);
-speaker.findByName('woofer')?.setLocalEulerAngles(90, 0, 0);
-speaker.findByName('tweeter')?.setLocalEulerAngles(90, 0, 0);
-
-const products = [chair, lamp, speaker];
-products.forEach((product, i) => {
-    product.enabled = i === 0;
-    app.root.addChild(product);
-});
-
-const ground = new Entity('studio-ground');
-ground.setPosition(0, -0.08, 0);
-ground.setLocalScale(10, 0.16, 10);
-ground.addComponent('render', { type: 'cylinder', material: studio });
-app.root.addChild(ground);
-
-app.scene.ambientLight = new Color(0.28, 0.3, 0.34);
+const sky = new Entity('sky');
+sky.addComponent('script');
+sky.script!.create(ProceduralSky, { properties: { luminance: 0.18 } });
+app.root.addChild(sky);
 
 const camera = new Entity('camera');
-camera.setPosition(6, 3.6, 7);
-camera.lookAt(0, 1.1, 0);
-camera.addComponent('camera', { clearColor: new Color(0.16, 0.18, 0.22) });
+camera.setPosition(5.5, 3.2, 6.5);
+camera.lookAt(CAMERA_FOCUS);
+camera.addComponent('camera', { fov: 40, toneMapping: TONEMAP_ACES2, renderSceneColorMap: true });
 camera.addComponent('script');
 camera.script!.create(CameraControls, {
     properties: {
-        sceneSize: 5.5,
+        sceneSize: 6.2,
         focusPoint: CAMERA_FOCUS,
         pitchRange: CAMERA_PITCH,
         enableFly: false,
@@ -123,6 +108,29 @@ camera.script!.create(CameraControls, {
     }
 });
 app.root.addChild(camera);
+
+const ground = new Entity('studio-ground');
+const podium = new StandardMaterial();
+podium.diffuse = new Color(0.12, 0.18, 0.24);
+podium.metalness = 0.15;
+podium.gloss = 0.65;
+podium.update();
+
+ground.setPosition(0, -0.08, 0);
+ground.addComponent('render', {
+    meshInstances: [
+        new MeshInstance(
+            Mesh.fromGeometry(
+                device,
+                new CylinderGeometry({ radius: 4, height: 0.16, heightSegments: 1, capSegments: 128 })
+            ),
+            podium
+        )
+    ],
+    castShadows: false,
+    receiveShadows: true
+});
+app.root.addChild(ground);
 
 const light = new Entity('light');
 light.addComponent('light', {
@@ -135,18 +143,13 @@ light.addComponent('light', {
 light.setEulerAngles(45, 35, 0);
 app.root.addChild(light);
 
-document.querySelectorAll<HTMLButtonElement>('#products button').forEach((button, i) => {
+document.querySelectorAll<HTMLButtonElement>('#paints button').forEach((button, i, buttons) => {
     button.onclick = () => {
-        products.forEach((product, j) => (product.enabled = i === j));
-        document.querySelectorAll<HTMLButtonElement>('#products button').forEach((item, j) => {
-            item.ariaPressed = String(i === j);
-        });
-    };
-});
-document.querySelectorAll<HTMLButtonElement>('#colors button').forEach((button, i) => {
-    button.onclick = () => {
-        material.diffuse.fromString(COLORS[i]);
-        material.update();
+        paint.diffuse.fromString(PAINTS[i].color);
+        shade.diffuse.fromString(PAINTS[i].shade);
+        paint.update();
+        shade.update();
+        buttons.forEach((item, j) => (item.ariaPressed = String(i === j)));
     };
 });
 

@@ -1,0 +1,14 @@
+.variants button {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.finish {
+    width: 14px;
+    height: 14px;
+    border: 1px solid #ffffff66;
+    border-radius: 50%;
+    background: var(--color);
+    box-shadow: 0 1px 4px #0008;
+}
