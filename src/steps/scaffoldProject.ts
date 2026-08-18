@@ -104,7 +104,7 @@ export const scaffoldProject = (opts: Options) => {
             readme,
             fs
                 .readFileSync(readme, 'utf8')
-                .replace(README_SECTION, `${fs.readFileSync(starterReadme, 'utf8')}\n\n${README_SECTION}`)
+                .replace(README_SECTION, `${fs.readFileSync(starterReadme, 'utf8').trimEnd()}\n\n${README_SECTION}`)
         );
     }
 
