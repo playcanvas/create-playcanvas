@@ -15,7 +15,7 @@ function App() {
                 <Entity name="camera" position={[0, 0, 10]}>
                     <Camera projection={1} orthoHeight={4.4} clearColor="#5cb9e6" />
                 </Entity>
-                <Entity name="dirt" position={[0, -3.14, 0]} scale={[20, 2.1, 1]}>
+                <Entity name="dirt" position={[0, -3.39, 0]} scale={[20, 2.6, 1]}>
                     <Render type="box" material={dirt} />
                 </Entity>
                 <Entity name="grass" position={[0, -2, 0]} scale={[20, 0.18, 1]}>

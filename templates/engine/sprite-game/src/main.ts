@@ -53,8 +53,8 @@ grassMaterial.update();
 
 const dirt = new Entity('dirt');
 dirt.addComponent('render', { type: 'box', material: dirtMaterial });
-dirt.setLocalScale(20, 2.1, 1);
-dirt.setPosition(0, -3.14, 0);
+dirt.setLocalScale(20, 2.6, 1);
+dirt.setPosition(0, -3.39, 0);
 app.root.addChild(dirt);
 
 const grass = new Entity('grass');

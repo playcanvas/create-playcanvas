@@ -23,7 +23,7 @@ const SCALE = 2.5;
 const FEET = (2 / CELL) * SCALE;
 const SPEED = 3;
 const PLATFORMS = [
-    { x: -3.6, y: 1, width: 2.6 },
+    { x: -3.2, y: 1, width: 2.6 },
     { x: 0, y: 1.9, width: 2.4 },
     { x: 3.6, y: 1.1, width: 2.8 }
 ];
