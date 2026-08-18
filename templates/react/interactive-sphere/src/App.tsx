@@ -1,8 +1,6 @@
 import { Application } from '@playcanvas/react';
 import { useState } from 'react';
 
-import playcanvasLogo from './assets/playcanvas.png';
-import reactLogo from './assets/react.svg';
 import './App.css';
 import Scene from './Scene';
 
@@ -16,26 +14,7 @@ function App() {
                     <Scene onClick={() => setCount((count) => count + 1)} />
                 </Application>
             </div>
-            <div className="absolute overlay">
-                <div className="grow">
-                    <header>
-                        <h1>PlayCanvas + React</h1>
-                        <a href="https://developer.playcanvas.com/user-manual/react/" target="_blank" rel="noreferrer">
-                            <img src={playcanvasLogo} className="playcanvas-logo logo" alt="PlayCanvas logo" />
-                        </a>
-                        <a href="https://react.dev" target="_blank" rel="noreferrer">
-                            <img src={reactLogo} className="logo react" alt="React logo" />
-                        </a>
-                    </header>
-                </div>
-                <div>
-                    <span className="pill">Click Count: {count}</span>
-                    <p>
-                        Edit <code>src/Scene.tsx</code> and save to test HMR
-                    </p>
-                </div>
-                <p className="read-the-docs">Click on the PlayCanvas and React logos to learn more</p>
-            </div>
+            <p className="counter">Click count: {count}</p>
         </>
     );
 }

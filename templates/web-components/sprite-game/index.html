@@ -1,0 +1,34 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <link rel="icon" type="image/png" href="/src/assets/playcanvas.png" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Sprite Game</title>
+    </head>
+    <body>
+        <pc-app>
+            <pc-material id="dirt-material" emissive="#734729"></pc-material>
+            <pc-material id="grass-material" emissive="#479e57"></pc-material>
+            <pc-scene>
+                <pc-entity name="camera" position="0 0 10"
+                    ><pc-camera projection="orthographic" ortho-height="4.4" clear-color="#5cb9e6"></pc-camera
+                ></pc-entity>
+                <pc-entity name="dirt" position="0 -3.39 0" scale="20 2.6 1"
+                    ><pc-render type="box" material="dirt-material"></pc-render
+                ></pc-entity>
+                <pc-entity name="grass" position="0 -2 0" scale="20 0.18 1"
+                    ><pc-render type="box" material="grass-material"></pc-render
+                ></pc-entity>
+                <pc-entity name="game" position="0 -2.15 0"></pc-entity>
+            </pc-scene>
+        </pc-app>
+        <div class="hud">
+            <section class="panel">
+                <h1>Sprite Game</h1>
+                <p>Use A/D or the arrow keys to move and Space to jump.</p>
+            </section>
+        </div>
+        <script type="module" src="/src/main.ts"></script>
+    </body>
+</html>

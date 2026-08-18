@@ -1,0 +1,51 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <link rel="icon" type="image/png" href="/src/assets/playcanvas.png" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Product Configurator</title>
+    </head>
+    <body>
+        <pc-app>
+            <pc-asset id="car" src="https://developer.playcanvas.com/assets/lambo.glb"></pc-asset>
+            <pc-scene>
+                <pc-entity name="sky"></pc-entity>
+                <pc-entity name="camera" position="5.5 3.2 6.5" rotation="-16 40 0">
+                    <pc-camera fov="40" tonemap="aces2"></pc-camera>
+                </pc-entity>
+                <pc-entity name="light" rotation="45 -145 0">
+                    <pc-light
+                        type="directional"
+                        intensity="2.5"
+                        cast-shadows
+                        shadow-bias="0.2"
+                        normal-offset-bias="0.05"
+                    ></pc-light>
+                </pc-entity>
+                <pc-entity name="studio-ground"></pc-entity>
+                <pc-entity name="car">
+                    <pc-model asset="car"></pc-model>
+                </pc-entity>
+            </pc-scene>
+        </pc-app>
+        <div class="hud">
+            <section class="panel">
+                <h1>Product Configurator</h1>
+                <p>Choose a paint finish, then drag to orbit.</p>
+                <div class="controls variants" id="paints">
+                    <button aria-pressed="true" data-color="#d6293e" data-shade="#9b1731">
+                        <span class="finish" style="--color: #d6293e"></span>Crimson
+                    </button>
+                    <button data-color="#d8e4e9" data-shade="#8fa8b5">
+                        <span class="finish" style="--color: #d8e4e9"></span>Arctic
+                    </button>
+                    <button data-color="#9acb34" data-shade="#3c742d">
+                        <span class="finish" style="--color: #9acb34"></span>Volt
+                    </button>
+                </div>
+            </section>
+        </div>
+        <script type="module" src="/src/main.ts"></script>
+    </body>
+</html>

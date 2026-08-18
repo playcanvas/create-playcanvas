@@ -28,8 +28,8 @@ import { Grid } from 'playcanvas/scripts/esm/grid.mjs';
 
 import { throttle } from './utils';
 
-const HOVER_COLOR = new Color(1, 0.647, 0);
-const DEFAULT_COLOR = new Color(0.827, 0.827, 0.827);
+const HOVER_COLOR = new Color(0.25, 0.8, 1);
+const DEFAULT_COLOR = new Color(0.9, 0.93, 0.98);
 
 // Assets to load
 const assets = {
@@ -97,7 +97,8 @@ const setupApp = async (canvas: HTMLCanvasElement, onClick: () => void) => {
 
     // Create sphere entity
     const sphere = new Entity('sphere');
-    sphere.setPosition(new Vec3(0, 0.5, 0));
+    sphere.setPosition(new Vec3(0, 0.7, 0));
+    sphere.setLocalScale(1.25, 1.25, 1.25);
 
     // Create a new material
     const material = new StandardMaterial();
@@ -113,20 +114,21 @@ const setupApp = async (canvas: HTMLCanvasElement, onClick: () => void) => {
     // Create camera entity
     const camera = new Entity('camera');
     camera.addComponent('camera', {
-        clearColor: new Color(0.09, 0.09, 0.09)
+        clearColor: new Color(0.025, 0.04, 0.065)
     });
-    camera.setPosition(new Vec3(4, 1, 4));
+    camera.setPosition(new Vec3(3.2, 1.5, 3.2));
+    camera.lookAt(0, 0.7, 0);
     app.root.addChild(camera);
 
     // Create camera controls
     camera.addComponent('script');
-    camera.script?.create(CameraControls);
+    camera.script?.create(CameraControls, { properties: { sceneSize: 3 } });
 
     // Create grid entity
     const grid = new Entity('grid');
     grid.addComponent('script');
     grid.script?.create(Grid);
-    grid.setLocalScale(1000, 1000, 1000);
+    grid.setLocalScale(12, 12, 12);
     app.root.addChild(grid);
 
     // Create a picker for mouse interaction

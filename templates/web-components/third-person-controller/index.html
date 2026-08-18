@@ -1,0 +1,183 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <link rel="icon" type="image/png" href="/src/assets/playcanvas.png" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Third-Person Controller</title>
+    </head>
+    <body>
+        <pc-app>
+            <pc-material id="ground-material" diffuse="#33662e"></pc-material>
+            <pc-material id="block-material" diffuse="#57594d"></pc-material>
+            <pc-material id="wood-material" diffuse="#572e14"></pc-material>
+            <pc-material id="leaves-material" diffuse="#144d1f"></pc-material>
+            <pc-material id="tips-material" diffuse="#1f6629"></pc-material>
+            <pc-material id="shirt-material" diffuse="#268bd2"></pc-material>
+            <pc-material id="skin-material" diffuse="#c78759"></pc-material>
+            <pc-material id="pants-material" diffuse="#2e4a85"></pc-material>
+            <pc-module
+                name="Ammo"
+                glue="/ammo/ammo.wasm.js"
+                wasm="/ammo/ammo.wasm.wasm"
+                fallback="/ammo/ammo.js"
+            ></pc-module>
+            <pc-scene>
+                <pc-entity name="camera" position="0 3 6"><pc-camera clear-color="#7ab8e6"></pc-camera></pc-entity>
+                <pc-entity name="light" rotation="45 30 0"
+                    ><pc-light
+                        type="directional"
+                        intensity="2.5"
+                        cast-shadows
+                        shadow-bias="0.2"
+                        normal-offset-bias="0.05"
+                    ></pc-light
+                ></pc-entity>
+                <pc-entity name="ground" position="0 -0.1 0" scale="20 0.2 20"
+                    ><pc-render type="box" material="ground-material"></pc-render
+                    ><pc-collision type="box" half-extents="10 0.1 10"></pc-collision
+                    ><pc-rigidbody type="static"></pc-rigidbody
+                ></pc-entity>
+                <pc-entity name="block-0" position="-4.5 0.5 -3.5" scale="2.4 1 2.4"
+                    ><pc-render type="box" material="block-material"></pc-render
+                    ><pc-collision type="box" half-extents="1.2 0.5 1.2"></pc-collision
+                    ><pc-rigidbody type="static"></pc-rigidbody
+                ></pc-entity>
+                <pc-entity name="block-1" position="4.2 0.5 -2.8" rotation="0 25 0" scale="2.4 1 2.4"
+                    ><pc-render type="box" material="block-material"></pc-render
+                    ><pc-collision type="box" half-extents="1.2 0.5 1.2"></pc-collision
+                    ><pc-rigidbody type="static"></pc-rigidbody
+                ></pc-entity>
+                <pc-entity name="block-2" position="-3.7 0.5 3.2" rotation="0 50 0" scale="2.4 1 2.4"
+                    ><pc-render type="box" material="block-material"></pc-render
+                    ><pc-collision type="box" half-extents="1.2 0.5 1.2"></pc-collision
+                    ><pc-rigidbody type="static"></pc-rigidbody
+                ></pc-entity>
+                <pc-entity name="block-3" position="3.8 0.5 3.6" rotation="0 75 0" scale="2.4 1 2.4"
+                    ><pc-render type="box" material="block-material"></pc-render
+                    ><pc-collision type="box" half-extents="1.2 0.5 1.2"></pc-collision
+                    ><pc-rigidbody type="static"></pc-rigidbody
+                ></pc-entity>
+                <pc-entity name="tree-0-trunk" position="-7 0.99 -6" scale="0.418 1.98 0.418"
+                    ><pc-render type="box" material="wood-material"></pc-render
+                    ><pc-collision type="box" half-extents="0.209 0.99 0.209"></pc-collision
+                    ><pc-rigidbody type="static"></pc-rigidbody
+                ></pc-entity>
+                <pc-entity name="tree-0-crown-0" position="-7 2.09 -6" scale="2.31 1.98 2.31"
+                    ><pc-render type="cone" material="leaves-material"></pc-render
+                ></pc-entity>
+                <pc-entity name="tree-0-crown-1" position="-7 2.915 -6" scale="1.76 1.705 1.76"
+                    ><pc-render type="cone" material="tips-material"></pc-render
+                ></pc-entity>
+                <pc-entity name="tree-0-crown-2" position="-7 3.63 -6" scale="1.21 1.54 1.21"
+                    ><pc-render type="cone" material="leaves-material"></pc-render
+                ></pc-entity>
+                <pc-entity name="tree-1-trunk" position="6.5 1.125 -6.5" scale="0.475 2.25 0.475"
+                    ><pc-render type="box" material="wood-material"></pc-render
+                    ><pc-collision type="box" half-extents="0.2375 1.125 0.2375"></pc-collision
+                    ><pc-rigidbody type="static"></pc-rigidbody
+                ></pc-entity>
+                <pc-entity name="tree-1-crown-0" position="6.5 2.375 -6.5" scale="2.625 2.25 2.625"
+                    ><pc-render type="cone" material="leaves-material"></pc-render
+                ></pc-entity>
+                <pc-entity name="tree-1-crown-1" position="6.5 3.3125 -6.5" scale="2 1.9375 2"
+                    ><pc-render type="cone" material="tips-material"></pc-render
+                ></pc-entity>
+                <pc-entity name="tree-1-crown-2" position="6.5 4.125 -6.5" scale="1.375 1.75 1.375"
+                    ><pc-render type="cone" material="leaves-material"></pc-render
+                ></pc-entity>
+                <pc-entity name="tree-2-trunk" position="-7.5 0.81 5" scale="0.342 1.62 0.342"
+                    ><pc-render type="box" material="wood-material"></pc-render
+                    ><pc-collision type="box" half-extents="0.171 0.81 0.171"></pc-collision
+                    ><pc-rigidbody type="static"></pc-rigidbody
+                ></pc-entity>
+                <pc-entity name="tree-2-crown-0" position="-7.5 1.71 5" scale="1.89 1.62 1.89"
+                    ><pc-render type="cone" material="leaves-material"></pc-render
+                ></pc-entity>
+                <pc-entity name="tree-2-crown-1" position="-7.5 2.385 5" scale="1.44 1.395 1.44"
+                    ><pc-render type="cone" material="tips-material"></pc-render
+                ></pc-entity>
+                <pc-entity name="tree-2-crown-2" position="-7.5 2.97 5" scale="0.99 1.26 0.99"
+                    ><pc-render type="cone" material="leaves-material"></pc-render
+                ></pc-entity>
+                <pc-entity name="tree-3-trunk" position="7 1.035 5.5" scale="0.437 2.07 0.437"
+                    ><pc-render type="box" material="wood-material"></pc-render
+                    ><pc-collision type="box" half-extents="0.2185 1.035 0.2185"></pc-collision
+                    ><pc-rigidbody type="static"></pc-rigidbody
+                ></pc-entity>
+                <pc-entity name="tree-3-crown-0" position="7 2.185 5.5" scale="2.415 2.07 2.415"
+                    ><pc-render type="cone" material="leaves-material"></pc-render
+                ></pc-entity>
+                <pc-entity name="tree-3-crown-1" position="7 3.0475 5.5" scale="1.84 1.7825 1.84"
+                    ><pc-render type="cone" material="tips-material"></pc-render
+                ></pc-entity>
+                <pc-entity name="tree-3-crown-2" position="7 3.795 5.5" scale="1.265 1.61 1.265"
+                    ><pc-render type="cone" material="leaves-material"></pc-render
+                ></pc-entity>
+                <pc-entity name="tree-4-trunk" position="-2.2 0.765 -8" scale="0.323 1.53 0.323"
+                    ><pc-render type="box" material="wood-material"></pc-render
+                    ><pc-collision type="box" half-extents="0.1615 0.765 0.1615"></pc-collision
+                    ><pc-rigidbody type="static"></pc-rigidbody
+                ></pc-entity>
+                <pc-entity name="tree-4-crown-0" position="-2.2 1.615 -8" scale="1.785 1.53 1.785"
+                    ><pc-render type="cone" material="leaves-material"></pc-render
+                ></pc-entity>
+                <pc-entity name="tree-4-crown-1" position="-2.2 2.2525 -8" scale="1.36 1.3175 1.36"
+                    ><pc-render type="cone" material="tips-material"></pc-render
+                ></pc-entity>
+                <pc-entity name="tree-4-crown-2" position="-2.2 2.805 -8" scale="0.935 1.19 0.935"
+                    ><pc-render type="cone" material="leaves-material"></pc-render
+                ></pc-entity>
+                <pc-entity name="fallen-log" position="0 0.35 6" scale="3.8 0.7 0.7"
+                    ><pc-render type="box" material="wood-material"></pc-render
+                    ><pc-collision type="box" half-extents="1.9 0.35 0.35"></pc-collision
+                    ><pc-rigidbody type="static"></pc-rigidbody
+                ></pc-entity>
+                <pc-entity name="stump" position="-1.8 0.4 -2.2" scale="0.9 0.8 0.9"
+                    ><pc-render type="box" material="wood-material"></pc-render
+                    ><pc-collision type="box" half-extents="0.45 0.4 0.45"></pc-collision
+                    ><pc-rigidbody type="static"></pc-rigidbody
+                ></pc-entity>
+                <pc-entity name="player" position="0 1.1 0">
+                    <pc-collision type="capsule" radius="0.5" height="2.4" linear-offset="0 0.1 0"></pc-collision>
+                    <pc-rigidbody type="dynamic" mass="70" angular-factor="0 0 0"></pc-rigidbody>
+                    <pc-entity name="character" position="0 0.2 0">
+                        <pc-entity name="body" scale="0.56 0.88 0.38"
+                            ><pc-render type="box" material="shirt-material"></pc-render
+                        ></pc-entity>
+                        <pc-entity name="head" position="0 0.76 0" scale="0.52 0.6 0.52"
+                            ><pc-render type="box" material="skin-material"></pc-render
+                        ></pc-entity>
+                        <pc-entity name="left-arm" position="-0.38 0.44 0">
+                            <pc-entity position="0 -0.44 0" scale="0.18 0.88 0.32"
+                                ><pc-render type="box" material="shirt-material"></pc-render
+                            ></pc-entity>
+                        </pc-entity>
+                        <pc-entity name="right-arm" position="0.38 0.44 0">
+                            <pc-entity position="0 -0.44 0" scale="0.18 0.88 0.32"
+                                ><pc-render type="box" material="shirt-material"></pc-render
+                            ></pc-entity>
+                        </pc-entity>
+                        <pc-entity name="left-leg" position="-0.15 -0.44 0">
+                            <pc-entity position="0 -0.43 0" scale="0.24 0.86 0.34"
+                                ><pc-render type="box" material="pants-material"></pc-render
+                            ></pc-entity>
+                        </pc-entity>
+                        <pc-entity name="right-leg" position="0.15 -0.44 0">
+                            <pc-entity position="0 -0.43 0" scale="0.24 0.86 0.34"
+                                ><pc-render type="box" material="pants-material"></pc-render
+                            ></pc-entity>
+                        </pc-entity>
+                    </pc-entity>
+                </pc-entity>
+            </pc-scene>
+        </pc-app>
+        <div class="hud">
+            <section class="panel">
+                <h1>Third-Person Controller</h1>
+                <p>Click the scene, then use WASD to move, mouse to orbit and Space to jump.</p>
+            </section>
+        </div>
+        <script type="module" src="/src/main.ts"></script>
+    </body>
+</html>

@@ -5,10 +5,11 @@ import { Asset, TEXTURETYPE_RGBP } from 'playcanvas';
 import { CameraControls } from 'playcanvas/scripts/esm/camera-controls.mjs';
 import { Grid } from 'playcanvas/scripts/esm/grid.mjs';
 
+import './starter.css';
 import './style.css';
 
-const HOVER_COLOR = 'orange';
-const DEFAULT_COLOR = 'lightgrey';
+const HOVER_COLOR = '#40ccff';
+const DEFAULT_COLOR = '#e6edf9';
 
 // The camera is awaited as <pc-camera> rather than the <pc-entity> holding it - an entity becomes
 // ready before its component children do, and CameraControls needs the camera component to exist
@@ -49,7 +50,7 @@ if (skyboxLayer) {
 // with <pc-script name="...">, which only resolves scripts fetched at runtime by <pc-asset>
 const camera = cameraComponent.closestEntity;
 camera?.entity?.addComponent('script');
-camera?.entity?.script?.create(CameraControls);
+camera?.entity?.script?.create(CameraControls, { properties: { sceneSize: 3 } });
 grid.entity?.addComponent('script');
 grid.entity?.script?.create(Grid);
 
@@ -72,5 +73,5 @@ sphere.addEventListener('pointerleave', () => {
 
 sphere.addEventListener('pointerup', () => {
     count++;
-    counterElement.textContent = `Click Count: ${count}`;
+    counterElement.textContent = `Click count: ${count}`;
 });

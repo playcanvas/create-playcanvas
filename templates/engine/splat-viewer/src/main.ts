@@ -4,6 +4,7 @@ import {
     Asset,
     AssetListLoader,
     CameraComponentSystem,
+    Color,
     Entity,
     FILLMODE_FILL_WINDOW,
     GSplatComponentSystem,
@@ -67,8 +68,8 @@ app.root.addChild(toyCat);
 
 // Create camera entity with orbit controls
 const camera = new Entity('camera');
-camera.addComponent('camera');
-camera.setPosition(0, 0, 2.5);
+camera.addComponent('camera', { clearColor: new Color(0.56, 0.58, 0.62) });
+camera.setPosition(0, 0, 2.8);
 camera.addComponent('script');
-camera.script?.create(CameraControls);
+camera.script?.create(CameraControls, { properties: { sceneSize: 2 } });
 app.root.addChild(camera);

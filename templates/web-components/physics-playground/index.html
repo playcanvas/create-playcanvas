@@ -1,0 +1,51 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <link rel="icon" type="image/png" href="/src/assets/playcanvas.png" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Physics Playground</title>
+    </head>
+    <body>
+        <pc-app>
+            <pc-module
+                name="Ammo"
+                glue="/ammo/ammo.wasm.js"
+                wasm="/ammo/ammo.wasm.wasm"
+                fallback="/ammo/ammo.js"
+            ></pc-module>
+            <pc-material id="floor-material" diffuse="#2e333d" gloss="0.2"></pc-material>
+            <pc-material id="cyan-material" diffuse="#29ade6" gloss="0.45"></pc-material>
+            <pc-material id="coral-material" diffuse="#f25738" gloss="0.45"></pc-material>
+            <pc-material id="yellow-material" diffuse="#f9ad2e" gloss="0.45"></pc-material>
+            <pc-scene>
+                <pc-entity name="camera" position="10 8 10" rotation="-23 45 0"
+                    ><pc-camera clear-color="#0d121c"></pc-camera
+                ></pc-entity>
+                <pc-entity name="light" rotation="45 35 0"
+                    ><pc-light
+                        type="directional"
+                        intensity="2.5"
+                        cast-shadows
+                        shadow-bias="0.2"
+                        normal-offset-bias="0.05"
+                    ></pc-light
+                ></pc-entity>
+                <pc-entity name="floor" position="0 -0.1 0" scale="10 0.2 10"
+                    ><pc-render type="box" material="floor-material"></pc-render
+                    ><pc-collision type="box" half-extents="5 0.1 5"></pc-collision
+                    ><pc-rigidbody type="static"></pc-rigidbody
+                ></pc-entity>
+                <pc-entity id="bodies"></pc-entity>
+            </pc-scene>
+        </pc-app>
+        <div class="hud">
+            <section class="panel">
+                <h1>Physics Playground</h1>
+                <p>Rigid bodies, collisions and runtime spawning.</p>
+                <div class="controls"><button id="spawn">Spawn object</button><button id="reset">Reset</button></div>
+            </section>
+        </div>
+        <script type="module" src="/src/main.ts"></script>
+    </body>
+</html>

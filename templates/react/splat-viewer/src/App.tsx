@@ -26,9 +26,9 @@ function App() {
     return (
         <Application graphicsDeviceOptions={{ antialias: false }}>
             {/* Create a camera entity with orbit controls */}
-            <Entity name="camera" position={[0, 0, 2.5]}>
-                <Camera />
-                <Script script={CameraControls} />
+            <Entity name="camera" position={[0, 0, 2.8]}>
+                <Camera clearColor="#8f949e" />
+                <Script script={CameraControls} sceneSize={2} />
             </Entity>
 
             <Splat />

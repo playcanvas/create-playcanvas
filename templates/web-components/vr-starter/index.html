@@ -1,0 +1,80 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <link rel="icon" type="image/png" href="/src/assets/playcanvas.png" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>VR Starter</title>
+    </head>
+    <body>
+        <pc-app>
+            <pc-material id="floor-material" diffuse="#61666e"></pc-material>
+            <pc-material id="wall-material" diffuse="#3d424a"></pc-material>
+            <pc-material id="cyan" diffuse="#1fb3db"></pc-material>
+            <pc-material id="coral" diffuse="#ff594d"></pc-material>
+            <pc-material id="yellow" diffuse="#ffbf33"></pc-material>
+            <pc-scene>
+                <pc-entity name="light" rotation="45 30 0"
+                    ><pc-light
+                        type="directional"
+                        intensity="2"
+                        cast-shadows
+                        shadow-bias="0.2"
+                        normal-offset-bias="0.05"
+                    ></pc-light
+                ></pc-entity>
+                <pc-entity name="floor" scale="10 1 10"
+                    ><pc-render type="plane" material="floor-material"></pc-render
+                ></pc-entity>
+                <pc-entity position="0 2 -3.5" scale="8 4 0.2"
+                    ><pc-render type="box" material="wall-material"></pc-render
+                ></pc-entity>
+                <pc-entity position="-4 2 0" scale="0.2 4 7"
+                    ><pc-render type="box" material="wall-material"></pc-render
+                ></pc-entity>
+                <pc-entity position="4 2 0" scale="0.2 4 7"
+                    ><pc-render type="box" material="wall-material"></pc-render
+                ></pc-entity>
+                <pc-entity position="-2.4 2.4 -3.35" scale="1.3 1.3 0.12"
+                    ><pc-render type="box" material="cyan"></pc-render
+                ></pc-entity>
+                <pc-entity position="0 2.4 -3.35" scale="1.3 1.3 0.12"
+                    ><pc-render type="box" material="coral"></pc-render
+                ></pc-entity>
+                <pc-entity position="2.4 2.4 -3.35" scale="1.3 1.3 0.12"
+                    ><pc-render type="box" material="yellow"></pc-render
+                ></pc-entity>
+                <pc-entity position="-2.4 0.45 -1.6" scale="1 0.9 1"
+                    ><pc-render type="box" material="wall-material"></pc-render
+                ></pc-entity>
+                <pc-entity position="0 0.45 -1.6" scale="1 0.9 1"
+                    ><pc-render type="box" material="wall-material"></pc-render
+                ></pc-entity>
+                <pc-entity position="2.4 0.45 -1.6" scale="1 0.9 1"
+                    ><pc-render type="box" material="wall-material"></pc-render
+                ></pc-entity>
+                <pc-entity position="-2.4 1.35 -1.6" scale="0.7 0.7 0.7"
+                    ><pc-render type="sphere" material="cyan"></pc-render
+                ></pc-entity>
+                <pc-entity position="0 1.35 -1.6" scale="0.7 0.7 0.7"
+                    ><pc-render type="box" material="coral"></pc-render
+                ></pc-entity>
+                <pc-entity position="2.4 1.35 -1.6" scale="0.8 0.9 0.8"
+                    ><pc-render type="cone" material="yellow"></pc-render
+                ></pc-entity>
+                <pc-entity name="xr-rig"
+                    ><pc-entity name="camera" position="0 1.6 4"
+                        ><pc-camera clear-color="#292e38"></pc-camera></pc-entity
+                ></pc-entity>
+            </pc-scene>
+        </pc-app>
+        <div class="hud">
+            <section class="panel">
+                <h1>VR Starter</h1>
+                <p id="xr-status">Checking VR support…</p>
+                <div class="controls"><button id="xr-button" disabled>Enter VR</button></div>
+            </section>
+        </div>
+        <script type="module" src="/src/main.ts"></script>
+    </body>
+</html>

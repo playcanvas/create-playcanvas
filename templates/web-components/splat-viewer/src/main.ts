@@ -1,6 +1,7 @@
 import { whenReady } from '@playcanvas/web-components';
 import { CameraControls } from 'playcanvas/scripts/esm/camera-controls.mjs';
 
+import './starter.css';
 import './style.css';
 
 // The camera is awaited as <pc-camera> rather than the <pc-entity> holding it - an entity becomes
@@ -11,4 +12,4 @@ const cameraComponent = await whenReady('pc-camera');
 // with <pc-script name="...">, which only resolves scripts fetched at runtime by <pc-asset>
 const camera = cameraComponent.closestEntity;
 camera?.entity?.addComponent('script');
-camera?.entity?.script?.create(CameraControls);
+camera?.entity?.script?.create(CameraControls, { properties: { sceneSize: 2 } });

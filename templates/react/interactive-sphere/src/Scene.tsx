@@ -12,7 +12,7 @@ function Scene({ onClick }: SceneProps) {
     const [hovering, setHovering] = useState(false);
 
     // Set a material color based on the hover state
-    const diffuse = hovering ? 'orange' : 'lightgrey';
+    const diffuse = hovering ? '#40ccff' : '#e6edf9';
 
     // Create a material for the sphere
     const material = useMaterial({ diffuse });
@@ -38,19 +38,20 @@ function Scene({ onClick }: SceneProps) {
             <Environment envAtlas={envMap} showSkybox={false} />
 
             {/* Render a background grid */}
-            <Entity scale={[1000, 1000, 1000]}>
+            <Entity scale={[12, 12, 12]}>
                 <Script script={Grid} />
             </Entity>
 
             {/* Create a camera entity with camera controls */}
-            <Entity name="camera" position={[4, 1, 4]}>
-                <Camera clearColor="#171717" />
-                <Script script={CameraControls} />
+            <Entity name="camera" position={[3.2, 1.5, 3.2]} rotation={[-10, 45, 0]}>
+                <Camera clearColor="#07101a" />
+                <Script script={CameraControls} sceneSize={3} />
             </Entity>
 
             {/* Create and position entity with pointer events */}
             <Entity
-                position={[0, 0.5, 0]}
+                position={[0, 0.7, 0]}
+                scale={[1.25, 1.25, 1.25]}
                 onClick={onClick}
                 onPointerOver={() => setHovering(true)}
                 onPointerOut={() => setHovering(false)}

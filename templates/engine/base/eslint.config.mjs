@@ -1,3 +1,3 @@
 import typescriptConfig from '@playcanvas/eslint-config/typescript';
 
-export default [{ ignores: ['.claude', '.agents'] }, ...typescriptConfig];
+export default [{ ignores: ['.claude', '.agents', 'public/ammo'] }, ...typescriptConfig];
