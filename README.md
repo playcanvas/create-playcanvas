@@ -38,11 +38,9 @@ Every format uses TypeScript and includes Vite, ESLint, Prettier and a productio
 
 ## Starters
 
-Every starter is available in every format. Choose from basics, viewers, games, tools and XR; `spinning-cube` is the default.
+Choose from 12 starter kits across basics, viewers, games, tools and XR. Run the creator to browse them; `spinning-cube` is the default.
 
 ![The twelve PlayCanvas starter scenes](images/starter-catalog.webp)
-
-[Browse the starter catalog](STARTERS.md).
 
 ## CLI Options
 
