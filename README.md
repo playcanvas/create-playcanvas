@@ -2,7 +2,7 @@
 
 [![NPM Version](https://img.shields.io/npm/v/create-playcanvas)](https://www.npmjs.com/package/create-playcanvas)
 [![NPM Downloads](https://img.shields.io/npm/dw/create-playcanvas)](https://npmtrends.com/create-playcanvas)
-[![License](https://img.shields.io/npm/l/create-playcanvas)](https://github.com/playcanvas/create-playcanvas/blob/main/LICENSE)
+[![License](https://img.shields.io/npm/l/create-playcanvas)](LICENSE)
 [![Discord](https://img.shields.io/badge/Discord-5865F2?style=flat&logo=discord&logoColor=white&color=black)](https://discord.gg/RSaMRzg)
 [![Reddit](https://img.shields.io/badge/Reddit-FF4500?style=flat&logo=reddit&logoColor=white&color=black)](https://www.reddit.com/r/PlayCanvas)
 [![X](https://img.shields.io/badge/X-000000?style=flat&logo=x&logoColor=white&color=black)](https://x.com/intent/follow?screen_name=playcanvas)
@@ -42,7 +42,7 @@ Every starter is available in every format. Choose from basics, viewers, games, 
 
 ![The twelve PlayCanvas starter scenes](images/starter-catalog.webp)
 
-[Browse the starter catalog](https://github.com/playcanvas/create-playcanvas/blob/main/STARTERS.md).
+[Browse the starter catalog](STARTERS.md).
 
 ## CLI Options
 
