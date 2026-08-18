@@ -4,6 +4,7 @@ import { XrControllers } from 'playcanvas/scripts/esm/xr/xr-controllers.mjs';
 import { XrNavigation } from 'playcanvas/scripts/esm/xr/xr-navigation.mjs';
 
 export const setupVr = (app: AppBase, rig: Entity, camera: Entity) => {
+    // attach the controller and locomotion scripts to the player rig
     if (!rig.script) rig.addComponent('script');
     rig.script!.create(XrControllers);
     rig.script!.create(XrNavigation, {
@@ -14,6 +15,7 @@ export const setupVr = (app: AppBase, rig: Entity, camera: Entity) => {
     const status = document.getElementById('xr-status')!;
     const { xr } = app;
 
+    // availability can change after the page loads
     const update = () => {
         const available = xr?.isAvailable(XRTYPE_VR) ?? false;
         button.disabled = !available;

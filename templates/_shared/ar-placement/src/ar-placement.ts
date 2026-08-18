@@ -35,6 +35,7 @@ class ArPlacement extends Script {
         this.reticle.enabled = false;
         this.app.root.addChild(this.reticle);
 
+        // xr UI and lifecycle events
         const button = document.getElementById('xr-button') as HTMLButtonElement;
         button.onclick = () => this.start();
         this.app.xr?.hitTest.on('available', this.startHitTest, this);
@@ -80,6 +81,7 @@ class ArPlacement extends Script {
         });
     }
 
+    // retain the latest hit so a select event can place the object
     updateReticle(position: Vec3, rotation: Quat) {
         this.position = position.clone();
         this.rotation = rotation.clone();

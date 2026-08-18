@@ -16,6 +16,7 @@ class SceneEditor extends Script {
         this.layer = Gizmo.createLayer(this.app);
         this.setMode('translate');
 
+        // wire the scene and gizmo controls
         document.querySelectorAll<HTMLButtonElement>('[data-mode]').forEach((button) => {
             button.onclick = () => this.setMode(button.dataset.mode as Mode);
         });
@@ -30,6 +31,7 @@ class SceneEditor extends Script {
         this.updateButtons();
     }
 
+    // replace the active gizmo for the selected entity
     setMode(mode: Mode) {
         this.gizmo?.destroy();
         const camera = this.camera.camera!;
