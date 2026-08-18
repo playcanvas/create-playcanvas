@@ -20,6 +20,27 @@ import {
 import { addThirdPersonController } from './controller';
 import './starter.css';
 
+const BLOCK_SCALE: [number, number, number] = [2.4, 1, 2.4];
+const BLOCK_HALF_EXTENTS: [number, number, number] = [1.2, 0.5, 1.2];
+const BLOCKS: [number, number, number][] = [
+    [-4.5, 0.5, -3.5],
+    [4.2, 0.5, -2.8],
+    [-3.7, 0.5, 3.2],
+    [3.8, 0.5, 3.6]
+];
+const TREES: [number, number, number][] = [
+    [-7, -6, 1.1],
+    [6.5, -6.5, 1.25],
+    [-7.5, 5, 0.9],
+    [7, 5.5, 1.15],
+    [-2.2, -8, 0.85]
+];
+const PINE_LAYERS: [number, number, number][] = [
+    [1.9, 2.1, 1.8],
+    [2.65, 1.6, 1.55],
+    [3.3, 1.1, 1.4]
+];
+
 WasmModule.setConfig('Ammo', {
     glueUrl: '/ammo/ammo.wasm.js',
     wasmUrl: '/ammo/ammo.wasm.wasm',
@@ -55,11 +76,11 @@ app.setCanvasResolution(RESOLUTION_AUTO);
 app.scene.ambientLight = new Color(0.28, 0.32, 0.38);
 
 const groundMaterial = new StandardMaterial();
-groundMaterial.diffuse = new Color(0.32, 0.48, 0.27);
+groundMaterial.diffuse = new Color(0.2, 0.4, 0.18);
 groundMaterial.update();
-const rockMaterial = new StandardMaterial();
-rockMaterial.diffuse = new Color(0.38, 0.41, 0.43);
-rockMaterial.update();
+const blockMaterial = new StandardMaterial();
+blockMaterial.diffuse = new Color(0.34, 0.35, 0.3);
+blockMaterial.update();
 
 const ground = new Entity('ground');
 ground.setLocalScale(20, 0.2, 20);
@@ -69,19 +90,55 @@ ground.addComponent('collision', { type: 'box', halfExtents: new Vec3(10, 0.1, 1
 ground.addComponent('rigidbody', { type: 'static' });
 app.root.addChild(ground);
 
-for (const [i, position] of [
-    [-4.5, 0.25, -3.5],
-    [4.2, 0.2, -2.8],
-    [-3.7, 0.18, 3.2],
-    [3.8, 0.28, 3.6]
-].entries()) {
-    const rock = new Entity(`rock-${i}`);
-    rock.addComponent('render', { type: 'box', material: rockMaterial });
-    rock.setPosition(...(position as [number, number, number]));
-    rock.setLocalScale(0.9, 0.5, 0.7);
-    rock.setEulerAngles(0, i * 25, 0);
-    app.root.addChild(rock);
+for (const [i, position] of BLOCKS.entries()) {
+    const block = new Entity(`block-${i}`);
+    block.setPosition(...position);
+    block.setLocalScale(...BLOCK_SCALE);
+    block.setEulerAngles(0, i * 25, 0);
+    block.addComponent('render', { type: 'box', material: blockMaterial });
+    block.addComponent('collision', { type: 'box', halfExtents: new Vec3(...BLOCK_HALF_EXTENTS) });
+    block.addComponent('rigidbody', { type: 'static' });
+    app.root.addChild(block);
 }
+
+const wood = new StandardMaterial();
+wood.diffuse = new Color(0.34, 0.18, 0.08);
+wood.update();
+const leaves = new StandardMaterial();
+leaves.diffuse = new Color(0.08, 0.3, 0.12);
+leaves.update();
+const tips = new StandardMaterial();
+tips.diffuse = new Color(0.12, 0.4, 0.16);
+tips.update();
+const prop = (
+    name: string,
+    position: [number, number, number],
+    scale: [number, number, number],
+    material: StandardMaterial
+) => {
+    const entity = new Entity(name);
+    entity.setPosition(...position);
+    entity.setLocalScale(...scale);
+    entity.addComponent('render', { type: 'box', material });
+    entity.addComponent('collision', {
+        type: 'box',
+        halfExtents: new Vec3(scale[0] / 2, scale[1] / 2, scale[2] / 2)
+    });
+    entity.addComponent('rigidbody', { type: 'static' });
+    app.root.addChild(entity);
+};
+for (const [i, [x, z, size]] of TREES.entries()) {
+    prop(`tree-${i}-trunk`, [x, size * 0.9, z], [size * 0.38, size * 1.8, size * 0.38], wood);
+    for (const [j, [y, width, height]] of PINE_LAYERS.entries()) {
+        const crown = new Entity(`tree-${i}-crown-${j}`);
+        crown.setPosition(x, size * y, z);
+        crown.setLocalScale(size * width, size * height, size * width);
+        crown.addComponent('render', { type: 'cone', material: j === 1 ? tips : leaves });
+        app.root.addChild(crown);
+    }
+}
+prop('fallen-log', [0, 0.35, 6], [3.8, 0.7, 0.7], wood);
+prop('stump', [-1.8, 0.4, -2.2], [0.9, 0.8, 0.9], wood);
 
 const player = new Entity('player');
 player.setPosition(0, 1.1, 0);
@@ -135,8 +192,8 @@ part(model, 'body', [0, 0, 0], [0.56, 0.88, 0.38], shirt);
 part(model, 'head', [0, 0.76, 0], [0.52, 0.6, 0.52], skin);
 limb('left-arm', [-0.38, 0.44, 0], -0.44, [0.18, 0.88, 0.32], shirt);
 limb('right-arm', [0.38, 0.44, 0], -0.44, [0.18, 0.88, 0.32], shirt);
-limb('left-leg', [-0.15, -0.44, 0], -0.43, [0.26, 0.86, 0.34], pants);
-limb('right-leg', [0.15, -0.44, 0], -0.43, [0.26, 0.86, 0.34], pants);
+limb('left-leg', [-0.15, -0.44, 0], -0.43, [0.24, 0.86, 0.34], pants);
+limb('right-leg', [0.15, -0.44, 0], -0.43, [0.24, 0.86, 0.34], pants);
 player.addChild(model);
 
 const camera = new Entity('camera');

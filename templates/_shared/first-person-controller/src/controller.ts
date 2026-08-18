@@ -1,7 +1,8 @@
-import type { Entity } from 'playcanvas';
+import type { Entity, RigidBodyComponentSystem } from 'playcanvas';
 import { FirstPersonController } from 'playcanvas/scripts/esm/first-person-controller.mjs';
 
 export const addFirstPersonController = (player: Entity, camera: Entity) => {
+    (player.rigidbody!.system as RigidBodyComponentSystem).gravity.set(0, -18, 0);
     if (!player.script) player.addComponent('script');
     player.script!.create(FirstPersonController, {
         properties: {

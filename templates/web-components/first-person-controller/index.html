@@ -8,10 +8,12 @@
     </head>
     <body>
         <pc-app>
-            <pc-material id="floor-material" diffuse="#ab9c85" emissive="#22201b" gloss="0.2"></pc-material>
-            <pc-material id="wall-material" diffuse="#c2bdb0" emissive="#272623" gloss="0.25"></pc-material>
+            <pc-material id="floor-material" diffuse="#474d52" emissive="#0e0f10" gloss="0.2"></pc-material>
+            <pc-material id="wall-material" diffuse="#6b737a" emissive="#151718" gloss="0.25"></pc-material>
             <pc-material id="blue-material" diffuse="#154a7a" emissive="#040f18" gloss="0.4"></pc-material>
             <pc-material id="green-material" diffuse="#2e6638" emissive="#09140b" gloss="0.2"></pc-material>
+            <pc-material id="wood-material" diffuse="#7a451a" emissive="#180e05" gloss="0.2"></pc-material>
+            <pc-material id="metal-material" diffuse="#475461" emissive="#0e1113" gloss="0.5"></pc-material>
             <pc-module
                 name="Ammo"
                 glue="/ammo/ammo.wasm.js"
@@ -64,6 +66,86 @@
                 <pc-entity name="green-crate" position="3 0.5 1" scale="2.5 1 1"
                     ><pc-render type="box" material="green-material"></pc-render
                     ><pc-collision type="box" half-extents="1.25 0.5 0.5"></pc-collision
+                    ><pc-rigidbody type="static"></pc-rigidbody
+                ></pc-entity>
+                <pc-entity name="cargo-left-0" position="-5.5 0.75 -5.5" scale="2 1.5 2"
+                    ><pc-render type="box" material="wood-material"></pc-render
+                    ><pc-collision type="box" half-extents="1 0.75 1"></pc-collision
+                    ><pc-rigidbody type="static"></pc-rigidbody
+                ></pc-entity>
+                <pc-entity name="cargo-left-1" position="-5.5 2 -5.5" scale="1.5 1 1.5"
+                    ><pc-render type="box" material="blue-material"></pc-render
+                    ><pc-collision type="box" half-extents="0.75 0.5 0.75"></pc-collision
+                    ><pc-rigidbody type="static"></pc-rigidbody
+                ></pc-entity>
+                <pc-entity name="cargo-right-0" position="5.3 0.6 -4.8" scale="2.4 1.2 2"
+                    ><pc-render type="box" material="green-material"></pc-render
+                    ><pc-collision type="box" half-extents="1.2 0.6 1"></pc-collision
+                    ><pc-rigidbody type="static"></pc-rigidbody
+                ></pc-entity>
+                <pc-entity name="cargo-right-1" position="5.3 1.7 -4.8" scale="1.5 1 1.5"
+                    ><pc-render type="box" material="wood-material"></pc-render
+                    ><pc-collision type="box" half-extents="0.75 0.5 0.75"></pc-collision
+                    ><pc-rigidbody type="static"></pc-rigidbody
+                ></pc-entity>
+                <pc-entity name="cargo-center" position="0 0.6 -6.5" scale="2.2 1.2 1.8"
+                    ><pc-render type="box" material="blue-material"></pc-render
+                    ><pc-collision type="box" half-extents="1.1 0.6 0.9"></pc-collision
+                    ><pc-rigidbody type="static"></pc-rigidbody
+                ></pc-entity>
+                <pc-entity name="shelf-left-post-0" position="-6.8 1.4 -3.5" scale="0.25 2.8 0.25"
+                    ><pc-render type="box" material="metal-material"></pc-render
+                    ><pc-collision type="box" half-extents="0.125 1.4 0.125"></pc-collision
+                    ><pc-rigidbody type="static"></pc-rigidbody
+                ></pc-entity>
+                <pc-entity name="shelf-left-post-1" position="-6.8 1.4 0" scale="0.25 2.8 0.25"
+                    ><pc-render type="box" material="metal-material"></pc-render
+                    ><pc-collision type="box" half-extents="0.125 1.4 0.125"></pc-collision
+                    ><pc-rigidbody type="static"></pc-rigidbody
+                ></pc-entity>
+                <pc-entity name="shelf-left-post-2" position="-6.8 1.4 3.5" scale="0.25 2.8 0.25"
+                    ><pc-render type="box" material="metal-material"></pc-render
+                    ><pc-collision type="box" half-extents="0.125 1.4 0.125"></pc-collision
+                    ><pc-rigidbody type="static"></pc-rigidbody
+                ></pc-entity>
+                <pc-entity name="shelf-right-post-0" position="6.8 1.4 -3.5" scale="0.25 2.8 0.25"
+                    ><pc-render type="box" material="metal-material"></pc-render
+                    ><pc-collision type="box" half-extents="0.125 1.4 0.125"></pc-collision
+                    ><pc-rigidbody type="static"></pc-rigidbody
+                ></pc-entity>
+                <pc-entity name="shelf-right-post-1" position="6.8 1.4 0" scale="0.25 2.8 0.25"
+                    ><pc-render type="box" material="metal-material"></pc-render
+                    ><pc-collision type="box" half-extents="0.125 1.4 0.125"></pc-collision
+                    ><pc-rigidbody type="static"></pc-rigidbody
+                ></pc-entity>
+                <pc-entity name="shelf-right-post-2" position="6.8 1.4 3.5" scale="0.25 2.8 0.25"
+                    ><pc-render type="box" material="metal-material"></pc-render
+                    ><pc-collision type="box" half-extents="0.125 1.4 0.125"></pc-collision
+                    ><pc-rigidbody type="static"></pc-rigidbody
+                ></pc-entity>
+                <pc-entity name="shelf-left-low" position="-6.8 0.65 0" scale="1.1 0.18 7.5"
+                    ><pc-render type="box" material="metal-material"></pc-render
+                    ><pc-collision type="box" half-extents="0.55 0.09 3.75"></pc-collision
+                    ><pc-rigidbody type="static"></pc-rigidbody
+                ></pc-entity>
+                <pc-entity name="shelf-left-high" position="-6.8 2.1 0" scale="1.1 0.18 7.5"
+                    ><pc-render type="box" material="metal-material"></pc-render
+                    ><pc-collision type="box" half-extents="0.55 0.09 3.75"></pc-collision
+                    ><pc-rigidbody type="static"></pc-rigidbody
+                ></pc-entity>
+                <pc-entity name="shelf-right-low" position="6.8 0.65 0" scale="1.1 0.18 7.5"
+                    ><pc-render type="box" material="metal-material"></pc-render
+                    ><pc-collision type="box" half-extents="0.55 0.09 3.75"></pc-collision
+                    ><pc-rigidbody type="static"></pc-rigidbody
+                ></pc-entity>
+                <pc-entity name="shelf-right-high" position="6.8 2.1 0" scale="1.1 0.18 7.5"
+                    ><pc-render type="box" material="metal-material"></pc-render
+                    ><pc-collision type="box" half-extents="0.55 0.09 3.75"></pc-collision
+                    ><pc-rigidbody type="static"></pc-rigidbody
+                ></pc-entity>
+                <pc-entity name="pallet" position="-2.5 0.15 2.5" scale="3 0.3 2"
+                    ><pc-render type="box" material="wood-material"></pc-render
+                    ><pc-collision type="box" half-extents="1.5 0.15 1"></pc-collision
                     ><pc-rigidbody type="static"></pc-rigidbody
                 ></pc-entity>
                 <pc-entity name="player" position="0 1 5">

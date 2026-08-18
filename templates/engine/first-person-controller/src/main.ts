@@ -61,10 +61,12 @@ const material = (color: Color) => {
     return result;
 };
 
-const floor = material(new Color(0.67, 0.61, 0.52));
-const wall = material(new Color(0.76, 0.74, 0.68));
+const floor = material(new Color(0.28, 0.3, 0.32));
+const wall = material(new Color(0.42, 0.45, 0.48));
 const blue = material(new Color(0.08, 0.29, 0.48));
 const green = material(new Color(0.18, 0.4, 0.22));
+const wood = material(new Color(0.48, 0.27, 0.1));
+const metal = material(new Color(0.28, 0.33, 0.38));
 
 const block = (
     name: string,
@@ -91,6 +93,20 @@ block('left-wall', [-9, 1.5, 0], [0.3, 3, 18], wall);
 block('right-wall', [9, 1.5, 0], [0.3, 3, 18], wall);
 block('blue-crate', [-2, 0.75, -3], [1.5, 1.5, 1.5], blue);
 block('green-crate', [3, 0.5, 1], [2.5, 1, 1], green);
+block('cargo-left-0', [-5.5, 0.75, -5.5], [2, 1.5, 2], wood);
+block('cargo-left-1', [-5.5, 2, -5.5], [1.5, 1, 1.5], blue);
+block('cargo-right-0', [5.3, 0.6, -4.8], [2.4, 1.2, 2], green);
+block('cargo-right-1', [5.3, 1.7, -4.8], [1.5, 1, 1.5], wood);
+block('cargo-center', [0, 0.6, -6.5], [2.2, 1.2, 1.8], blue);
+for (const [i, z] of [-3.5, 0, 3.5].entries()) {
+    block(`shelf-left-post-${i}`, [-6.8, 1.4, z], [0.25, 2.8, 0.25], metal);
+    block(`shelf-right-post-${i}`, [6.8, 1.4, z], [0.25, 2.8, 0.25], metal);
+}
+block('shelf-left-low', [-6.8, 0.65, 0], [1.1, 0.18, 7.5], metal);
+block('shelf-left-high', [-6.8, 2.1, 0], [1.1, 0.18, 7.5], metal);
+block('shelf-right-low', [6.8, 0.65, 0], [1.1, 0.18, 7.5], metal);
+block('shelf-right-high', [6.8, 2.1, 0], [1.1, 0.18, 7.5], metal);
+block('pallet', [-2.5, 0.15, 2.5], [3, 0.3, 2], wood);
 
 const player = new Entity('player');
 player.setPosition(0, 1, 5);

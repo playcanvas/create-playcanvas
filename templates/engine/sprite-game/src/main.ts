@@ -38,7 +38,7 @@ app.setCanvasResolution(RESOLUTION_AUTO);
 const camera = new Entity('camera');
 camera.addComponent('camera', {
     projection: 1,
-    orthoHeight: 4,
+    orthoHeight: 4.4,
     clearColor: new Color(0.36, 0.73, 0.9)
 });
 camera.setPosition(0, 0, 10);

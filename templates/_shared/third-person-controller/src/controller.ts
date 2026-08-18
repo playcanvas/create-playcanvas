@@ -1,4 +1,4 @@
-import type { Entity } from 'playcanvas';
+import type { Entity, RigidBodyComponentSystem } from 'playcanvas';
 import { Script } from 'playcanvas';
 import { ThirdPersonController } from 'playcanvas/scripts/esm/third-person-controller.mjs';
 
@@ -28,6 +28,7 @@ class RobotAnimation extends Script {
 }
 
 export const addThirdPersonController = (player: Entity, camera: Entity, model: Entity) => {
+    (player.rigidbody!.system as RigidBodyComponentSystem).gravity.set(0, -18, 0);
     if (!player.script) player.addComponent('script');
     player.script!.create(ThirdPersonController, {
         properties: {

@@ -19,7 +19,14 @@ import {
 
 const CELL = 24;
 const FRAMES = 4;
+const SCALE = 2.5;
+const FEET = (2 / CELL) * SCALE;
 const SPEED = 3;
+const PLATFORMS = [
+    { x: -3.6, y: 1, width: 2.6 },
+    { x: 0, y: 1.9, width: 2.4 },
+    { x: 3.6, y: 1.1, width: 2.8 }
+];
 
 class SpriteGame extends Script {
     static scriptName = 'spriteGame';
@@ -86,12 +93,19 @@ class SpriteGame extends Script {
         this.player.addComponent('sprite', { type: SPRITETYPE_ANIMATED });
         this.player.sprite!.addClip({ name: 'run', fps: 10, loop: true, spriteAsset: asset.id });
         this.player.sprite!.autoPlayClip = 'run';
-        this.player.setLocalScale(2.5, 2.5, 2.5);
+        this.player.setLocalScale(SCALE, SCALE, SCALE);
+        this.player.setLocalPosition(-5.2, 0, 0);
         this.entity.addChild(this.player);
 
         const sky = new StandardMaterial();
         sky.emissive = new Color(0.86, 0.95, 1);
         sky.update();
+        const dirt = new StandardMaterial();
+        dirt.emissive = new Color(0.45, 0.28, 0.16);
+        dirt.update();
+        const grass = new StandardMaterial();
+        grass.emissive = new Color(0.28, 0.62, 0.34);
+        grass.update();
         const decoration = (
             name: string,
             type: 'box' | 'sphere',
@@ -108,6 +122,10 @@ class SpriteGame extends Script {
         decoration('cloud-left', 'sphere', [-3.8, 4, -1], [1.2, 0.5, 0.2], sky);
         decoration('cloud-center', 'sphere', [-2.9, 4.1, -1], [1.4, 0.65, 0.2], sky);
         decoration('cloud-right', 'sphere', [3.6, 3.6, -1], [1.7, 0.6, 0.2], sky);
+        for (const [i, { x, y, width }] of PLATFORMS.entries()) {
+            decoration(`platform-${i}`, 'box', [x, y - 0.24, -0.5], [width, 0.32, 0.4], dirt);
+            decoration(`platform-grass-${i}`, 'box', [x, y - 0.04, -0.49], [width, 0.08, 0.4], grass);
+        }
 
         window.addEventListener('keydown', this.onKeyDown);
         window.addEventListener('keyup', this.onKeyUp);
@@ -116,6 +134,8 @@ class SpriteGame extends Script {
             window.removeEventListener('keyup', this.onKeyUp);
             texture.destroy();
             sky.destroy();
+            dirt.destroy();
+            grass.destroy();
         });
     }
 
@@ -136,16 +156,32 @@ class SpriteGame extends Script {
         const position = this.player.getLocalPosition();
 
         this.velocity -= 12 * dt;
-        const x = mathClamp(position.x + direction * SPEED * dt, -5.5, 5.5);
+        const x = mathClamp(position.x + direction * SPEED * dt, -5.2, 5.5);
         let y = position.y + this.velocity * dt;
-        if (y <= 0) {
-            y = 0;
+        let floor = 0;
+        if (this.velocity <= 0) {
+            for (const platform of PLATFORMS) {
+                const top = platform.y - FEET;
+                if (
+                    position.y >= top &&
+                    y <= top &&
+                    x >= platform.x - platform.width / 2 &&
+                    x <= platform.x + platform.width / 2
+                ) {
+                    floor = Math.max(floor, top);
+                }
+            }
+        }
+        if (y <= floor) {
+            y = floor;
             this.velocity = 0;
             this.grounded = true;
+        } else {
+            this.grounded = false;
         }
 
         this.player.setLocalPosition(x, y, position.z);
-        this.player.setLocalScale(direction < 0 ? -2.5 : 2.5, 2.5, 2.5);
+        this.player.setLocalScale(direction < 0 ? -SCALE : SCALE, SCALE, SCALE);
         const component = this.player.sprite as SpriteComponent;
         component.speed = direction ? 1 : 0;
     }
