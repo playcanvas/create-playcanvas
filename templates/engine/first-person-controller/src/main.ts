@@ -86,6 +86,7 @@ const block = (
 
 block('floor', [0, -0.1, 0], [18, 0.2, 18], floor);
 block('back-wall', [0, 1.5, -9], [18, 3, 0.3], wall);
+block('front-wall', [0, 1.5, 9], [18, 3, 0.3], wall);
 block('left-wall', [-9, 1.5, 0], [0.3, 3, 18], wall);
 block('right-wall', [9, 1.5, 0], [0.3, 3, 18], wall);
 block('blue-crate', [-2, 0.75, -3], [1.5, 1.5, 1.5], blue);

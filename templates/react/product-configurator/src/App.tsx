@@ -2,12 +2,15 @@ import { Application, Entity } from '@playcanvas/react';
 import { Camera, Light, Render, Script } from '@playcanvas/react/components';
 import { useMaterial } from '@playcanvas/react/hooks';
 import type { StandardMaterial } from 'playcanvas';
+import { Vec2, Vec3 } from 'playcanvas';
 import { CameraControls } from 'playcanvas/scripts/esm/camera-controls.mjs';
 import { useState } from 'react';
 
 import './starter.css';
 
 const COLORS = ['#41b6e6', '#ff6b6b', '#f7c948'];
+const CAMERA_FOCUS = new Vec3(0, 1.1, 0);
+const CAMERA_PITCH = new Vec2(-85, -4);
 
 function Chair({ material, neutral }: { material: StandardMaterial; neutral: StandardMaterial }) {
     return (
@@ -79,7 +82,14 @@ function Scene({ product, color }: { product: number; color: string }) {
         <>
             <Entity name="camera" position={[6, 3.6, 7]} rotation={[-15, 41, 0]}>
                 <Camera clearColor="#292e38" />
-                <Script script={CameraControls} sceneSize={5.5} />
+                <Script
+                    script={CameraControls}
+                    sceneSize={5.5}
+                    focusPoint={CAMERA_FOCUS}
+                    pitchRange={CAMERA_PITCH}
+                    enableFly={false}
+                    enablePan={false}
+                />
             </Entity>
             <Entity name="light" rotation={[45, 35, 0]}>
                 <Light type="directional" intensity={2.5} castShadows shadowBias={0.2} normalOffsetBias={0.05} />

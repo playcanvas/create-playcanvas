@@ -84,8 +84,13 @@ for (const [i, position] of [
 }
 
 const player = new Entity('player');
-player.setPosition(0, 1, 0);
-player.addComponent('collision', { type: 'capsule', radius: 0.45, height: 1.8 });
+player.setPosition(0, 1.1, 0);
+player.addComponent('collision', {
+    type: 'capsule',
+    radius: 0.5,
+    height: 2.4,
+    linearOffset: new Vec3(0, 0.1, 0)
+});
 player.addComponent('rigidbody', { type: 'dynamic', mass: 70, angularFactor: Vec3.ZERO });
 app.root.addChild(player);
 
@@ -100,7 +105,9 @@ pants.diffuse = new Color(0.18, 0.29, 0.52);
 pants.update();
 
 const model = new Entity('character');
+model.setLocalPosition(0, 0.2, 0);
 const part = (
+    parent: Entity,
     name: string,
     position: [number, number, number],
     scale: [number, number, number],
@@ -110,14 +117,26 @@ const part = (
     entity.addComponent('render', { type: 'box', material });
     entity.setLocalPosition(...position);
     entity.setLocalScale(...scale);
-    model.addChild(entity);
+    parent.addChild(entity);
 };
-part('body', [0, 0, 0], [0.56, 0.88, 0.38], shirt);
-part('head', [0, 0.76, 0], [0.52, 0.6, 0.52], skin);
-part('left-arm', [-0.38, 0, 0], [0.18, 0.88, 0.32], shirt);
-part('right-arm', [0.38, 0, 0], [0.18, 0.88, 0.32], shirt);
-part('left-leg', [-0.15, -0.87, 0], [0.26, 0.86, 0.34], pants);
-part('right-leg', [0.15, -0.87, 0], [0.26, 0.86, 0.34], pants);
+const limb = (
+    name: string,
+    position: [number, number, number],
+    offset: number,
+    scale: [number, number, number],
+    material: StandardMaterial
+) => {
+    const joint = new Entity(name);
+    joint.setLocalPosition(...position);
+    model.addChild(joint);
+    part(joint, `${name}-mesh`, [0, offset, 0], scale, material);
+};
+part(model, 'body', [0, 0, 0], [0.56, 0.88, 0.38], shirt);
+part(model, 'head', [0, 0.76, 0], [0.52, 0.6, 0.52], skin);
+limb('left-arm', [-0.38, 0.44, 0], -0.44, [0.18, 0.88, 0.32], shirt);
+limb('right-arm', [0.38, 0.44, 0], -0.44, [0.18, 0.88, 0.32], shirt);
+limb('left-leg', [-0.15, -0.44, 0], -0.43, [0.26, 0.86, 0.34], pants);
+limb('right-leg', [0.15, -0.44, 0], -0.43, [0.26, 0.86, 0.34], pants);
 player.addChild(model);
 
 const camera = new Entity('camera');

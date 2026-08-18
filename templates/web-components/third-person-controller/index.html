@@ -47,28 +47,40 @@
                 <pc-entity position="3.8 0.28 3.6" rotation="0 75 0" scale="0.9 0.5 0.7"
                     ><pc-render type="box" material="rock-material"></pc-render
                 ></pc-entity>
-                <pc-entity name="player" position="0 1 0">
-                    <pc-collision type="capsule" radius="0.45" height="1.8"></pc-collision>
+                <pc-entity name="player" position="0 1.1 0">
+                    <pc-collision type="capsule" radius="0.5" height="2.4" linear-offset="0 0.1 0"></pc-collision>
                     <pc-rigidbody type="dynamic" mass="70" angular-factor="0 0 0"></pc-rigidbody>
-                    <pc-entity name="character">
+                    <pc-entity name="character" position="0 0.2 0">
                         <pc-entity name="body" scale="0.56 0.88 0.38"
                             ><pc-render type="box" material="shirt-material"></pc-render
                         ></pc-entity>
                         <pc-entity name="head" position="0 0.76 0" scale="0.52 0.6 0.52"
                             ><pc-render type="box" material="skin-material"></pc-render
                         ></pc-entity>
-                        <pc-entity name="left-arm" position="-0.38 0 0" scale="0.18 0.88 0.32"
-                            ><pc-render type="box" material="shirt-material"></pc-render
-                        ></pc-entity>
-                        <pc-entity name="right-arm" position="0.38 0 0" scale="0.18 0.88 0.32"
-                            ><pc-render type="box" material="shirt-material"></pc-render
-                        ></pc-entity>
-                        <pc-entity name="left-leg" position="-0.15 -0.87 0" scale="0.26 0.86 0.34"
-                            ><pc-render type="box" material="pants-material"></pc-render
-                        ></pc-entity>
-                        <pc-entity name="right-leg" position="0.15 -0.87 0" scale="0.26 0.86 0.34"
-                            ><pc-render type="box" material="pants-material"></pc-render
-                        ></pc-entity>
+                        <pc-entity name="left-arm" position="-0.38 0.44 0">
+                            <pc-entity position="0 -0.44 0" scale="0.18 0.88 0.32"
+                                ><pc-render type="box" material="shirt-material"></pc-render
+                            ></pc-entity>
+                            ></pc-entity
+                        >
+                        <pc-entity name="right-arm" position="0.38 0.44 0">
+                            <pc-entity position="0 -0.44 0" scale="0.18 0.88 0.32"
+                                ><pc-render type="box" material="shirt-material"></pc-render
+                            ></pc-entity>
+                            ></pc-entity
+                        >
+                        <pc-entity name="left-leg" position="-0.15 -0.44 0">
+                            <pc-entity position="0 -0.43 0" scale="0.26 0.86 0.34"
+                                ><pc-render type="box" material="pants-material"></pc-render
+                            ></pc-entity>
+                            ></pc-entity
+                        >
+                        <pc-entity name="right-leg" position="0.15 -0.44 0">
+                            <pc-entity position="0 -0.43 0" scale="0.26 0.86 0.34"
+                                ><pc-render type="box" material="pants-material"></pc-render
+                            ></pc-entity>
+                            ></pc-entity
+                        >
                     </pc-entity>
                 </pc-entity>
             </pc-scene>

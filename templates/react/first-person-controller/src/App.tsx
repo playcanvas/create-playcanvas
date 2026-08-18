@@ -52,6 +52,7 @@ function Scene() {
             </Entity>
             <Block name="floor" position={[0, -0.1, 0]} scale={[18, 0.2, 18]} material={floor} />
             <Block name="back-wall" position={[0, 1.5, -9]} scale={[18, 3, 0.3]} material={wall} />
+            <Block name="front-wall" position={[0, 1.5, 9]} scale={[18, 3, 0.3]} material={wall} />
             <Block name="left-wall" position={[-9, 1.5, 0]} scale={[0.3, 3, 18]} material={wall} />
             <Block name="right-wall" position={[9, 1.5, 0]} scale={[0.3, 3, 18]} material={wall} />
             <Block name="blue-crate" position={[-2, 0.75, -3]} scale={[1.5, 1.5, 1.5]} material={blue} />

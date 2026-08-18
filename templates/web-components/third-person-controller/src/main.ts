@@ -11,6 +11,6 @@ await Promise.all([
 const [player, camera, model] = await Promise.all([
     whenReady<EntityElement>('pc-entity[name="player"]'),
     whenReady<EntityElement>('pc-entity[name="camera"]'),
-    whenReady<EntityElement>('pc-entity[name="robot"]')
+    whenReady<EntityElement>('pc-entity[name="character"]')
 ]);
 addThirdPersonController(player.entity!, camera.entity!, model.entity!);

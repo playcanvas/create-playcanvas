@@ -52,27 +52,35 @@ function Scene() {
                     <Render type="box" material={rock} />
                 </Entity>
             ))}
-            <Entity name="player" ref={player} position={[0, 1, 0]}>
-                <Collision type="capsule" radius={0.45} height={1.8} />
+            <Entity name="player" ref={player} position={[0, 1.1, 0]}>
+                <Collision type="capsule" radius={0.5} height={2.4} linearOffset={[0, 0.1, 0]} />
                 <RigidBody type="dynamic" mass={70} angularFactor={[0, 0, 0]} />
-                <Entity name="character" ref={model}>
+                <Entity name="character" ref={model} position={[0, 0.2, 0]}>
                     <Entity name="body" scale={[0.56, 0.88, 0.38]}>
                         <Render type="box" material={shirt} />
                     </Entity>
                     <Entity name="head" position={[0, 0.76, 0]} scale={[0.52, 0.6, 0.52]}>
                         <Render type="box" material={skin} />
                     </Entity>
-                    <Entity name="left-arm" position={[-0.38, 0, 0]} scale={[0.18, 0.88, 0.32]}>
-                        <Render type="box" material={shirt} />
+                    <Entity name="left-arm" position={[-0.38, 0.44, 0]}>
+                        <Entity position={[0, -0.44, 0]} scale={[0.18, 0.88, 0.32]}>
+                            <Render type="box" material={shirt} />
+                        </Entity>
                     </Entity>
-                    <Entity name="right-arm" position={[0.38, 0, 0]} scale={[0.18, 0.88, 0.32]}>
-                        <Render type="box" material={shirt} />
+                    <Entity name="right-arm" position={[0.38, 0.44, 0]}>
+                        <Entity position={[0, -0.44, 0]} scale={[0.18, 0.88, 0.32]}>
+                            <Render type="box" material={shirt} />
+                        </Entity>
                     </Entity>
-                    <Entity name="left-leg" position={[-0.15, -0.87, 0]} scale={[0.26, 0.86, 0.34]}>
-                        <Render type="box" material={pants} />
+                    <Entity name="left-leg" position={[-0.15, -0.44, 0]}>
+                        <Entity position={[0, -0.43, 0]} scale={[0.26, 0.86, 0.34]}>
+                            <Render type="box" material={pants} />
+                        </Entity>
                     </Entity>
-                    <Entity name="right-leg" position={[0.15, -0.87, 0]} scale={[0.26, 0.86, 0.34]}>
-                        <Render type="box" material={pants} />
+                    <Entity name="right-leg" position={[0.15, -0.44, 0]}>
+                        <Entity position={[0, -0.43, 0]} scale={[0.26, 0.86, 0.34]}>
+                            <Render type="box" material={pants} />
+                        </Entity>
                     </Entity>
                 </Entity>
             </Entity>

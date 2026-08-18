@@ -10,6 +10,8 @@ import {
     RESOLUTION_AUTO,
     ScriptComponentSystem,
     StandardMaterial,
+    Vec2,
+    Vec3,
     createGraphicsDevice
 } from 'playcanvas';
 import { CameraControls } from 'playcanvas/scripts/esm/camera-controls.mjs';
@@ -17,6 +19,8 @@ import { CameraControls } from 'playcanvas/scripts/esm/camera-controls.mjs';
 import './starter.css';
 
 const COLORS = ['#41b6e6', '#ff6b6b', '#f7c948'];
+const CAMERA_FOCUS = new Vec3(0, 1.1, 0);
+const CAMERA_PITCH = new Vec2(-85, -4);
 
 document.body.insertAdjacentHTML(
     'beforeend',
@@ -109,7 +113,15 @@ camera.setPosition(6, 3.6, 7);
 camera.lookAt(0, 1.1, 0);
 camera.addComponent('camera', { clearColor: new Color(0.16, 0.18, 0.22) });
 camera.addComponent('script');
-camera.script!.create(CameraControls, { properties: { sceneSize: 5.5 } });
+camera.script!.create(CameraControls, {
+    properties: {
+        sceneSize: 5.5,
+        focusPoint: CAMERA_FOCUS,
+        pitchRange: CAMERA_PITCH,
+        enableFly: false,
+        enablePan: false
+    }
+});
 app.root.addChild(camera);
 
 const light = new Entity('light');
