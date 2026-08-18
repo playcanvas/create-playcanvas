@@ -77,7 +77,7 @@ function Studio() {
         if (!entity) return;
 
         const podium = new StandardMaterial();
-        podium.diffuse = new Color(0.12, 0.18, 0.24);
+        podium.diffuse = new Color(0.3, 0.32, 0.34);
         podium.metalness = 0.15;
         podium.gloss = 0.65;
         podium.update();
@@ -119,7 +119,7 @@ function Scene({ color, shade }: { color: string; shade: string }) {
                     enablePan={false}
                 />
             </Entity>
-            <Entity name="light" rotation={[45, 35, 0]}>
+            <Entity name="light" rotation={[45, -145, 0]}>
                 <Light type="directional" intensity={2.5} castShadows shadowBias={0.2} normalOffsetBias={0.05} />
             </Entity>
             <Studio />

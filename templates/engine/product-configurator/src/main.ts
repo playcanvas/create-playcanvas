@@ -111,7 +111,7 @@ app.root.addChild(camera);
 
 const ground = new Entity('studio-ground');
 const podium = new StandardMaterial();
-podium.diffuse = new Color(0.12, 0.18, 0.24);
+podium.diffuse = new Color(0.3, 0.32, 0.34);
 podium.metalness = 0.15;
 podium.gloss = 0.65;
 podium.update();
@@ -140,7 +140,7 @@ light.addComponent('light', {
     shadowBias: 0.2,
     normalOffsetBias: 0.05
 });
-light.setEulerAngles(45, 35, 0);
+light.setEulerAngles(45, -145, 0);
 app.root.addChild(light);
 
 document.querySelectorAll<HTMLButtonElement>('#paints button').forEach((button, i, buttons) => {

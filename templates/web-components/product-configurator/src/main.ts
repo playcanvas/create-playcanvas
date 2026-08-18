@@ -37,7 +37,7 @@ sky.entity!.addComponent('script');
 sky.entity!.script!.create(ProceduralSky, { properties: { luminance: 0.18 } });
 
 const podium = new StandardMaterial();
-podium.diffuse = new Color(0.12, 0.18, 0.24);
+podium.diffuse = new Color(0.3, 0.32, 0.34);
 podium.metalness = 0.15;
 podium.gloss = 0.65;
 podium.update();
