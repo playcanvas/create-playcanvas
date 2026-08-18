@@ -17,7 +17,6 @@ npm run dev
 ```
 
 Open <http://localhost:5173>. Edit `index.html` to change the scene.
-See [`STARTER.md`](./STARTER.md) for the selected scene's contents and controls.
 
 ## Scripts
 

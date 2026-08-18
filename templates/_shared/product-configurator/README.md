@@ -1,9 +1,7 @@
-# Product Configurator
-
-## What this contains
+## Product Configurator
 
 A glTF product model, procedural studio lighting and selectable paint finishes.
 
-## Controls
+### Controls
 
 Choose a paint finish, then drag to orbit the camera.

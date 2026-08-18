@@ -7,6 +7,7 @@ import * as prompts from '@clack/prompts';
 import { FEATURES, FORMATS, STARTERS } from '../../templates/index.js';
 
 const PACKAGE_MAPS = ['scripts', 'dependencies', 'devDependencies', 'peerDependencies', 'engines'] as const;
+const README_SECTION = '## Prerequisites';
 const TEMPLATE_ENTRIES: Record<string, string> = {
     engine: 'src/main.ts',
     react: 'src/App.tsx',
@@ -94,6 +95,17 @@ export const scaffoldProject = (opts: Options) => {
         if (fs.existsSync(dir)) {
             fs.cpSync(dir, root, { recursive: true });
         }
+    }
+
+    const starterReadme = path.join(sharedDir, 'README.md');
+    const readme = path.join(root, 'README.md');
+    if (fs.existsSync(starterReadme)) {
+        fs.writeFileSync(
+            readme,
+            fs
+                .readFileSync(readme, 'utf8')
+                .replace(README_SECTION, `${fs.readFileSync(starterReadme, 'utf8')}\n\n${README_SECTION}`)
+        );
     }
 
     for (const [from, to] of Object.entries(renameFiles)) {
