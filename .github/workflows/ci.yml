@@ -71,12 +71,25 @@ jobs:
               run: npm run typecheck
 
     templates:
-        name: Template (${{ matrix.template }} / ${{ matrix.boilerplate }})
+        name: Starter (${{ matrix.format }} / ${{ matrix.starter }})
         runs-on: ubuntu-latest
         strategy:
+            fail-fast: false
             matrix:
-                template: [engine, react, web-components]
-                boilerplate: [spinning-cube, interactive-sphere]
+                format: [engine, react, web-components]
+                starter:
+                    - spinning-cube
+                    - interactive-sphere
+                    - model-viewer
+                    - splat-viewer
+                    - product-configurator
+                    - physics-playground
+                    - first-person-controller
+                    - third-person-controller
+                    - sprite-game
+                    - scene-editor
+                    - vr-starter
+                    - ar-placement
         steps:
             - name: Check out code
               uses: actions/checkout@v7
@@ -94,43 +107,44 @@ jobs:
             - name: Build CLI
               run: npm run build
 
-            - name: Scaffold template
+            - name: Scaffold starter
               run: |
-                  node dist/index.mjs "$RUNNER_TEMP/${{ matrix.template }}-${{ matrix.boilerplate }}" \
-                    --template "${{ matrix.template }}" \
-                    --boilerplate "${{ matrix.boilerplate }}"
+                  node dist/index.mjs "$RUNNER_TEMP/${{ matrix.format }}-${{ matrix.starter }}" \
+                    --format "${{ matrix.format }}" \
+                    --starter "${{ matrix.starter }}"
 
             - name: Assert skills present
-              working-directory: ${{ runner.temp }}/${{ matrix.template }}-${{ matrix.boilerplate }}
+              working-directory: ${{ runner.temp }}/${{ matrix.format }}-${{ matrix.starter }}
               run: |
                   test -d .claude/skills/build-app
                   test -d .agents/skills/build-app
 
-            - name: Assert --no-skills omits skills
+            - name: Check legacy flags and --no-skills
+              if: matrix.format == 'engine' && matrix.starter == 'spinning-cube'
               run: |
-                  node dist/index.mjs "$RUNNER_TEMP/no-skills-${{ matrix.template }}-${{ matrix.boilerplate }}" \
-                    --template "${{ matrix.template }}" \
-                    --boilerplate "${{ matrix.boilerplate }}" \
+                  node dist/index.mjs "$RUNNER_TEMP/legacy-no-skills" \
+                    --template engine \
+                    --boilerplate spinning-cube \
                     --no-skills
-                  test ! -d "$RUNNER_TEMP/no-skills-${{ matrix.template }}-${{ matrix.boilerplate }}/.claude"
-                  test ! -d "$RUNNER_TEMP/no-skills-${{ matrix.template }}-${{ matrix.boilerplate }}/.agents"
+                  test ! -d "$RUNNER_TEMP/legacy-no-skills/.claude"
+                  test ! -d "$RUNNER_TEMP/legacy-no-skills/.agents"
 
             - name: Install template dependencies
-              working-directory: ${{ runner.temp }}/${{ matrix.template }}-${{ matrix.boilerplate }}
+              working-directory: ${{ runner.temp }}/${{ matrix.format }}-${{ matrix.starter }}
               run: npm install
 
             - name: Check template formatting
-              working-directory: ${{ runner.temp }}/${{ matrix.template }}-${{ matrix.boilerplate }}
+              working-directory: ${{ runner.temp }}/${{ matrix.format }}-${{ matrix.starter }}
               run: npm run fmt
 
             - name: Lint template
-              working-directory: ${{ runner.temp }}/${{ matrix.template }}-${{ matrix.boilerplate }}
+              working-directory: ${{ runner.temp }}/${{ matrix.format }}-${{ matrix.starter }}
               run: npm run lint
 
             - name: Typecheck template
-              working-directory: ${{ runner.temp }}/${{ matrix.template }}-${{ matrix.boilerplate }}
+              working-directory: ${{ runner.temp }}/${{ matrix.format }}-${{ matrix.starter }}
               run: npm run typecheck
 
             - name: Build template
-              working-directory: ${{ runner.temp }}/${{ matrix.template }}-${{ matrix.boilerplate }}
+              working-directory: ${{ runner.temp }}/${{ matrix.format }}-${{ matrix.starter }}
               run: npm run build
