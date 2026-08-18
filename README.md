@@ -2,7 +2,7 @@
 
 [![NPM Version](https://img.shields.io/npm/v/create-playcanvas)](https://www.npmjs.com/package/create-playcanvas)
 [![NPM Downloads](https://img.shields.io/npm/dw/create-playcanvas)](https://npmtrends.com/create-playcanvas)
-[![License](https://img.shields.io/npm/l/create-playcanvas)](https://github.com/playcanvas/create-playcanvas/blob/main/LICENSE)
+[![License](https://img.shields.io/npm/l/create-playcanvas)](LICENSE)
 [![Discord](https://img.shields.io/badge/Discord-5865F2?style=flat&logo=discord&logoColor=white&color=black)](https://discord.gg/RSaMRzg)
 [![Reddit](https://img.shields.io/badge/Reddit-FF4500?style=flat&logo=reddit&logoColor=white&color=black)](https://www.reddit.com/r/PlayCanvas)
 [![X](https://img.shields.io/badge/X-000000?style=flat&logo=x&logoColor=white&color=black)](https://x.com/intent/follow?screen_name=playcanvas)
@@ -38,33 +38,16 @@ Every format uses TypeScript and includes Vite, ESLint, Prettier and a productio
 
 ## Starters
 
-Every starter is available in every format. `spinning-cube` is the default.
-
-| Starter                   | Category | Description                                         |
-| ------------------------- | -------- | --------------------------------------------------- |
-| `spinning-cube`           | Basics   | A rotating cube and a light                         |
-| `interactive-sphere`      | Basics   | Orbit controls, a grid and pointer picking          |
-| `model-viewer`            | Viewers  | A glTF model, orbit controls and a procedural sky   |
-| `splat-viewer`            | Viewers  | A Gaussian splat and orbit controls                 |
-| `product-configurator`    | Viewers  | Product variants, materials and orbit controls      |
-| `physics-playground`      | Games    | Rigid bodies, collisions, spawning and reset        |
-| `first-person-controller` | Games    | First-person movement, mouse look and jumping       |
-| `third-person-controller` | Games    | An animated character, follow camera and locomotion |
-| `sprite-game`             | Games    | An orthographic camera, sprite animation and input  |
-| `scene-editor`            | Tools    | Selection plus translate, rotate and scale gizmos   |
-| `vr-starter`              | XR       | Immersive VR, controllers and locomotion            |
-| `ar-placement`            | XR       | Mobile AR, hit testing and object placement         |
+Choose from 12 starter kits across basics, viewers, games, tools and XR. Run the creator to browse them; `spinning-cube` is the default.
 
 ![The twelve PlayCanvas starter scenes](images/starter-catalog.webp)
 
-Internally, each format has a `base` directory plus one directory per starter. Code and assets shared by all formats live in `templates/_shared/<starter>`. Reusable capabilities with format-specific setup live in `templates/_features/<feature>`; the physics feature provides pinned Ammo.js assets for Engine and Web Components while React keeps its framework adapter.
-
 ## CLI Options
 
-Pass a project name, format and starter to skip the prompts:
+Pass a project name and options to skip the prompts:
 
 ```bash
-npm create playcanvas@latest my-game -- --format react --starter spinning-cube
+npm create playcanvas@latest my-game -- -f react -y
 ```
 
 | Option             | Shorthand | Description                                             |
