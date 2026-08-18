@@ -16,6 +16,7 @@ npm run dev
 ```
 
 Open <http://localhost:5173>. Edit the files under `src/` and save to see the scene update.
+See [`STARTER.md`](./STARTER.md) for the selected scene's contents and controls.
 
 ## Scripts
 

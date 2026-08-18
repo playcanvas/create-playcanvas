@@ -37,6 +37,7 @@ class SpriteGame extends Script {
     grounded = true;
 
     initialize() {
+        // build a small procedural runner sheet
         const canvas = document.createElement('canvas');
         canvas.width = CELL * FRAMES;
         canvas.height = CELL;
@@ -53,6 +54,7 @@ class SpriteGame extends Script {
             ctx.fillRect(x + 13 - (i % 2) * 5, 15, 3, 7);
         }
 
+        // turn the canvas into an in-memory animated sprite asset
         const texture = new Texture(this.app.graphicsDevice, {
             width: canvas.width,
             height: canvas.height,
@@ -97,6 +99,7 @@ class SpriteGame extends Script {
         this.player.setLocalPosition(-5.2, 0, 0);
         this.entity.addChild(this.player);
 
+        // build the scene decoration from primitives
         const sky = new StandardMaterial();
         sky.emissive = new Color(0.86, 0.95, 1);
         sky.update();
@@ -127,6 +130,7 @@ class SpriteGame extends Script {
             decoration(`platform-grass-${i}`, 'box', [x, y - 0.04, -0.49], [width, 0.08, 0.4], grass);
         }
 
+        // retain input and release scene-owned resources on teardown
         window.addEventListener('keydown', this.onKeyDown);
         window.addEventListener('keyup', this.onKeyUp);
         this.on('destroy', () => {
@@ -150,6 +154,7 @@ class SpriteGame extends Script {
     onKeyUp = (event: KeyboardEvent) => this.keys.delete(event.code);
 
     update(dt: number) {
+        // apply movement, gravity and simple top-down platform collisions
         const direction =
             Number(this.keys.has('ArrowRight') || this.keys.has('KeyD')) -
             Number(this.keys.has('ArrowLeft') || this.keys.has('KeyA'));
