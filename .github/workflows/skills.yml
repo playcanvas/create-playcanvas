@@ -2,6 +2,9 @@ name: Update Skills
 
 on:
     workflow_dispatch:
+    repository_dispatch:
+        types:
+            - skills-release
 
 permissions:
     contents: write
