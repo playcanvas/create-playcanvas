@@ -11,12 +11,15 @@ const instance = (name: keyof typeof ASSET_TUNING) => {
         castShadows: true
     });
     model.setLocalScale(t.scale, t.scale, t.scale);
-    model.setLocalPosition(0, t.y, 0);
-    model.setLocalEulerAngles(0, t.yaw, 0);
+    model.setLocalPosition(-t.center[0] * t.scale, t.y, -t.center[2] * t.scale);
     const root = new Entity(name);
-    root.addChild(model);
+    const yaw = new Entity(`${name}-yaw`);
+    yaw.setLocalEulerAngles(0, t.yaw, 0);
+    yaw.addChild(model);
+    root.addChild(yaw);
     return root;
 };
 ```
 
-Only position and rotate the returned root. Keep the calibration inside `instance()`.
+Only position and rotate the returned root. Keep the yaw, scale, and pivot compensation inside
+`instance()`.
