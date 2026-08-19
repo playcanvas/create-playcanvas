@@ -1,13 +1,22 @@
 # Web Components projects
 
-`<pc-model>` already covers the simplest case without any script: when the loaded container has
-animations it adds an `anim` component and assigns `animations[0]` under the state name `animation`.
-It always takes the first clip and has no attribute for choosing another.
+Use `<pc-anim>` inside `<pc-model>` to animate the model hierarchy. Without `<pc-anim-clip>`
+children, it assigns every animation from the model's container by track name and starts the first
+clip. Select and cross-fade declaratively:
 
-There is no animation component beyond that. Put explicit clip selection, multiple clips, state
-graphs, and retargeting in a module-scoped Engine `Script`, load it with `<pc-asset>`, and attach it
-to the same `<pc-entity>` hierarchy as the rendered model using `<pc-scripts>` and `<pc-script>`.
+```html
+<pc-entity>
+    <pc-model asset="character">
+        <pc-anim clip="Idle" transition-time="0.2"></pc-anim>
+    </pc-model>
+</pc-entity>
+```
 
-Pass clip names and simple configuration as `<pc-script>` attributes. Use its `attributes` JSON
-attribute for nested state-graph configuration. Keep scale on a visual child `<pc-entity>`, not on
-skinned bones, and confirm playback after `pc-app` is ready.
+Add `<pc-anim-clip name="...">` children to declare a subset, rename states, set per-clip `loop` or
+`speed`, or source tracks through an explicit `asset`. Use `<pc-anim>` attributes for `activate`,
+`clip`, `speed`, and `transition-time`; its `play`, `pause`, and `transition` methods cover imperative
+playback.
+
+Use a module-scoped Engine `Script` only for state graphs, retargeting, or orchestration beyond that
+component contract. Keep scale on a visual child `<pc-entity>`, not on skinned bones, and confirm
+playback after `pc-app` is ready.

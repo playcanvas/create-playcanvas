@@ -2,11 +2,14 @@
 // zero-dep glb metadata inspector. bounds come from decoded vertex positions, not accessor min/max,
 // so a rotated node reports its true extent and models can be placed touching.
 import fs from 'node:fs';
+import { fileURLToPath } from 'node:url';
 
 const GLB_MAGIC = 0x46546c67;
 const JSON_CHUNK = 0x4e4f534a;
 const BIN_CHUNK = 0x004e4942;
 const IDENTITY = [1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1];
+const MAX_ACCESSOR_VALUES = 30_000_000;
+const TYPES = { SCALAR: 1, VEC2: 2, VEC3: 3, VEC4: 4, MAT2: 4, MAT3: 9, MAT4: 16 };
 
 // componentType -> byte size, signedness and normalized divisor (glTF 2.0 table 3.1 / 5.1)
 const COMPONENTS = {
@@ -16,6 +19,14 @@ const COMPONENTS = {
     5123: { size: 2, signed: false, norm: 65535, read: (b, o) => b.readUInt16LE(o) },
     5125: { size: 4, signed: false, norm: 4294967295, read: (b, o) => b.readUInt32LE(o) },
     5126: { size: 4, signed: true, norm: 1, read: (b, o) => b.readFloatLE(o) }
+};
+
+const tryCatch = (fn) => {
+    try {
+        return [null, fn()];
+    } catch (error) {
+        return [error];
+    }
 };
 
 const mul = (a, b) => {
@@ -73,41 +84,99 @@ const round = (v) => Math.round(v * 1e4) / 1e4 + 0;
 
 // buffer 0 of a GLB is the BIN chunk; other buffers are external files or data URIs
 const bufferBytes = (g, bin, index) => {
-    const uri = g.buffers?.[index]?.uri;
-    if (uri === undefined) return bin;
+    const buffer = g.buffers?.[index];
+    if (!buffer) return null;
+    const uri = buffer.uri;
+    if (uri === undefined) return index === 0 ? bin : null;
     const base64 = /^data:[^,]*;base64,(.*)$/s.exec(uri);
     return base64 ? Buffer.from(base64[1], 'base64') : null;
 };
 
-// widen min/max with every decoded POSITION transformed by matrix. returns null on success,
-// otherwise a reason the vertices could not be read so the caller can fall back and say so.
-const accumulate = (g, bin, accessor, matrix, min, max) => {
+const readAccessor = (g, bin, accessor, type = 'VEC3') => {
     const acc = g.accessors?.[accessor];
-    if (!acc) return 'no-position-accessor';
-    if (acc.sparse) return 'sparse-accessor';
-    if (acc.bufferView === undefined) return 'no-vertex-data';
+    if (!acc) return ['no-position-accessor'];
+    if (acc.bufferView === undefined && !acc.sparse) return ['no-vertex-data'];
     const comp = COMPONENTS[acc.componentType];
-    if (!comp || acc.type !== 'VEC3') return 'unsupported-accessor';
-    const view = g.bufferViews?.[acc.bufferView];
-    if (!view) return 'unsupported-accessor';
-    if (view.extensions?.EXT_meshopt_compression) return 'meshopt-compressed';
-    const bytes = bufferBytes(g, bin, view.buffer ?? 0);
-    if (!bytes) return 'external-buffer';
-    const stride = view.byteStride ?? comp.size * 3;
-    const base = (view.byteOffset ?? 0) + (acc.byteOffset ?? 0);
-    if (!acc.count || base + (acc.count - 1) * stride + comp.size * 3 > bytes.length) return 'truncated-buffer';
+    const size = TYPES[acc.type];
+    if (!comp || !size || acc.type !== type || !Number.isInteger(acc.count) || acc.count < 1) {
+        return ['unsupported-accessor'];
+    }
+    if (acc.count * size > MAX_ACCESSOR_VALUES) return ['accessor-too-large'];
+    const data = new Float32Array(acc.count * size);
     const scale = acc.normalized ? comp.norm : 1;
-    for (let v = 0; v < acc.count; v++) {
-        const o = base + v * stride;
-        let x = comp.read(bytes, o) / scale;
-        let y = comp.read(bytes, o + comp.size) / scale;
-        let z = comp.read(bytes, o + comp.size * 2) / scale;
-        if (acc.normalized && comp.signed) {
-            if (x < -1) x = -1;
-            if (y < -1) y = -1;
-            if (z < -1) z = -1;
+    const read = (bytes, offset) => {
+        const value = comp.read(bytes, offset) / scale;
+        return acc.normalized && comp.signed && value < -1 ? -1 : value;
+    };
+
+    if (acc.bufferView !== undefined) {
+        const view = g.bufferViews?.[acc.bufferView];
+        if (!view || !Number.isInteger(view.byteLength)) return ['unsupported-accessor'];
+        if (view.extensions?.EXT_meshopt_compression) return ['meshopt-compressed'];
+        const bytes = bufferBytes(g, bin, view.buffer ?? 0);
+        if (!bytes) return ['external-buffer'];
+        const width = comp.size * size;
+        const stride = view.byteStride ?? width;
+        const base = (view.byteOffset ?? 0) + (acc.byteOffset ?? 0);
+        const used = (acc.byteOffset ?? 0) + (acc.count - 1) * stride + width;
+        if (stride < width || base < 0 || used > view.byteLength || base + (acc.count - 1) * stride + width > bytes.length) {
+            return ['truncated-buffer'];
         }
-        // inlined to avoid allocating a vector per vertex on million-vertex meshes
+        for (let i = 0; i < acc.count; i++) {
+            for (let k = 0; k < size; k++) data[i * size + k] = read(bytes, base + i * stride + k * comp.size);
+        }
+    }
+
+    if (acc.sparse) {
+        const sparse = acc.sparse;
+        const idx = sparse.indices;
+        const values = sparse.values;
+        const idxComp = idx && [5121, 5123, 5125].includes(idx.componentType) ? COMPONENTS[idx.componentType] : null;
+        const idxView = g.bufferViews?.[idx?.bufferView];
+        const valueView = g.bufferViews?.[values?.bufferView];
+        if (!Number.isInteger(sparse.count) || sparse.count < 1 || sparse.count > acc.count || !idxComp ||
+            !Number.isInteger(idxView?.byteLength) || !Number.isInteger(valueView?.byteLength)) {
+            return ['invalid-sparse-accessor'];
+        }
+        if (idxView.extensions?.EXT_meshopt_compression || valueView.extensions?.EXT_meshopt_compression) {
+            return ['meshopt-compressed'];
+        }
+        const idxBytes = bufferBytes(g, bin, idxView.buffer ?? 0);
+        const valueBytes = bufferBytes(g, bin, valueView.buffer ?? 0);
+        if (!idxBytes || !valueBytes) return ['external-buffer'];
+        const idxBase = (idxView.byteOffset ?? 0) + (idx.byteOffset ?? 0);
+        const valueBase = (valueView.byteOffset ?? 0) + (values.byteOffset ?? 0);
+        const valueWidth = comp.size * size;
+        const idxUsed = (idx.byteOffset ?? 0) + sparse.count * idxComp.size;
+        const valueUsed = (values.byteOffset ?? 0) + sparse.count * valueWidth;
+        if (idxBase < 0 || valueBase < 0 || idxUsed > idxView.byteLength || valueUsed > valueView.byteLength ||
+            idxBase + sparse.count * idxComp.size > idxBytes.length || valueBase + sparse.count * valueWidth > valueBytes.length) {
+            return ['truncated-buffer'];
+        }
+        let prev = -1;
+        for (let i = 0; i < sparse.count; i++) {
+            const index = idxComp.read(idxBytes, idxBase + i * idxComp.size);
+            if (index <= prev || index >= acc.count) return ['invalid-sparse-accessor'];
+            prev = index;
+            for (let k = 0; k < size; k++) {
+                data[index * size + k] = read(valueBytes, valueBase + i * valueWidth + k * comp.size);
+            }
+        }
+    }
+
+    return [null, data];
+};
+
+const accumulate = (data, matrix, min, max, morphs = []) => {
+    for (let i = 0; i < data.length; i += 3) {
+        let x = data[i];
+        let y = data[i + 1];
+        let z = data[i + 2];
+        for (const [weight, delta] of morphs) {
+            x += delta[i] * weight;
+            y += delta[i + 1] * weight;
+            z += delta[i + 2] * weight;
+        }
         const px = matrix[0] * x + matrix[4] * y + matrix[8] * z + matrix[12];
         const py = matrix[1] * x + matrix[5] * y + matrix[9] * z + matrix[13];
         const pz = matrix[2] * x + matrix[6] * y + matrix[10] * z + matrix[14];
@@ -118,13 +187,12 @@ const accumulate = (g, bin, accessor, matrix, min, max) => {
         if (py > max[1]) max[1] = py;
         if (pz > max[2]) max[2] = pz;
     }
-    return null;
 };
 
 // loose fallback: bound the 8 corners of the accessor's local box. over-estimates a mesh that does
 // not fill its box when the node rotation is not a multiple of 90 degrees.
 const accumulateCorners = (acc, matrix, min, max) => {
-    if (!acc?.min || !acc?.max) return;
+    if (!acc?.min || !acc?.max) return false;
     for (let c = 0; c < 8; c++) {
         const point = xform(matrix, [
             c & 1 ? acc.max[0] : acc.min[0],
@@ -136,35 +204,55 @@ const accumulateCorners = (acc, matrix, min, max) => {
             if (point[k] > max[k]) max[k] = point[k];
         }
     }
+    return true;
 };
 
 export const inspectGlb = (buf) => {
     if (buf.length < 20 || buf.readUInt32LE(0) !== GLB_MAGIC || buf.readUInt32LE(16) !== JSON_CHUNK) {
         throw new Error('not a GLB (or JSON chunk missing)');
     }
+    if (buf.readUInt32LE(4) !== 2) throw new Error('unsupported GLB version');
+    if (buf.readUInt32LE(8) !== buf.length) throw new Error('invalid GLB length');
     const jsonLength = buf.readUInt32LE(12);
+    if (20 + jsonLength > buf.length) throw new Error('invalid JSON chunk length');
     const g = JSON.parse(buf.toString('utf8', 20, 20 + jsonLength));
     const binAt = 20 + jsonLength;
-    const bin =
-        binAt + 8 <= buf.length && buf.readUInt32LE(binAt + 4) === BIN_CHUNK
-            ? buf.subarray(binAt + 8, binAt + 8 + buf.readUInt32LE(binAt))
-            : null;
+    let bin = null;
+    if (binAt < buf.length) {
+        if (binAt + 8 > buf.length || buf.readUInt32LE(binAt + 4) !== BIN_CHUNK) {
+            throw new Error('invalid BIN chunk');
+        }
+        const length = buf.readUInt32LE(binAt);
+        if (binAt + 8 + length !== buf.length) throw new Error('invalid BIN chunk length');
+        bin = buf.subarray(binAt + 8);
+    }
     const nodes = g.nodes ?? [];
     const nodeName = (i) => nodes[i]?.name ?? `node_${i}`;
     const parents = new Array(nodes.length).fill(-1);
     for (let i = 0; i < nodes.length; i++) {
-        for (const child of nodes[i].children ?? []) parents[child] = i;
+        for (const child of nodes[i].children ?? []) {
+            if (!Number.isInteger(child) || !nodes[child] || parents[child] !== -1) throw new Error('invalid node graph');
+            parents[child] = i;
+        }
     }
     const nodePath = (i) => {
         const names = [];
-        for (; i >= 0; i = parents[i]) names.unshift(nodeName(i));
+        const seen = new Set();
+        for (; i >= 0; i = parents[i]) {
+            if (seen.has(i)) throw new Error('invalid node graph');
+            seen.add(i);
+            names.unshift(nodeName(i));
+        }
         return names.join('/');
     };
     const children = new Set(nodes.flatMap((n) => n.children ?? []));
     const roots = g.scenes?.[g.scene ?? 0]?.nodes ?? nodes.map((_, i) => i).filter((i) => !children.has(i));
 
     const world = new Array(nodes.length);
+    const seen = new Set();
     const walk = (i, parent) => {
+        if (!Number.isInteger(i) || !nodes[i] || seen.has(i)) throw new Error('invalid node graph');
+        seen.add(i);
         const n = nodes[i];
         const local = n.matrix ?? compose(n.translation ?? [0, 0, 0], n.rotation ?? [0, 0, 0, 1], n.scale ?? [1, 1, 1]);
         world[i] = mul(parent, local);
@@ -176,28 +264,67 @@ export const inspectGlb = (buf) => {
     const max = [-Infinity, -Infinity, -Infinity];
     const notes = new Set();
     let meshNodes = 0;
+    let morphed = false;
+    let fallback = false;
+    let incomplete = false;
     for (let i = 0; i < nodes.length; i++) {
         if (nodes[i].mesh === undefined || !world[i]) continue;
         meshNodes++;
         // glTF 2.0: "the transform of the skinned mesh node MUST be ignored" - joints drive the pose
         const matrix = nodes[i].skin === undefined ? world[i] : IDENTITY;
-        for (const prim of g.meshes?.[nodes[i].mesh]?.primitives ?? []) {
-            const note = prim.extensions?.KHR_draco_mesh_compression
-                ? 'draco-compressed'
-                : accumulate(g, bin, prim.attributes?.POSITION, matrix, min, max);
-            if (!note) continue;
-            notes.add(note);
-            accumulateCorners(g.accessors?.[prim.attributes?.POSITION], matrix, min, max);
+        const mesh = g.meshes?.[nodes[i].mesh];
+        for (const prim of mesh?.primitives ?? []) {
+            const [error, data] = prim.extensions?.KHR_draco_mesh_compression
+                ? ['draco-compressed']
+                : readAccessor(g, bin, prim.attributes?.POSITION);
+            if (error) {
+                notes.add(error);
+                if (error === 'meshopt-compressed' || !accumulateCorners(g.accessors?.[prim.attributes?.POSITION], matrix, min, max)) {
+                    incomplete = true;
+                } else {
+                    fallback = true;
+                }
+                continue;
+            }
+            const morphs = [];
+            if (prim.targets?.length) {
+                morphed = true;
+                const weights = nodes[i].weights ?? mesh.weights ?? [];
+                for (let k = 0; k < prim.targets.length; k++) {
+                    const weight = weights[k] ?? 0;
+                    if (!Number.isFinite(weight)) {
+                        notes.add('invalid-morph-weight');
+                        incomplete = true;
+                        continue;
+                    }
+                    const accessor = prim.targets[k].POSITION;
+                    if (!weight || accessor === undefined) continue;
+                    const [morphError, delta] = readAccessor(g, bin, accessor);
+                    if (morphError || delta.length !== data.length) {
+                        notes.add(`morph-${morphError ?? 'accessor-size'}`);
+                        incomplete = true;
+                        continue;
+                    }
+                    morphs.push([weight, delta]);
+                }
+            }
+            accumulate(data, matrix, min, max, morphs);
         }
     }
 
     const ok = min[0] !== Infinity;
+    const morphAnimated = (g.animations ?? []).some((a) =>
+        (a.channels ?? []).some((c) => c.target?.path === 'weights')
+    );
+    const skinned = !!g.skins?.length;
     return {
         aabb: ok ? { min: min.map(round), max: max.map(round) } : null,
         dims: ok ? max.map((v, i) => round(v - min[i])) : null,
         center: ok ? max.map((v, i) => round((v + min[i]) / 2)) : null,
         groundOffset: ok ? round(-min[1]) : null,
-        boundsSource: ok ? (notes.size ? 'accessor-minmax' : 'vertices') : null,
+        boundsSource: ok ? (incomplete ? 'incomplete' : fallback ? 'accessor-minmax' : 'vertices') : null,
+        boundsPose: skinned ? 'bind' : morphed ? 'default-morph' : 'static',
+        requiresRuntimeCheck: skinned || morphAnimated || notes.size > 0,
         ...(notes.size ? { boundsNotes: [...notes].sort() } : {}),
         nodes: nodes.length,
         nodePaths: nodes.map((_, i) => nodePath(i)).sort(),
@@ -217,11 +344,15 @@ export const inspectGlb = (buf) => {
                     )
             )
         ].sort(),
-        skinned: !!g.skins?.length
+        morphed,
+        morphAnimated,
+        skinned
     };
 };
 
-if (import.meta.main ?? import.meta.filename === process.argv[1]) {
+const main = import.meta.main ?? (process.argv[1] &&
+    fs.realpathSync(fileURLToPath(import.meta.url)) === fs.realpathSync(process.argv[1]));
+if (main) {
     const files = process.argv.slice(2);
     if (!files.length) {
         console.error('usage: node inspect.mjs <file.glb> [more.glb ...]');
@@ -229,11 +360,9 @@ if (import.meta.main ?? import.meta.filename === process.argv[1]) {
     }
     // report per-file failures so one unreadable file cannot discard a whole glob
     const out = files.map((file) => {
-        try {
-            return { file, ...inspectGlb(fs.readFileSync(file)) };
-        } catch (e) {
-            return { file, error: e.message };
-        }
+        const [error, result] = tryCatch(() => inspectGlb(fs.readFileSync(file)));
+        return error ? { file, error: error instanceof Error ? error.message : String(error) } : { file, ...result };
     });
+    if (out.some((result) => result.error)) process.exitCode = 1;
     console.log(JSON.stringify(out.length === 1 ? out[0] : out, null, 2));
 }

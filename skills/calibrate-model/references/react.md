@@ -15,13 +15,18 @@ const Model = ({ id, src, heading = 0, position = [0, 0, 0] }) => {
 
     return (
         <Entity name={id} position={position} rotation={[0, heading, 0]}>
-            <Entity position={[0, t.y, 0]} rotation={[0, t.yaw, 0]} scale={[t.scale, t.scale, t.scale]}>
-                <Render type="asset" asset={asset} />
+            <Entity rotation={[0, t.yaw, 0]}>
+                <Entity
+                    position={[-t.center[0] * t.scale, t.y, -t.center[2] * t.scale]}
+                    scale={[t.scale, t.scale, t.scale]}
+                >
+                    <Render type="asset" asset={asset} />
+                </Entity>
             </Entity>
         </Entity>
     );
 };
 ```
 
-Add project-specific prop types without changing the two-level transform structure. Keep hooks
+Add project-specific prop types without changing the three-level transform structure. Keep hooks
 unconditional and asset URLs stable.

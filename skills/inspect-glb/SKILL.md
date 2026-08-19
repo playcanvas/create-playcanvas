@@ -19,20 +19,27 @@ The output provides:
 - `groundOffset` for the model wrapper's local Y position;
 - `center` for the pivot offset from the geometry centre: a non-zero X or Z means the root's
   position is not where the model appears, and Y feeds grounding;
-- `boundsSource` for proving how precisely the bounds were measured;
+- `boundsSource` and `boundsPose` for proving how and at which pose the bounds were measured;
+- `requiresRuntimeCheck` for animated morphs, skins, and incomplete decoding;
 - `nodePaths`, `clips`, `joints`, and `animationTargets` for animation setup and rig comparison;
-- `skinned` to flag bind-pose bounds that need runtime confirmation.
+- `morphed`, `morphAnimated`, and `skinned` for pose-sensitive assets.
 
 ## Bounds precision
 
-`aabb`, `dims`, `center`, and `groundOffset` are decoded from actual vertex positions and transformed
-by each node's world matrix, so they are exact and can place meshes touching without a gap. Confirm
-`boundsSource` before relying on that precision:
+`aabb`, `dims`, `center`, and `groundOffset` are decoded from actual vertex positions, default morph
+weights, and each node's world matrix. Confirm both source and pose before relying on them:
 
-- `vertices` means every primitive was decoded and the bounds are exact.
+- `vertices` means every primitive was decoded and the bounds are exact for `boundsPose`.
 - `accessor-minmax` means at least one primitive could not be decoded, so its bounds fall back to the
   node-transformed local box. That over-estimates a mesh which does not fill its own box on a node
   rotated off-axis, by up to 41 percent for a 45-degree yaw. `boundsNotes` gives the cause.
+- `incomplete` means some visible default-pose geometry could not be measured; do not calibrate from
+  the reported bounds.
+- `null` means no usable bounds could be recovered.
+
+`static` and `default-morph` bounds describe visible geometry at its authored default pose. `bind`
+describes skinned vertices before animation. When `requiresRuntimeCheck` is true, confirm grounding
+and maximum animated extent in the running application even if `boundsSource` is `vertices`.
 
 Carry `boundsSource`, `aabb`, `dims`, `center`, and `groundOffset` into the asset tuning record.
 `groundOffset` seats the base in Y; `center.x` and `center.z` are the horizontal pivot offset that
@@ -41,28 +48,30 @@ authored pivot happens to be. Running the inspector alone is not placement evide
 broad-phase spacing, but cannot locate a non-planar support surface or attachment point. Use an
 authored mount point or confirm the support in the running application before placing another model.
 
-## Extract from any container with gltf-transform
+## Extract from compressed containers
 
-The bundled inspector decodes plain vertex buffers only. When a primitive is draco- or
-meshopt-compressed, sparse, or in an external buffer it falls back to `accessor-minmax` or reports
-nothing, and `boundsNotes` names the cause. Use gltf-transform as the precursor that normalizes any
-container into a plain GLB the inspector can then measure exactly. Decompress a scratch copy with the
-passes that would alter geometry or hierarchy disabled, and inspect the copy rather than shipping it:
+The bundled inspector decodes plain, interleaved, quantized, and sparse vertex buffers. For Draco,
+Meshopt, or external buffers, `boundsNotes` names the cause. Parse and rewrite a scratch copy with
+glTF Transform's lossless `copy` command, then inspect that copy rather than shipping it:
 
 ```sh
-npx @gltf-transform/cli optimize in.glb scratch.glb \
-  --compress false --simplify false --flatten false --join false
+npx --yes @gltf-transform/cli@4.4.2 copy in.glb scratch.glb
 node <skill-directory>/scripts/inspect.mjs scratch.glb
 ```
+
+`copy` preserves decoded vertex values, scenes, nodes, and materials while removing Draco and
+Meshopt compression. Existing lossy compression may already have quantized the source. Do not
+substitute `optimize`: it enables additional transforms unless each one is understood and disabled.
 
 The Engine has no `EXT_meshopt_compression` support, so a meshopt asset will not render as shipped.
 If it must appear in the scene, transcode it to an uncompressed GLB the same way — subject to the
 project's rules on modifying assets — so it both loads and measures.
 
-These exact bounds intentionally disagree with the Engine at runtime. `MeshInstance.aabb` transforms
-the mesh's declared local box, so for a node rotated off-axis it reads larger than the geometry
-really is. Treat that difference as expected and place from these bounds. A skinned mesh node's own
-transform is ignored here because glTF requires it; the Engine resolves to the same result.
+These geometry-fit bounds can intentionally disagree with the Engine's runtime culling AABB.
+`MeshInstance.aabb` transforms the declared local box and expands it conservatively for morph
+targets, so it can be larger than visible geometry. Place static models from exact inspected bounds;
+confirm morph and skin extremes at runtime. A skinned mesh node's own transform is ignored here
+because glTF requires it; the Engine resolves to the same result.
 
 Shortlist files first; do not dump an entire asset pack into context. Bounds cannot prove facing.
 glTF convention is +Z forward while PlayCanvas entities face -Z, and asset packs vary. Confirm each
