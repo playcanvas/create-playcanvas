@@ -41,9 +41,13 @@ jobs:
                   echo "Latest skills tag: $latest"
                   tmp=$(mktemp -d)
                   git clone --depth 1 --branch "$latest" https://github.com/playcanvas/skills.git "$tmp"
+                  source="$tmp/skills"
+                  if [ ! -d "$source" ]; then
+                      source="$tmp/plugins/engine/skills"
+                  fi
                   rm -rf skills
                   mkdir -p skills
-                  cp -R "$tmp/plugins/engine/skills/." skills/
+                  cp -R "$source/." skills/
                   rm -rf "$tmp"
                   echo "ref=$latest" >> "$GITHUB_OUTPUT"
 
