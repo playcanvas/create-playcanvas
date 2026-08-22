@@ -58,8 +58,10 @@ ground.addComponent('render', {
     receiveShadows: true
 });
 
+// The element's entity is a host whose transform composes with the GLB's authored root rotation
+// (a -90° X up-axis fix), so only the yaw is set here
 const entity = model.entity!;
-entity.setLocalEulerAngles(-90, -25, 0);
+entity.setLocalEulerAngles(0, -25, 0);
 entity.root.syncHierarchy();
 const meshes = (entity.findComponents('render') as RenderComponent[]).flatMap((render) => render.meshInstances);
 const bounds = meshes[0].aabb.clone();

@@ -6,7 +6,7 @@ import './starter.css';
 
 await Promise.all([
     whenReady('pc-entity[name="player"] > pc-collision'),
-    whenReady('pc-entity[name="player"] > pc-rigidbody')
+    whenReady('pc-entity[name="player"] > pc-rigid-body')
 ]);
 const [player, camera] = await Promise.all([
     whenReady<EntityElement>('pc-entity[name="player"]'),

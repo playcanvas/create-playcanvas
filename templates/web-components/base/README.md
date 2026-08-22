@@ -39,9 +39,9 @@ so `document.querySelector` reaches them and `setAttribute` changes them.
 
 `src/main.ts` covers the two things HTML alone cannot do:
 
-- **Attaching engine scripts.** `<pc-script name="...">` resolves scripts that `<pc-asset>` fetched at
-  runtime. Scripts imported through the bundler — like `CameraControls` and `Grid` here — are attached
-  through the entity instead, reached via `whenReady()` and the element's `.entity` property.
+- **Attaching engine scripts.** `<pc-script-instance name="...">` resolves scripts that `<pc-asset>`
+  fetched at runtime. Scripts imported through the bundler — like `CameraControls` and `Grid` here — are
+  attached through the entity instead, reached via `whenReady()` and the element's `.entity` property.
 - **Responding to pointer input.** `<pc-app>` picks whatever is under the pointer and dispatches an
   ordinary `PointerEvent` on the `<pc-entity>` it hit, so `addEventListener('pointerup', ...)` works on a
   3D entity exactly as it would on a `<button>`. Events are only generated for entities that have a
