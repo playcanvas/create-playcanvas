@@ -9,7 +9,7 @@ update logic. Drop its graphics device and application bootstrap because `<pc-ap
 - Express supported entities and components with `pc-*` elements.
 - Register assets as direct children of `<pc-app>` with `<pc-asset>`.
 - Put per-entity behavior in an Engine `Script` loaded through `<pc-asset>` and attached with
-  `<pc-scripts>` and `<pc-script>`.
+  `<pc-script>` and `<pc-script-instance>`.
 - Use `whenReady` for page-level glue or Engine APIs with no declarative element.
 - Fetch example assets from the same Engine tag as the source example.
 

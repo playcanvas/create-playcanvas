@@ -35,10 +35,10 @@ Build supported application structure declaratively:
 - Treat a present boolean attribute as true unless its value is `false`; remove it to restore the
   Engine default.
 
-Load Engine `Script` modules with `<pc-asset>`, then attach them through `<pc-scripts>` and
-`<pc-script>`. Match the element's `name` to the class's static `scriptName`. Extra kebab-case
-attributes map to camelCase properties; use the `attributes` JSON attribute for nested or reserved
-values.
+Load Engine `Script` modules with `<pc-asset>`, then attach them through `<pc-script>` and
+`<pc-script-instance>`. Match the instance element's `name` to the class's static `scriptName`.
+Extra kebab-case attributes map to camelCase properties; use the `attributes` JSON attribute for
+nested or reserved values.
 
 Use `whenReady` for occasional page-level Engine access:
 
