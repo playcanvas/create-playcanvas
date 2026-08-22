@@ -18,7 +18,7 @@ const spawn = () => {
     const type = TYPES[i % TYPES.length];
     bodies.insertAdjacentHTML(
         'beforeend',
-        `<pc-entity data-body position="${((i % 4) - 1.5) * 1.1} ${0.7 + Math.floor(i / 4) * 1.1} ${(Math.floor(i / 4) - 1) * 1.4}" rotation="${i * 13} ${i * 29} 0" scale="${SCALES[i % SCALES.length]}"><pc-render type="${type}" material="${MATERIALS[i % MATERIALS.length]}"></pc-render><pc-collision type="${type}"></pc-collision><pc-rigidbody type="dynamic" mass="1" restitution="0.35"></pc-rigidbody></pc-entity>`
+        `<pc-entity data-body position="${((i % 4) - 1.5) * 1.1} ${0.7 + Math.floor(i / 4) * 1.1} ${(Math.floor(i / 4) - 1) * 1.4}" rotation="${i * 13} ${i * 29} 0" scale="${SCALES[i % SCALES.length]}"><pc-render type="${type}" material="${MATERIALS[i % MATERIALS.length]}"></pc-render><pc-collision type="${type}"></pc-collision><pc-rigid-body type="dynamic" mass="1" restitution="0.35"></pc-rigid-body></pc-entity>`
     );
 };
 const reset = () => {

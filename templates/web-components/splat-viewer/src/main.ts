@@ -9,7 +9,7 @@ import './style.css';
 const cameraComponent = await whenReady('pc-camera');
 
 // Engine scripts are resolved by the bundler, so they are attached through the entity rather than
-// with <pc-script name="...">, which only resolves scripts fetched at runtime by <pc-asset>
+// with <pc-script-instance name="...">, which only resolves scripts fetched at runtime by <pc-asset>
 const camera = cameraComponent.closestEntity;
 camera?.entity?.addComponent('script');
 camera?.entity?.script?.create(CameraControls, { properties: { sceneSize: 2 } });

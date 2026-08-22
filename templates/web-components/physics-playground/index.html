@@ -8,12 +8,12 @@
     </head>
     <body>
         <pc-app>
-            <pc-module
+            <pc-wasm
                 name="Ammo"
                 glue="/ammo/ammo.wasm.js"
                 wasm="/ammo/ammo.wasm.wasm"
                 fallback="/ammo/ammo.js"
-            ></pc-module>
+            ></pc-wasm>
             <pc-material id="floor-material" diffuse="#2e333d" gloss="0.2"></pc-material>
             <pc-material id="cyan-material" diffuse="#29ade6" gloss="0.45"></pc-material>
             <pc-material id="coral-material" diffuse="#f25738" gloss="0.45"></pc-material>
@@ -34,7 +34,7 @@
                 <pc-entity name="floor" position="0 -0.1 0" scale="10 0.2 10"
                     ><pc-render type="box" material="floor-material"></pc-render
                     ><pc-collision type="box" half-extents="5 0.1 5"></pc-collision
-                    ><pc-rigidbody type="static"></pc-rigidbody
+                    ><pc-rigid-body type="static"></pc-rigid-body
                 ></pc-entity>
                 <pc-entity id="bodies"></pc-entity>
             </pc-scene>
