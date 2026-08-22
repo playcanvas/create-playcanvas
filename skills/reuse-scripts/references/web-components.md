@@ -8,9 +8,9 @@ Expose an Engine script as an ES module and register it as an asset:
     <pc-scene>
         <pc-entity name="Camera">
             <pc-camera></pc-camera>
-            <pc-scripts>
-                <pc-script name="cameraControls" move-speed="4"></pc-script>
-            </pc-scripts>
+            <pc-script>
+                <pc-script-instance name="cameraControls" move-speed="4"></pc-script-instance>
+            </pc-script>
         </pc-entity>
     </pc-scene>
 </pc-app>
