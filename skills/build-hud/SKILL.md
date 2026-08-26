@@ -20,6 +20,8 @@ each transition; never store gameplay truth in the DOM or a UI element.
 
 - Map each overlay to a game state and each indicator to a snapshot field. A transition shows or
   hides overlays; it does not duplicate the state the game already owns (see `manage-game-state`).
+- An indicator that is idle most of the time toggles `enabled` with its visibility; an element left
+  drawing at opacity 0 still costs a draw call every frame (see `reduce-draw-calls`).
 - Anchor and scale elements to the viewport so the layout holds at the target resolution and on
   resize. Verify at the acceptance resolution, not the default window size.
 - Keep copy minimal and legible over the scene: back text with a plate or shadow where the frame is
