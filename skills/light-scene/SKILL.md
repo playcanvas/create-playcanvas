@@ -33,6 +33,16 @@ Keep the two named production integrations visible in the implementation:
 Do not continue to cosmetic tuning while either integration is missing or diagnostics report a
 shader, texture, or framebuffer error.
 
+## Stylized and prebaked scenes
+
+When the art direction is deliberately flat or stylized rather than photoreal, or the platform's
+startup, frame, or payload budget rules out the runtime pipeline above, do not treat `Water`,
+`CameraFrame`, and the sky/IBL bake as mandatory. The sanctioned alternative is baked static
+lighting via the `bake-lighting` skill plus custom material shading via the `override-shader-chunks`
+skill. Either way, dynamic objects and their attachments must sample or approximate the baked
+occlusion so they dim to the same levels as the baked surfaces, grounded with contact shadows. Fall
+back to the runtime pipeline above as the default path when neither trigger holds.
+
 ## Light and expose
 
 - Establish one dominant key light with a clear direction and warm or cool intent, then add soft

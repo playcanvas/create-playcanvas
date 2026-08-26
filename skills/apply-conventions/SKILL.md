@@ -43,6 +43,8 @@ details. Apply these stable conventions throughout the project.
 - Materials cull back faces by default; counter-clockwise winding defines the front face.
 - Clone a material before per-instance tinting or edits, and assign the clone; never mutate one
   shared by other instances, including default and asset-imported materials.
+- `setParameter` uploads raw values; author colours in sRGB and convert with `Color#linear()`
+  before upload — do not hand-roll gamma.
 - Entities do not have an `aabb`. Union descendant `meshInstance.aabb` values after transforms have
   synchronized.
 - Let `Mesh.update()` calculate local bounds. If passing `false` for `updateBoundingBox`, assign an
