@@ -5,8 +5,7 @@ description: Use when adding transient visual effects or trails to a PlayCanvas 
 
 # Effects and game feel
 
-Add transient effects as short-lived, self-owning entities triggered by application events, not as
-permanent scene fixtures.
+Trigger transient effects through application events and reuse their resources.
 
 Reuse before authoring. Adapt the closest official particle example with `find-examples`, prefer the
 Engine's built-in particle component over a hand-written system, and discover any shipped trail or
@@ -25,12 +24,22 @@ the actual scene lighting and surface.
 
 ## Place and layer
 
-- Spawn an effect at the emitter's world mount point, either parent it there or copy the world
-  transform once, and let it destroy itself when finished. Never leak emitters.
+- Place an effect at the emitter's world mount point; parent it there or copy the world transform once.
 - Keep additive or transparent effects above the surface they sit on and biased toward the camera so
   they do not z-fight. Inspect soft transparency at grazing angles for hard edges, black quads, or
   dropout.
 - Size and orient effects from the emitter's calibrated bounds, not a guessed constant.
+
+## Pool and prewarm
+
+- Create emitters, ribbons, flashes, materials, and meshes at load. Events check out an effect, set
+  its transform, and call `particlesystem.reset()` then `play()`; after its particles finish, call
+  `stop()` and return it to the pool.
+- First-use shader compilation can stall a frame. Before gameplay, render every material and particle
+  variant through the relevant passes, on an offscreen rig or behind the ready overlay.
+- Pulse or tint uniforms with `meshInstance.setParameter` or `material.setParameter`.
+  `material.update()` marks the whole material dirty and clears variants when defines or chunks
+  change; reserve it for material changes that require it.
 
 ## Moving trails
 
@@ -74,8 +83,10 @@ the actual scene lighting and surface.
 
 Trigger each effect through real gameplay input and confirm with a screenshot captured at its peak,
 not a saved filepath. Confirm the effect is visible from the gameplay camera and from a grazing
-angle, that emitters are gone after their lifetime (query the entity count), and that nothing leaves
-a black quad or a hard edge over the surface.
+angle, that repeated events leave entity counts stable, and that nothing leaves a black quad or a
+hard edge over the surface. Compare `graphicsDevice.shaders.length` after prewarming and after the
+first real event; growth indicates a missed variant. Use two fixed poses and return screenshots at
+accept-or-reject points only, not after every edit.
 
 Choose the authoring surface with the `build-app` skill; create effects through its entity and
 component primitives and own their lifecycle in the surface that spawned them.
