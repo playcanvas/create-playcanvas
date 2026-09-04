@@ -1,20 +1,7 @@
 # Web Components projects
 
-Expose an Engine script as an ES module and register it as an asset:
-
-```html
-<pc-app>
-    <pc-asset src="/scripts/camera-controls.mjs"></pc-asset>
-    <pc-scene>
-        <pc-entity name="Camera">
-            <pc-camera></pc-camera>
-            <pc-script>
-                <pc-script-instance name="cameraControls" move-speed="4"></pc-script-instance>
-            </pc-script>
-        </pc-entity>
-    </pc-scene>
-</pc-app>
-```
+Expose the selected script as an ES module and register its URL with a `pc-asset` directly under
+`pc-app`. Attach a `pc-script` to the owning `pc-entity`, with a `pc-script-instance` for the class.
 
 The `name` must equal the class's static `scriptName`. Extra kebab-case attributes map to camelCase
 script properties. Use the `attributes` JSON attribute for nested or reserved properties; it

@@ -15,6 +15,12 @@ Read `app.stats.drawCalls.total` (or the `forward`/`depth`/`shadow` breakdown) b
 anything, or drop in `MiniStats` for a live overlay. Every rung below is proved against this number,
 not against intuition about what "looks expensive."
 
+Draw count alone does not identify the bottleneck. Test sensitivity to pixel cost by halving the
+effective pixel ratio (`Math.min(graphicsDevice.maxPixelRatio, window.devicePixelRatio)`) and calling
+`app.resizeCanvas()`. Verify the backbuffer shrank and compare frame times at the same scene state.
+If frame time improves materially, prioritize resolution, multisampling and per-pixel shader cost.
+Otherwise profile CPU and GPU work before choosing a rung; restore the original ratio after the test.
+
 ## Rung 1: stop drawing invisible things
 
 An element at opacity 0 still submits a draw call — its mesh instance exists and is still in a
