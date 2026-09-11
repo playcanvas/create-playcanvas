@@ -16,9 +16,9 @@
     },
     "dependencies": {
         "@playcanvas/react": "^0.11.5",
-        "playcanvas": "^2.22.0",
-        "react": "^19.2.8",
-        "react-dom": "^19.2.8"
+        "playcanvas": "^2.22.2",
+        "react": "^19.3.0",
+        "react-dom": "^19.3.0"
     },
     "devDependencies": {
         "@playcanvas/eslint-config": "3.0.0-beta.8",
