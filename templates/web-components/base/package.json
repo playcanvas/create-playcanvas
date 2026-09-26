@@ -15,8 +15,8 @@
         "typecheck": "tsc --noEmit"
     },
     "dependencies": {
-        "@playcanvas/web-components": "^0.21.0",
-        "playcanvas": "^2.22.0"
+        "@playcanvas/web-components": "^0.25.0",
+        "playcanvas": "^2.22.4"
     },
     "devDependencies": {
         "@playcanvas/eslint-config": "3.0.0-beta.8",
