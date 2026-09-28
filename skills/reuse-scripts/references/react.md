@@ -1,17 +1,7 @@
 # React projects
 
-Import the named script class and attach it through React:
-
-```tsx
-import { Entity } from '@playcanvas/react';
-import { Camera, Script } from '@playcanvas/react/components';
-import { CameraControls } from 'playcanvas/scripts/esm/camera-controls.mjs';
-
-<Entity name="Camera" position={[4, 1, 4]}>
-    <Camera />
-    <Script script={CameraControls} />
-</Entity>;
-```
+Import the selected class from its installed module. Render `Script` from
+`@playcanvas/react/components` inside the owning `Entity`, passing the class through its `script` prop.
 
 Keep imported or custom script constructors at module scope. Declaring a class inside a component
 creates a new identity on render and can recreate the script.

@@ -19,11 +19,13 @@ Preserve the surface that owns the current entry point and lifecycle.
 
 ## Render at an intentional density
 
-PlayCanvas defaults `graphicsDevice.maxPixelRatio` to 1 for predictable fill-rate cost. In a
-quality-oriented browser app, set it deliberately after the application exists and before its
-initial automatic resize; `Math.min(window.devicePixelRatio, 2)` is a practical high-DPI starting
-point. Keep 1 only as a measured performance decision, and resize the canvas again after changing
-the value.
+PlayCanvas defaults `graphicsDevice.maxPixelRatio` to 1 for predictable fill-rate cost. Set it
+deliberately after the application exists and before its initial automatic resize, and call
+`app.resizeCanvas()` after changing it. Fragment work scales with the square of the ratio, so
+choose the value from a measured frame time on the target display, not from the display alone:
+`Math.min(window.devicePixelRatio, 2)` suits a quality-first viewer on hardware that holds its
+frame budget there, and 1 is the right value wherever it does not. Never cap above
+`window.devicePixelRatio`; a larger value renders identically.
 
 Verify the real backbuffer in a browser: for automatic resolution, `canvas.width / canvas.clientWidth`
 and the height ratio should match the chosen pixel ratio. CSS dimensions and a screenshot filepath

@@ -26,26 +26,32 @@ shadow-map rendering and per-pixel dynamic lighting for that light entirely.
 
 ## Verify UVs before trusting this on real assets
 
-Procedural primitives auto-generate a usable UV set; imported GLB models often do not ship a second,
-non-overlapping UV channel suitable for a lightmap atlas. Read the installed engine's source for
-what its `Lightmapper` actually requires — which UV set it samples, whether it unwraps one for you —
-before assuming a real model will bake correctly. Do not carry a primitive-only test result into
-production assets unchecked.
+The installed `Lightmapper` bakes a node only when every mesh instance on it has a second UV set
+(`mesh.vertexBuffer.format.hasUv1`). A node missing one is skipped silently — no warning, no
+lightmap — and its mesh simply stays dynamically lit, which a glance at a screenshot will not catch.
+Procedural primitives generate that set; imported GLB models often do not. Check `hasUv1` on every
+mesh you expect to bake, and unwrap or re-export the ones without it before the bake. Do not carry a
+primitive-only test result into production assets unchecked.
 
 ## Choose the rung by budget, not by default
 
-On-device bake cost scales with baked-node count and lightmap resolution; estimate it against the
-startup budget before choosing a rung. Stay on-device unless:
+On-device bake cost scales with baked-node count and lightmap resolution; measure it once on the
+target device (`performance.now()` around `bake()`) and compare it with the startup budget before
+choosing a rung. Stay on-device unless:
 
-- the estimated bake time does not fit the startup or first-paint budget on the target device, or
+- the measured bake time does not fit the startup or first-paint budget on the target device, or
 - the result needs stylized material detail beyond lighting that the runtime `Lightmapper` cannot
   produce.
 
-Only then move to an offline bake shipped as assets, following the same shape as any other
-generated-asset pipeline: registry-keyed per-asset configs (a new asset is a config change, not new
-pipeline code), a CLI with per-target fast paths, staged size logging, worker-thread parallelism for
-build time, and a coverage self-audit that fails the bake when an expected output is missing or
-empty.
+Only then move to an offline bake shipped as assets, and size the pipeline to the scene count. For
+one deterministic scene the whole pipeline is a build script that computes or renders the maps and
+writes them next to the other static assets, plus a loader; that is sufficient. Registry-keyed
+per-asset configs, worker-thread parallelism and a coverage audit that fails the bake on a missing
+output belong to multi-asset pipelines — add them when the second scene arrives, not before.
+
+Offline maps are payload. State the compressed size delta in the change description and compare it
+with the download or package budget; a modest lightmap set can double the archive of a small web
+app.
 
 ## Keep dynamic objects consistent
 

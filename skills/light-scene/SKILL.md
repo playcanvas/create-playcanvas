@@ -1,6 +1,6 @@
 ---
 name: light-scene
-description: Use when a PlayCanvas scene must read as a deliberate cinematic image rather than a flat asset preview, to set key and ambient lighting, sky and image-based lighting, shadows, tone mapping and exposure, and a restrained post-process grade of bloom, fog, and colour.
+description: Use when a PlayCanvas scene must read as a deliberate image rather than a flat asset preview — photoreal and cinematic, or stylized, low-poly, and palette-driven — to set key and ambient lighting, sky and image-based lighting, shadows, tone mapping and exposure, water, and a restrained post-process grade of bloom, fog, and colour.
 ---
 
 # Cinematic rendering
@@ -9,6 +9,26 @@ A polished frame is lit and graded, not just populated. Treat lighting, sky, sha
 and post as one pass over the assembled scene, and tune every value against a real screenshot rather
 than from memory.
 
+## Confirm art direction before implementation
+
+Follow the user's specified or approved direction. When it is unresolved, present concrete options
+using references, mockups, or inexpensive rendered variants and get approval before substantial
+implementation. Prefer a side-by-side variant sheet when cheap to produce. Work within the approved
+direction and confirm significant departures before implementing them.
+
+## Choose the path from the brief
+
+Read the reference before wiring any pipeline. A photoreal or cinematic brief takes the runtime HDR
+path below. A brief whose reference is low-poly, flat-shaded, toon, or palette-driven — or whose
+startup, frame, or payload budget rules out the runtime pipeline — takes the stylized path: banded
+or flat shading through `override-shader-chunks`, a solid or gradient sky, static lighting through
+`bake-lighting`, and no `Water` or `CameraFrame`. A remark such as "look at the water script" is a
+pointer to inspect it; confirm any resulting change of art direction before integration. On either
+path, dynamic objects and their attachments must sample or approximate the baked or ambient occlusion
+so they dim to the same levels as the surfaces around them, grounded with contact shadows.
+
+## Runtime HDR path
+
 Prefer shipped building blocks over hand-written shaders and passes. Discover them with the
 `reuse-scripts` skill and adapt the closest official example with `find-examples`:
 
@@ -16,32 +36,22 @@ Prefer shipped building blocks over hand-written shaders and passes. Discover th
 - a procedural sky and image-based light for ambient colour and reflections;
 - a shadow catcher for grounding subjects that have no lit floor.
 
-For an outdoor scene with water, stop before authoring the scene and read both `reuse-scripts` and
-`find-examples`. Use `graphics/water.example.mjs` as the initial composition recipe: it already
-joins the production `Water` script, sky, sun, `CameraFrame`, water layer, scene depth, and
-reflection pipeline. Get that complete frame rendering before replacing its assets or tuning its
-look. A custom normal-mapped material, tessellated plane, or reflection-coloured mesh is not the
-baseline and does not substitute for `Water` when the brief asks for reflective water.
+For an outdoor scene whose brief asks for reflective, photoreal water, stop before authoring the
+scene and read both `reuse-scripts` and `find-examples`. Use `graphics/water.example.mjs` as the
+initial composition recipe: it already joins the production `Water` script, sky, sun, `CameraFrame`,
+water layer, scene depth, and reflection pipeline. Get that complete frame rendering before
+replacing its assets or tuning its look; a custom normal-mapped material or tessellated plane is not
+that baseline.
 
-Keep the two named production integrations visible in the implementation:
+For that water scene, keep both production integrations visible in the implementation:
 
 - import and create `Water` from `playcanvas/scripts/esm/water.mjs` on the water entity, preserving
   the example's required render component, camera reference, water layer, depth map, and textures;
 - construct `CameraFrame` from `playcanvas` for the gameplay camera, set a deliberate tone map and
   restrained grade, call `update()`, and destroy it with the application.
 
-Do not continue to cosmetic tuning while either integration is missing or diagnostics report a
-shader, texture, or framebuffer error.
-
-## Stylized and prebaked scenes
-
-When the art direction is deliberately flat or stylized rather than photoreal, or the platform's
-startup, frame, or payload budget rules out the runtime pipeline above, do not treat `Water`,
-`CameraFrame`, and the sky/IBL bake as mandatory. The sanctioned alternative is baked static
-lighting via the `bake-lighting` skill plus custom material shading via the `override-shader-chunks`
-skill. Either way, dynamic objects and their attachments must sample or approximate the baked
-occlusion so they dim to the same levels as the baked surfaces, grounded with contact shadows. Fall
-back to the runtime pipeline above as the default path when neither trigger holds.
+Do not continue to cosmetic tuning while a required integration is missing or diagnostics report
+a shader, texture, or framebuffer error.
 
 ## Light and expose
 
@@ -84,11 +94,16 @@ back to the runtime pipeline above as the default path when neither trigger hold
 
 ## Prove the look
 
+For changes to an existing look, show old and new at the same pose in one image. If the difference
+is not visible, report that before spending more time tuning.
+
 Tune against pixels, not numbers. Capture the intended framing with an image-returning browser
 screenshot tool and inspect the returned image, as `apply-conventions` and the local agent guide
-require; a saved filepath is not evidence. Confirm the subject is exposed and readable, shadows are
-present but not crushed, and the grade is restrained, from the real gameplay camera at the target
-resolution. Confirm the post-process camera keeps rendering as it orbits and pitches.
+require; a saved filepath is not evidence. Use two fixed poses, capture with a headless browser, and
+return images at accept-or-reject points only, not after every edit. Confirm the subject is exposed
+and readable, shadows are present but not crushed, and the grade is restrained, from the real
+gameplay camera at the target resolution. Confirm the post-process camera keeps rendering as it
+orbits and pitches.
 
 Choose the authoring surface with the `build-app` skill and set lights, camera, and scene settings
 through its own primitives before reaching into the Engine.

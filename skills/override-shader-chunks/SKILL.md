@@ -13,11 +13,17 @@ override is the default for everything else, since it is cheaper and stays integ
 
 ## Pin the version, read the source
 
-Set `material.shaderChunksVersion` to the installed engine's major.minor (for example `'2.21'`)
+Set `material.shaderChunksVersion` to the installed engine's major.minor (for example `'2.22'`)
 before shipping any override. Chunk names and their contracts — what a chunk defines, what globals
 it reads or writes — are version-keyed and change between releases. Read the installed `playcanvas`
 source for the exact chunk being touched; do not recall its contract from memory or an older
 version's documentation.
+
+## Clone before overriding a shared material
+
+Clone a material that other mesh instances share — including default and asset-imported materials —
+before changing its chunks, properties, or material-level parameters for only some meshes, and assign
+the clone. For per-mesh uniforms, use `meshInstance.setParameter()` without cloning the material.
 
 ## Set chunks through the documented accessor
 
