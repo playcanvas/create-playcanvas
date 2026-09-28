@@ -21,7 +21,14 @@ export const getTargetDir = async ({
         const projectName = await prompts.text({
             message: 'Project name:',
             defaultValue: defaultTargetDir,
-            placeholder: defaultTargetDir
+            placeholder: defaultTargetDir,
+            validate: (value) => {
+                // an empty answer takes the default, but one that trims to nothing (spaces, "/") would
+                // resolve to the current directory and skip the non-empty check
+                if (value && !formatTargetDir(value)) {
+                    return 'Invalid project name';
+                }
+            }
         });
 
         if (prompts.isCancel(projectName)) {
