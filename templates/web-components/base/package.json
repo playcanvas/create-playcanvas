@@ -15,7 +15,7 @@
         "typecheck": "tsc --noEmit"
     },
     "dependencies": {
-        "@playcanvas/web-components": "^0.25.0",
+        "@playcanvas/web-components": "^0.26.0",
         "playcanvas": "^2.22.6"
     },
     "devDependencies": {
