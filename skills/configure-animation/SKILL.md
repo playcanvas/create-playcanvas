@@ -1,50 +1,34 @@
 ---
 name: configure-animation
-description: Use before playing, blending, or retargeting GLB animation clips in PlayCanvas Engine, React, or Web Components to inspect clip and joint names, attach animation to the rendered hierarchy, keep blend inputs valid, and diagnose T-pose, frozen playback, or binding failures.
+description: Use before playing, blending, or retargeting GLB animation clips in PlayCanvas, or when diagnosing T-pose, frozen playback, or binding failures.
 ---
 
 # Animation setup
 
-Use the `inspect-glb` skill first. Never guess clip or joint names.
+Get clip and joint names from `inspect-glb`; never guess them.
 
-## Choose the smallest playback model
-
-- Use the selected authoring surface's simple playback path for a single clip.
-- Use an `AnimStateGraph` for locomotion blending, transitions, or event-driven actions.
-- Adapt the official animation examples with the `find-examples` skill instead of writing a state
-  graph from memory.
-
-## Keep blend inputs valid
-
-Clamp every 1D blend parameter to the first and last child points before updating it. PlayCanvas
-does not clamp values outside that span: every child can receive zero weight and synchronized clips
-can receive non-finite speeds, freezing the pose. Exercise the first, interior, and last blend
-points with real gameplay input.
-
-## Retarget only compatible rigs
-
-For each source `animationTargets` entry, remove its final `.translation`, `.rotation`, `.scale`, or
-`.weights` suffix and match the remaining path against the destination's `nodePaths`. The top-level
-model root may differ; the remaining parent chain must match. Equal joint counts or similar bone
-names are insufficient. Confirm the result in the running app as the `apply-conventions` skill
-describes; frozen, partial, or exploded motion means the rigs are incompatible.
+- For one clip, use the surface's simple playback path. For blending, transitions, or events, adapt
+  an `AnimStateGraph` from an official animation example with `find-examples`.
+- Put the `anim` component on or above the rendered skinned hierarchy, not on a separate pivot.
+- Clamp every 1D blend parameter to its first and last child points. The Engine does not; values
+  outside the span zero every weight and can make synced speeds non-finite, freezing the pose.
+- Retarget only when each source `animationTargets` path, minus its `.translation`, `.rotation`,
+  `.scale`, or `.weights` suffix, matches a destination `nodePaths` entry below the model root.
+  Equal joint counts or similar names are not enough.
+- Scale a wrapper, never skinned bones.
 
 ## Prove playback
 
-An assigned clip, active state, or advancing state time does not prove that the skeleton is moving.
-For clips expected to move, sample the local position or rotation of two non-root joints over
-several rendered frames. Require a finite animation speed, active-state time, and progress, and
-confirm pose changes at idle and at both ends of each blend tree. Zero joint motion indicates a
-binding, playback, or blend-weight failure even when reported state names look correct.
+An active state or advancing state time does not prove motion. Sample two non-root joints over
+several rendered frames at idle and at both ends of each blend tree. Zero joint motion means a
+binding, playback, or blend-weight failure.
 
-## Diagnose failures
+## Diagnose
 
-- A T-pose usually means no clip was assigned, target paths differ, or animation is attached outside
-  the rendered hierarchy.
-- Put scale on a model wrapper, not skinned bones.
-- Match playback rate to real movement speed when visible foot sliding matters.
+- T-pose: no clip assigned, target paths differ, or the anim component sits outside the rendered
+  hierarchy.
+- Frozen pose: an unclamped blend input or a non-finite speed.
+- Partial or exploded motion: incompatible rigs.
 
-Read exactly one reference matching the code being edited:
-[direct Engine](references/direct-engine.md), [React](references/react.md), or
-[Web Components](references/web-components.md). Choose from imports and markup, not installed
-dependencies alone.
+Read only the reference matching the code: [direct Engine](references/direct-engine.md),
+[React](references/react.md), or [Web Components](references/web-components.md).

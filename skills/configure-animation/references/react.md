@@ -7,13 +7,13 @@ import { Entity } from '@playcanvas/react';
 import { Anim, Render } from '@playcanvas/react/components';
 import { useModel } from '@playcanvas/react/hooks';
 
-const Character = () => {
-    const { asset, error } = useModel('/models/Character.glb');
+const Model = () => {
+    const { asset, error } = useModel('/models/model.glb');
     if (error) throw new Error(error);
     if (!asset) return null;
 
     return (
-        <Entity name="Character">
+        <Entity name="Model">
             <Render type="asset" asset={asset} />
             <Anim asset={asset} activate />
         </Entity>

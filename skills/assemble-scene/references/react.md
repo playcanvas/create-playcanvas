@@ -7,11 +7,11 @@ import { Entity } from '@playcanvas/react';
 import { Collision, RigidBody } from '@playcanvas/react/components';
 
 // Model is the project's calibrated component from calibrate-model, not a library export
-const Enemy = ({ id, position, heading }) => (
-    <Entity name={`Enemy_${id}`} position={position} rotation={[0, heading, 0]}>
+const SceneObject = ({ id, position, heading }) => (
+    <Entity name={`Model_${id}`} position={position} rotation={[0, heading, 0]}>
         <RigidBody type="dynamic" mass={1} />
         <Collision type="capsule" />
-        <Model id="enemy" src="/models/Enemy.glb" />
+        <Model id="model" src="/models/model.glb" />
     </Entity>
 );
 ```

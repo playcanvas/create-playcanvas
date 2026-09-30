@@ -1,43 +1,42 @@
 ---
 name: build-app
-description: Use when creating or restructuring a PlayCanvas application with the direct Engine API, @playcanvas/react, or @playcanvas/web-components to choose the active authoring surface and apply its bootstrap, lifecycle, ownership, asset-loading, and Engine interop patterns.
+description: Use when creating or restructuring a PlayCanvas app with the Engine API, @playcanvas/react, or @playcanvas/web-components, covering bootstrap, input, resize, physics, update loop, UI, and lifecycle.
 ---
 
 # Build an Engine application
 
-Read `package.json` and the application entry point before changing its structure. Choose the
-authoring surface from the code being edited:
+Read `package.json` and the entry point, keep the surface that owns the lifecycle, and read only its
+reference: [direct Engine](references/direct-engine.md), [React](references/react.md), or
+[Web Components](references/web-components.md). Choose from imports and markup, not dependencies.
 
-- read [references/react.md](references/react.md) for `@playcanvas/react` imports and JSX;
-- read [references/web-components.md](references/web-components.md) for `pc-*` elements or
-  `@playcanvas/web-components` imports;
-- read [references/direct-engine.md](references/direct-engine.md) for direct `playcanvas` bootstrap
-  code without a wrapper-owned lifecycle.
+## Bootstrap
 
-Installed dependencies alone are insufficient when a project contains more than one surface.
-Preserve the surface that owns the current entry point and lifecycle.
+- Input is opt-in. `app.keyboard`, `mouse`, `touch`, `gamepads`, and `elementInput` stay `null`
+  unless passed to `new Application(canvas, { ... })`; UI buttons need `new ElementInput(canvas)`.
+- The Engine adds no window resize listener; call `app.resizeCanvas()` from your own handler.
+- `graphicsDevice.maxPixelRatio` defaults to 1. Raise it, at most to `window.devicePixelRatio`, only
+  where the target holds its frame budget, call `app.resizeCanvas()`, and confirm with
+  `canvas.width / canvas.clientWidth`.
+- Rigid bodies stay inert until Ammo loads through `WasmModule`. Copy the loader from the
+  `physics/falling-shapes` example with `find-examples`.
 
-## Render at an intentional density
+## Update loop
 
-PlayCanvas defaults `graphicsDevice.maxPixelRatio` to 1 for predictable fill-rate cost. Set it
-deliberately after the application exists and before its initial automatic resize, and call
-`app.resizeCanvas()` after changing it. Fragment work scales with the square of the ratio, so
-choose the value from a measured frame time on the target display, not from the display alone:
-`Math.min(window.devicePixelRatio, 2)` suits a quality-first viewer on hardware that holds its
-frame budget there, and 1 is the right value wherever it does not. Never cap above
-`window.devicePixelRatio`; a larger value renders identically.
+- `dt` is already clamped by `app.maxDeltaTime` (0.1 s); tune it instead of clamping by hand.
+  `app.timeScale` scales it, and `0` pauses scaled time.
+- Keep app state explicit and owned in one place; advance time-dependent logic from `dt`, and reset
+  through the same setup used at start.
 
-Verify the real backbuffer in a browser: for automatic resolution, `canvas.width / canvas.clientWidth`
-and the height ratio should match the chosen pixel ratio. CSS dimensions and a screenshot filepath
-do not prove rendering density.
+## UI
 
-For every surface:
+- Render UI from app state; never keep the source of truth in the DOM or UI elements.
+- Use a DOM or React overlay, or Engine `screen` and `element` components adapted from a
+  `user-interface` example.
+- Hide unused elements with `enabled = false`; an element at opacity 0 still draws.
 
-- verify version-sensitive APIs against installed declarations or source;
-- keep one owner for application creation, assets, entities, update callbacks, and teardown;
-- prefer the surface's declarative or lifecycle primitives before reaching into the Engine;
-- put per-entity and per-frame behavior in an Engine `Script` when page or view state is not its
-  natural owner;
-- clamp the per-frame delta before advancing gameplay, timers, physics, or a state clock, so a
-  backgrounded tab or a slow frame cannot inject one large integration step;
-- clean up external events and resources in the lifecycle that created them.
+## Ownership
+
+- Keep one owner for app creation, assets, entities, update callbacks, and teardown.
+- Prefer the surface's declarative primitives. Put per-entity and per-frame behaviour in an Engine
+  `Script`.
+- Remove external events and resources in the lifecycle that created them.

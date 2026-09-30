@@ -1,12 +1,13 @@
 ---
 name: reuse-scripts
-description: Use before implementing non-core PlayCanvas behavior to discover the installed Engine's curated scripts and reuse or adapt those that fit the required behavior and approved art direction.
+description: Use before writing PlayCanvas behaviour from scratch, to reuse the scripts and helpers the installed Engine already ships.
 ---
 
-# Engine scripts
+# Reuse shipped Engine code
 
-Before writing behavior from scratch, inspect the curated scripts shipped with the installed
-`playcanvas` package under `scripts/esm/**`. Discover the current set:
+Before writing behaviour, check what the installed `playcanvas` package already provides.
+
+Scripts live under `scripts/esm/**`; import only from there. List them:
 
 ```sh
 rg 'static scriptName =' node_modules/playcanvas/scripts/esm \
@@ -14,50 +15,26 @@ rg 'static scriptName =' node_modules/playcanvas/scripts/esm \
   | sort
 ```
 
-Read the selected file for its named export, `@attribute` properties, and defaults. Not every module
-is a `Script`; the parsers below `scripts/esm/parsers` are plain classes registered with a resource
-handler instead.
+Common ones are `CameraControls`, `FirstPersonController`, `ThirdPersonController`,
+`ShadowCatcher`, `ProceduralSky`, `Water`, and `Grid`, plus XR and splat scripts. Modules under
+`scripts/esm/parsers` are resource-handler classes, not scripts.
 
-Only import from `scripts/esm/**`. Legacy sibling directories depend on the global Engine namespace.
-After selecting a script, use `find-examples` to locate its matching versioned Engine example. When
-`node_modules/playcanvas` is a linked or source checkout, its `examples/src/examples/**` are already
-on disk; read them there and skip the fetch.
+Core exports that are not scripts include `CameraFrame` for post-processing, `Picker`
+(`getSelectionAsync`), `TransformGizmo`, `OutlineRenderer`, `MiniStats`, `GltfExporter`, and
+`UsdzExporter`.
 
-## Check fit before integration
+## Integrate
 
-Compare candidates with the required behavior, approved art direction, and runtime constraints.
-Reuse a suitable script directly or adapt its configuration and extension points. If none fits,
-state the limitation and implement only the missing behavior, preserving reusable parts and their
-lifecycle, bounds, and input invariants.
+1. Read the source for exports, `@attribute` properties, defaults, and required components.
+2. Find its official example with `find-examples`, and copy the assets, layers, scene settings, and
+   render setup it depends on.
+3. Adapt configuration and extension points. If nothing fits, implement only the missing part and
+   say what was missing.
+4. After a rendered frame, fail on console, shader, or missing-asset errors.
 
-For visual behavior, resolve an unclear art direction with the user before substantial implementation.
-Present references, mockups, or inexpensive variants; follow existing approval and confirm significant
-departures. A script's default appearance is only a starting point for assessing its fit.
+Keep a shipped script's input mapping and damping unless asked otherwise, and verify input
+directions with real input rather than deriving signs from memory.
 
-## Adapt the reference integration
-
-Treat the selected script source and its closest official example as complementary references:
-
-1. Read the source for exports, properties, defaults, fallbacks, required components, and lifecycle.
-2. Read the example for assets, entity references, mesh requirements, layer ordering, scene settings,
-   and render-pipeline setup.
-3. Integrate the selected behavior with its required components, assets, and passes. Adapt the look
-   to the approved direction and preserve defaults and dependencies that still apply.
-4. After a rendered frame, fail on console, shader, or missing-asset diagnostics. Exercise the
-   behavior with real input where applicable and inspect returned screenshots from representative
-   views at the final backbuffer density.
-5. Use the example to check integration correctness and the user's approved direction to judge the
-   final look. Report any remaining gap.
-
-If no matching example exists, state that and derive the integration from installed source instead
-of inventing it from memory.
-
-## Preserve grouped defaults
-
-Grouped property updates differ by authoring surface. Read the selected reference and preserve
-defaults that are not being changed.
-
-Read exactly one reference matching the code being edited:
-[direct Engine](references/direct-engine.md), [React](references/react.md), or
-[Web Components](references/web-components.md). Choose from imports and markup, not installed
-dependencies alone.
+Grouped property updates differ by surface; preserve defaults you do not change. Read only the
+reference matching the code: [direct Engine](references/direct-engine.md),
+[React](references/react.md), or [Web Components](references/web-components.md).

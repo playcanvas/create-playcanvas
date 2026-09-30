@@ -5,8 +5,8 @@ Create one root and place a previously calibrated model beneath it:
 ```ts
 import { Entity } from 'playcanvas';
 
-const root = new Entity('Enemy_1');
-root.addChild(instance('enemy'));
+const root = new Entity('Model_1');
+root.addChild(instance('model'));
 root.setPosition(x, 0, z);
 root.setEulerAngles(0, heading, 0);
 app.root.addChild(root);
