@@ -20,10 +20,10 @@ Build supported application structure declaratively:
 
 ```html
 <pc-app>
-    <pc-asset id="ship" src="/models/ship.glb"></pc-asset>
+    <pc-asset id="model" src="/models/model.glb"></pc-asset>
     <pc-scene>
-        <pc-entity name="Ship" position="0 0 -4">
-            <pc-model asset="ship"></pc-model>
+        <pc-entity name="Model" position="0 0 -4">
+            <pc-model asset="model"></pc-model>
         </pc-entity>
     </pc-scene>
 </pc-app>

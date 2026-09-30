@@ -6,9 +6,9 @@ and attach it with `entity.script.create()`. Preserve an existing script compone
 Some production helpers are core Engine exports rather than scripts. Follow the matching example's
 construction and teardown contract instead of forcing them through `script.create`.
 
-Keep script constructors at module scope. `create` takes two distinct option keys that are not
-interchangeable: `properties` is assigned straight onto the instance, while `attributes` supplies
-declared `@attribute` fields. Passing the wrong one silently does nothing.
+Keep script constructors at module scope. `create` takes two option keys: `attributes` is passed to
+the constructor for declared `@attribute` fields, while `properties` is `Object.assign`ed onto the
+instance after construction, overwriting any field it names.
 
 Prefer mutating an existing grouped property when only a few fields change; preserve other defaults
 and follow any update or rebuild contract in the selected source.

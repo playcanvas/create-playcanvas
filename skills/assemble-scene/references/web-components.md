@@ -3,11 +3,11 @@
 Represent the whole gameplay object below one semantic root:
 
 ```html
-<pc-entity name="Enemy_1" position="4 0 -3" rotation="0 90 0">
+<pc-entity name="Model_1" position="4 0 -3" rotation="0 90 0">
     <pc-rigid-body type="dynamic" mass="1"></pc-rigid-body>
     <pc-collision type="capsule"></pc-collision>
     <pc-entity position="0 0.8 0" rotation="0 180 0" scale="0.01 0.01 0.01">
-        <pc-model asset="enemy"></pc-model>
+        <pc-model asset="model"></pc-model>
     </pc-entity>
 </pc-entity>
 ```

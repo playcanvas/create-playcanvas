@@ -21,10 +21,10 @@ Place the anim component on or above the complete skinned render hierarchy befor
 Attaching it to an unrelated pivot does not bind the clip.
 
 Clamp 1D state-graph parameters to their authored child range. For children at `0.5`, `3.5`, and
-`8`, do not pass an unclamped movement speed:
+`8`, do not pass an unclamped value:
 
 ```ts
-entity.anim?.setFloat('locomotion', Math.max(0.5, Math.min(8, speed)));
+entity.anim?.setFloat('blend', Math.max(0.5, Math.min(8, value)));
 ```
 
 After assignment, drive the real gameplay inputs through the range and sample expected moving
