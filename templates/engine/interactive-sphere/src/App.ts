@@ -1,4 +1,4 @@
-import type { Layer, Texture } from 'playcanvas';
+import type { Layer } from 'playcanvas';
 import {
     createGraphicsDevice,
     AppBase,
@@ -89,7 +89,7 @@ const setupApp = async (canvas: HTMLCanvasElement, onClick: () => void) => {
     app.start();
 
     // Set up environment lighting (no skybox, just IBL)
-    app.scene.envAtlas = assets.envAtlas.resource as Texture;
+    app.scene.envAtlas = assets.envAtlas.resource!;
     const skyboxLayer = app.scene.layers.getLayerByName('Skybox');
     if (skyboxLayer) {
         skyboxLayer.enabled = false;

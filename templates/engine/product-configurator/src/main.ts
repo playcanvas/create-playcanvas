@@ -1,4 +1,3 @@
-import type { ContainerResource, RenderComponent } from 'playcanvas';
 import {
     AppBase,
     AppOptions,
@@ -62,12 +61,12 @@ await new Promise<void>((resolve) => new AssetListLoader([product], app.assets).
 
 app.start();
 
-const car = (product.resource as ContainerResource).instantiateRenderEntity();
+const car = product.resource!.instantiateRenderEntity();
 car.setLocalEulerAngles(-90, -25, 0);
 app.root.addChild(car);
 app.root.syncHierarchy();
 
-const meshes = (car.findComponents('render') as RenderComponent[]).flatMap((render) => render.meshInstances);
+const meshes = car.findComponents('render').flatMap((render) => render.meshInstances);
 const bounds = meshes[0].aabb.clone();
 meshes.slice(1).forEach((mesh) => bounds.add(mesh.aabb));
 const scale = 5 / Math.max(bounds.halfExtents.x * 2, bounds.halfExtents.z * 2);
@@ -77,10 +76,10 @@ bounds.copy(meshes[0].aabb);
 meshes.slice(1).forEach((mesh) => bounds.add(mesh.aabb));
 car.setPosition(-bounds.center.x, 0.03 - bounds.getMin().y, -bounds.center.z);
 
-const body = meshes.filter((mesh) => mesh.material.name === 'material');
-const panels = meshes.filter((mesh) => mesh.material.name === 'material_1');
-const paint = body[0].material.clone() as StandardMaterial;
-const shade = panels[0].material.clone() as StandardMaterial;
+const body = meshes.filter((mesh) => mesh.material?.name === 'material');
+const panels = meshes.filter((mesh) => mesh.material?.name === 'material_1');
+const paint = body[0].material!.clone() as StandardMaterial;
+const shade = panels[0].material!.clone() as StandardMaterial;
 body.forEach((mesh) => (mesh.material = paint));
 panels.forEach((mesh) => (mesh.material = shade));
 paint.diffuse.fromString(PAINTS[0].color);
