@@ -1,7 +1,7 @@
 import { Application, Entity } from '@playcanvas/react';
 import { Camera, Light, Script } from '@playcanvas/react/components';
 import { useApp, useModel } from '@playcanvas/react/hooks';
-import type { ContainerResource, Entity as PcEntity, RenderComponent } from 'playcanvas';
+import type { ContainerResource, Entity as PcEntity } from 'playcanvas';
 import { Color, CylinderGeometry, Mesh, MeshInstance, StandardMaterial, TONEMAP_ACES2, Vec2, Vec3 } from 'playcanvas';
 import { CameraControls } from 'playcanvas/scripts/esm/camera-controls.mjs';
 import { ProceduralSky } from 'playcanvas/scripts/esm/sky/procedural-sky.mjs';
@@ -32,7 +32,7 @@ function Product({ color, shade }: { color: string; shade: string }) {
         entity.setLocalEulerAngles(-90, -25, 0);
         root.current.addChild(entity);
 
-        const meshes = (entity.findComponents('render') as RenderComponent[]).flatMap((render) => render.meshInstances);
+        const meshes = entity.findComponents('render').flatMap((render) => render.meshInstances);
         const bounds = meshes[0].aabb.clone();
         meshes.slice(1).forEach((mesh) => bounds.add(mesh.aabb));
         const scale = 5 / Math.max(bounds.halfExtents.x * 2, bounds.halfExtents.z * 2);
@@ -42,10 +42,10 @@ function Product({ color, shade }: { color: string; shade: string }) {
         meshes.slice(1).forEach((mesh) => bounds.add(mesh.aabb));
         entity.setPosition(-bounds.center.x, 0.03 - bounds.getMin().y, -bounds.center.z);
 
-        const body = meshes.filter((mesh) => mesh.material.name === 'material');
-        const panels = meshes.filter((mesh) => mesh.material.name === 'material_1');
-        paint.current = body[0].material.clone() as StandardMaterial;
-        tone.current = panels[0].material.clone() as StandardMaterial;
+        const body = meshes.filter((mesh) => mesh.material?.name === 'material');
+        const panels = meshes.filter((mesh) => mesh.material?.name === 'material_1');
+        paint.current = body[0].material!.clone() as StandardMaterial;
+        tone.current = panels[0].material!.clone() as StandardMaterial;
         body.forEach((mesh) => (mesh.material = paint.current!));
         panels.forEach((mesh) => (mesh.material = tone.current!));
         return () => {

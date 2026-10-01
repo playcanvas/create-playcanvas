@@ -1,4 +1,3 @@
-import type { ContainerResource } from 'playcanvas';
 import {
     AppBase,
     AppOptions,
@@ -57,7 +56,7 @@ await new Promise<void>((resolve) => {
 app.start();
 
 // A container asset holds the whole glTF scene, so instantiate it to get an entity hierarchy
-app.root.addChild((model.resource as ContainerResource).instantiateRenderEntity());
+app.root.addChild(model.resource!.instantiateRenderEntity());
 
 // The procedural sky is both the background and the image-based lighting, so no light or
 // environment map asset is needed. Its default luminance is scene-scale bright, so turn it down to

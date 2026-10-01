@@ -1,6 +1,5 @@
 import type { EntityElement } from '@playcanvas/web-components';
 import { whenReady } from '@playcanvas/web-components';
-import type { Texture } from 'playcanvas';
 import { Asset, TEXTURETYPE_RGBP } from 'playcanvas';
 import { CameraControls } from 'playcanvas/scripts/esm/camera-controls.mjs';
 import { Grid } from 'playcanvas/scripts/esm/grid.mjs';
@@ -40,7 +39,7 @@ await new Promise<void>((resolve) => {
 });
 
 // Light the scene from the environment, with the skybox itself left hidden
-app.scene.envAtlas = envAtlas.resource as Texture;
+app.scene.envAtlas = envAtlas.resource!;
 const skyboxLayer = app.scene.layers.getLayerByName('Skybox');
 if (skyboxLayer) {
     skyboxLayer.enabled = false;
