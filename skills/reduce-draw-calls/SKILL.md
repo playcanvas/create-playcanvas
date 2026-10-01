@@ -5,10 +5,10 @@ description: Use when a PlayCanvas app has too many draw calls or is CPU-bound, 
 
 # Cut draw calls
 
-Measure first with `app.stats.drawCalls.total` or `MiniStats`; the per-pass breakdown fills only in
-profiler builds. Also halve the pixel ratio and call `app.resizeCanvas()`: if frame time drops, the
-cost is fill rate, not draw calls. Stop at the first rung that meets the budget and report
-before-and-after counts.
+Measure first with `app.stats.drawCallCount` or `MiniStats`; the per-pass `app.stats.drawCalls`
+breakdown fills only in profiler builds. Also halve the pixel ratio and call `app.resizeCanvas()`:
+if frame time drops, the cost is fill rate, not draw calls. Stop at the first rung that meets the
+budget and report before-and-after counts.
 
 ## 1. Stop drawing hidden things
 

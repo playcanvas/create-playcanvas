@@ -44,6 +44,6 @@ Check version-sensitive APIs against installed `playcanvas` declarations.
 
 ## Verify in the running app
 
-Offline values cannot prove facing, poses, or placement. Log values from a `Script` or update
-callback in the running app, and judge visuals only from screenshots you have inspected. A saved
-file path is not evidence.
+Offline values cannot prove facing, poses, or placement. Read values from the running app with
+`inspect-runtime`, and judge visuals only from screenshots you have inspected. A saved file path is
+not evidence.

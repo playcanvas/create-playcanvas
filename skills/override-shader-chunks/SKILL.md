@@ -8,7 +8,7 @@ description: Use when a PlayCanvas StandardMaterial needs custom shading its pro
 Overriding a `StandardMaterial` chunk keeps fog, tone mapping, shadows, skinning, and instancing
 intact. Use a `ShaderMaterial` only when the look needs its own vertex and fragment pair.
 
-- Set `material.shaderChunksVersion` to the installed major.minor, such as `'2.22'`. Chunk names
+- Set `material.shaderChunksVersion` to the installed major.minor, such as `'2.23'`. Chunk names
   and contracts change between versions, so read the installed chunk source, not memory.
 - Set chunks with `material.getShaderChunks(SHADERLANGUAGE_GLSL).set(name, source)` and the WGSL
   equivalent, then call `material.update()`. For every material on a device, use

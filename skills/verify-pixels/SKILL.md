@@ -33,4 +33,4 @@ description: Use when a PlayCanvas rendering change is meant to leave the image 
 - Report the count, for example "0 of 65536 pixels differ", or the count and where the differences
   are. "Looks the same" is not a result.
 
-Keep harness code out of the shipped bundle.
+Keep harness code out of the shipped bundle; attach it through `inspect-runtime`.

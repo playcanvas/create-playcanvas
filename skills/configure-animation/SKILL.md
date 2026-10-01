@@ -20,7 +20,7 @@ Get clip and joint names from `inspect-glb`; never guess them.
 ## Prove playback
 
 An active state or advancing state time does not prove motion. Sample two non-root joints over
-several rendered frames at idle and at both ends of each blend tree. Zero joint motion means a
+several rendered frames (`inspect-runtime`) at idle and at both ends of each blend tree. Zero joint motion means a
 binding, playback, or blend-weight failure.
 
 ## Diagnose
