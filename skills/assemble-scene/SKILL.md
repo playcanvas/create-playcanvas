@@ -20,7 +20,7 @@ once; if the tuning record is missing, calibrate first.
 ## Check placement
 
 After a rendered frame, measure each support or attachment at the object's actual position, using
-a mount point, raycast, or geometry sample. A positive gap floats; a negative gap penetrates.
+a mount point, raycast, or geometry sample read through `inspect-runtime`. A positive gap floats; a negative gap penetrates.
 Overlapping world AABBs between unrelated roots are a failure unless two different views prove the
 overlap is empty space.
 

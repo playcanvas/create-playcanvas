@@ -19,6 +19,8 @@ reference: [direct Engine](references/direct-engine.md), [React](references/reac
   `canvas.width / canvas.clientWidth`.
 - Rigid bodies stay inert until Ammo loads through `WasmModule`. Copy the loader from the
   `physics/falling-shapes` example with `find-examples`.
+- `devtools` defaults to `true`, so debugging tools can find the app (`inspect-runtime`). Set it to
+  `false` only to hide a production build.
 
 ## Update loop
 
