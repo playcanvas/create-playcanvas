@@ -18,6 +18,10 @@ npm run dev
 
 Open <http://localhost:5173>. Edit `index.html` to change the scene.
 
+## Inspector
+
+`npm run dev` loads the [PlayCanvas Inspector](https://github.com/playcanvas/inspector), a debug panel for the hierarchy, assets, materials, textures, frame graph and physics. Press the backquote key (<kbd>&#96;</kbd>) to show or hide it, <kbd>F9</kbd> to pause and <kbd>F10</kbd> to step a frame. It is wired up in `vite.config.ts` and `src/inspector.ts` and is left out of production builds.
+
 ## Scripts
 
 | Command             | Description                       |
