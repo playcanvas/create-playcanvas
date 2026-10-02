@@ -1,0 +1,28 @@
+/* Inspector key hints, shown only on the dev server along with src/inspector.ts */
+.panel::after {
+    content: 'Press ` for the inspector · F9 pause · F10 step';
+    display: block;
+    margin-top: 12px;
+    color: #7d889b;
+    font-size: 12px;
+}
+
+/* Starters without a header panel get a corner chip instead */
+body:not(:has(.panel))::after {
+    content: 'Press ` for the inspector · F9 pause · F10 step';
+    position: fixed;
+    bottom: 20px;
+    left: 20px;
+    z-index: 10;
+    padding: 6px 10px;
+    border: 1px solid #ffffff24;
+    border-radius: 999px;
+    background: #0b1019d9;
+    color: #aeb8c8;
+    font:
+        12px Inter,
+        ui-sans-serif,
+        system-ui,
+        sans-serif;
+    pointer-events: none;
+}

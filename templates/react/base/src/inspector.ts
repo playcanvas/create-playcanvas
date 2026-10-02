@@ -2,6 +2,8 @@
 import { Inspector } from '@playcanvas/inspector';
 import type { AppBase } from 'playcanvas';
 
+import './inspector.css';
+
 type Hook = {
     register?(app: AppBase, info: object): void;
     unregister?(app: AppBase): void;
