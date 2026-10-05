@@ -30,3 +30,15 @@ scope[KEY] = {
 };
 
 console.info('PlayCanvas Inspector: press ` to toggle');
+
+// Key hint, kept in the starter's header panel when it has one (React and Web Components render it
+// later) and shown as a corner chip otherwise
+const hint = document.createElement('p');
+hint.className = 'inspector-hint';
+hint.innerHTML = '<kbd>`</kbd> inspector · <kbd>F9</kbd> pause · <kbd>F10</kbd> step';
+const place = () => {
+    const parent = document.querySelector('.panel') ?? document.body;
+    if (hint.parentElement !== parent) parent.append(hint);
+};
+new MutationObserver(place).observe(document.body, { childList: true, subtree: true });
+place();
