@@ -1,10 +1,8 @@
-import react from '@vitejs/plugin-react';
 import { defineConfig } from 'vite';
 
 // https://vite.dev/config/
 export default defineConfig({
     plugins: [
-        react(),
         {
             // Dev only: install the PlayCanvas Inspector before the app starts (press ` to toggle)
             name: 'playcanvas-inspector',
