@@ -16,7 +16,7 @@
     },
     "dependencies": {
         "@playcanvas/web-components": "^0.28.0",
-        "playcanvas": "^2.23.0"
+        "playcanvas": "^2.23.1"
     },
     "devDependencies": {
         "@playcanvas/eslint-config": "3.0.0-beta.8",
