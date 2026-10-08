@@ -134,6 +134,9 @@ for (const [i, [x, z, size]] of TREES.entries()) {
         crown.setPosition(x, size * y, z);
         crown.setLocalScale(size * width, size * height, size * width);
         crown.addComponent('render', { type: 'cone', material: j === 1 ? tips : leaves });
+
+        // A trigger: it stops the camera's line of sight but the player walks through it
+        crown.addComponent('collision', { type: 'cone', radius: (size * width) / 2, height: size * height });
         app.root.addChild(crown);
     }
 }
@@ -142,11 +145,13 @@ prop('stump', [-1.8, 0.4, -2.2], [0.9, 0.8, 0.9], wood);
 
 const player = new Entity('player');
 player.setPosition(0, 1.1, 0);
+
+// A box rather than a capsule, so the player stands on ledges instead of sliding off them. Its
+// bottom sits 1 m below the body, inside the controller's 1.1 m ground probes
 player.addComponent('collision', {
-    type: 'capsule',
-    radius: 0.5,
-    height: 2.4,
-    linearOffset: new Vec3(0, 0.1, 0)
+    type: 'box',
+    halfExtents: new Vec3(0.4, 1.2, 0.4),
+    linearOffset: new Vec3(0, 0.2, 0)
 });
 player.addComponent('rigidbody', { type: 'dynamic', mass: 70, angularFactor: Vec3.ZERO });
 app.root.addChild(player);
@@ -162,7 +167,7 @@ pants.diffuse = new Color(0.18, 0.29, 0.52);
 pants.update();
 
 const model = new Entity('character');
-model.setLocalPosition(0, 0.2, 0);
+model.setLocalPosition(0, 0.3, 0);
 const part = (
     parent: Entity,
     name: string,

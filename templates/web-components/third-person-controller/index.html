@@ -65,12 +65,15 @@
                 ></pc-entity>
                 <pc-entity name="tree-0-crown-0" position="-7 2.09 -6" scale="2.31 1.98 2.31"
                     ><pc-render type="cone" material="leaves-material"></pc-render
+                    ><pc-collision type="cone" radius="1.155" height="1.98"></pc-collision
                 ></pc-entity>
                 <pc-entity name="tree-0-crown-1" position="-7 2.915 -6" scale="1.76 1.705 1.76"
                     ><pc-render type="cone" material="tips-material"></pc-render
+                    ><pc-collision type="cone" radius="0.88" height="1.705"></pc-collision
                 ></pc-entity>
                 <pc-entity name="tree-0-crown-2" position="-7 3.63 -6" scale="1.21 1.54 1.21"
                     ><pc-render type="cone" material="leaves-material"></pc-render
+                    ><pc-collision type="cone" radius="0.605" height="1.54"></pc-collision
                 ></pc-entity>
                 <pc-entity name="tree-1-trunk" position="6.5 1.125 -6.5" scale="0.475 2.25 0.475"
                     ><pc-render type="box" material="wood-material"></pc-render
@@ -79,12 +82,15 @@
                 ></pc-entity>
                 <pc-entity name="tree-1-crown-0" position="6.5 2.375 -6.5" scale="2.625 2.25 2.625"
                     ><pc-render type="cone" material="leaves-material"></pc-render
+                    ><pc-collision type="cone" radius="1.3125" height="2.25"></pc-collision
                 ></pc-entity>
                 <pc-entity name="tree-1-crown-1" position="6.5 3.3125 -6.5" scale="2 1.9375 2"
                     ><pc-render type="cone" material="tips-material"></pc-render
+                    ><pc-collision type="cone" radius="1" height="1.9375"></pc-collision
                 ></pc-entity>
                 <pc-entity name="tree-1-crown-2" position="6.5 4.125 -6.5" scale="1.375 1.75 1.375"
                     ><pc-render type="cone" material="leaves-material"></pc-render
+                    ><pc-collision type="cone" radius="0.6875" height="1.75"></pc-collision
                 ></pc-entity>
                 <pc-entity name="tree-2-trunk" position="-7.5 0.81 5" scale="0.342 1.62 0.342"
                     ><pc-render type="box" material="wood-material"></pc-render
@@ -93,12 +99,15 @@
                 ></pc-entity>
                 <pc-entity name="tree-2-crown-0" position="-7.5 1.71 5" scale="1.89 1.62 1.89"
                     ><pc-render type="cone" material="leaves-material"></pc-render
+                    ><pc-collision type="cone" radius="0.945" height="1.62"></pc-collision
                 ></pc-entity>
                 <pc-entity name="tree-2-crown-1" position="-7.5 2.385 5" scale="1.44 1.395 1.44"
                     ><pc-render type="cone" material="tips-material"></pc-render
+                    ><pc-collision type="cone" radius="0.72" height="1.395"></pc-collision
                 ></pc-entity>
                 <pc-entity name="tree-2-crown-2" position="-7.5 2.97 5" scale="0.99 1.26 0.99"
                     ><pc-render type="cone" material="leaves-material"></pc-render
+                    ><pc-collision type="cone" radius="0.495" height="1.26"></pc-collision
                 ></pc-entity>
                 <pc-entity name="tree-3-trunk" position="7 1.035 5.5" scale="0.437 2.07 0.437"
                     ><pc-render type="box" material="wood-material"></pc-render
@@ -107,12 +116,15 @@
                 ></pc-entity>
                 <pc-entity name="tree-3-crown-0" position="7 2.185 5.5" scale="2.415 2.07 2.415"
                     ><pc-render type="cone" material="leaves-material"></pc-render
+                    ><pc-collision type="cone" radius="1.2075" height="2.07"></pc-collision
                 ></pc-entity>
                 <pc-entity name="tree-3-crown-1" position="7 3.0475 5.5" scale="1.84 1.7825 1.84"
                     ><pc-render type="cone" material="tips-material"></pc-render
+                    ><pc-collision type="cone" radius="0.92" height="1.7825"></pc-collision
                 ></pc-entity>
                 <pc-entity name="tree-3-crown-2" position="7 3.795 5.5" scale="1.265 1.61 1.265"
                     ><pc-render type="cone" material="leaves-material"></pc-render
+                    ><pc-collision type="cone" radius="0.6325" height="1.61"></pc-collision
                 ></pc-entity>
                 <pc-entity name="tree-4-trunk" position="-2.2 0.765 -8" scale="0.323 1.53 0.323"
                     ><pc-render type="box" material="wood-material"></pc-render
@@ -121,12 +133,15 @@
                 ></pc-entity>
                 <pc-entity name="tree-4-crown-0" position="-2.2 1.615 -8" scale="1.785 1.53 1.785"
                     ><pc-render type="cone" material="leaves-material"></pc-render
+                    ><pc-collision type="cone" radius="0.8925" height="1.53"></pc-collision
                 ></pc-entity>
                 <pc-entity name="tree-4-crown-1" position="-2.2 2.2525 -8" scale="1.36 1.3175 1.36"
                     ><pc-render type="cone" material="tips-material"></pc-render
+                    ><pc-collision type="cone" radius="0.68" height="1.3175"></pc-collision
                 ></pc-entity>
                 <pc-entity name="tree-4-crown-2" position="-2.2 2.805 -8" scale="0.935 1.19 0.935"
                     ><pc-render type="cone" material="leaves-material"></pc-render
+                    ><pc-collision type="cone" radius="0.4675" height="1.19"></pc-collision
                 ></pc-entity>
                 <pc-entity name="fallen-log" position="0 0.35 6" scale="3.8 0.7 0.7"
                     ><pc-render type="box" material="wood-material"></pc-render
@@ -139,9 +154,9 @@
                     ><pc-rigid-body type="static"></pc-rigid-body
                 ></pc-entity>
                 <pc-entity name="player" position="0 1.1 0">
-                    <pc-collision type="capsule" radius="0.5" height="2.4" linear-offset="0 0.1 0"></pc-collision>
+                    <pc-collision type="box" half-extents="0.4 1.2 0.4" linear-offset="0 0.2 0"></pc-collision>
                     <pc-rigid-body type="dynamic" mass="70" angular-factor="0 0 0"></pc-rigid-body>
-                    <pc-entity name="character" position="0 0.2 0">
+                    <pc-entity name="character" position="0 0.3 0">
                         <pc-entity name="body" scale="0.56 0.88 0.38"
                             ><pc-render type="box" material="shirt-material"></pc-render
                         ></pc-entity>
