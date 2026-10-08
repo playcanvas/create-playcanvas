@@ -79,6 +79,8 @@ function Pine({
                     scale={[size * width, size * height, size * width]}
                 >
                     <Render type="cone" material={i === 1 ? tips : leaves} />
+                    {/* A trigger: it stops the camera's line of sight but the player walks through it */}
+                    <Collision type="cone" radius={(size * width) / 2} height={size * height} />
                 </Entity>
             ))}
         </>
@@ -139,9 +141,10 @@ function Scene() {
             <Block name="fallen-log" position={[0, 0.35, 6]} scale={[3.8, 0.7, 0.7]} material={wood} />
             <Block name="stump" position={[-1.8, 0.4, -2.2]} scale={[0.9, 0.8, 0.9]} material={wood} />
             <Entity name="player" ref={player} position={[0, 1.1, 0]}>
-                <Collision type="capsule" radius={0.5} height={2.4} linearOffset={[0, 0.1, 0]} />
+                {/* A box rather than a capsule, so the player stands on ledges instead of sliding off them */}
+                <Collision type="box" halfExtents={[0.4, 1.2, 0.4]} linearOffset={[0, 0.2, 0]} />
                 <RigidBody type="dynamic" mass={70} angularFactor={[0, 0, 0]} />
-                <Entity name="character" ref={model} position={[0, 0.2, 0]}>
+                <Entity name="character" ref={model} position={[0, 0.3, 0]}>
                     <Entity name="body" scale={[0.56, 0.88, 0.38]}>
                         <Render type="box" material={shirt} />
                     </Entity>

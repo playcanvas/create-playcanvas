@@ -1,6 +1,9 @@
 import type { Entity, RigidBodyComponentSystem } from 'playcanvas';
-import { Script } from 'playcanvas';
+import { Script, Vec3 } from 'playcanvas';
 import { ThirdPersonController } from 'playcanvas/scripts/esm/third-person-controller.mjs';
+
+/** Ground probes under the player's box collider (half width 0.4): centre, edges and corners */
+const FEET = [-0.38, 0, 0.38].flatMap((x) => [-0.38, 0, 0.38].map((z) => [x, z]));
 
 class RobotAnimation extends Script {
     static scriptName = 'robotAnimation';
@@ -28,9 +31,10 @@ class RobotAnimation extends Script {
 }
 
 export const addThirdPersonController = (player: Entity, camera: Entity, model: Entity) => {
-    (player.rigidbody!.system as RigidBodyComponentSystem).gravity.set(0, -18, 0);
+    const sys = player.rigidbody!.system as RigidBodyComponentSystem;
+    sys.gravity.set(0, -18, 0);
     if (!player.script) player.addComponent('script');
-    player.script!.create(ThirdPersonController, {
+    const controller = player.script!.create(ThirdPersonController, {
         properties: {
             camera,
             characterModel: model,
@@ -40,6 +44,24 @@ export const addThirdPersonController = (player: Entity, camera: Entity, model: 
             invertLookY: true,
             jumpForce: 520,
             speedGround: 60
+        }
+    })!;
+
+    // The stock ground check is one ray from the centre, so a player standing on a ledge reads as
+    // airborne and can't jump. Count it grounded when any probe under the collider finds a solid
+    // surface; triggers (colliders without a rigid body) only stop the camera
+    const [from, to] = [new Vec3(), new Vec3()];
+    const solid = { filterCallback: (e: Entity) => !!e.rigidbody };
+    let grounded = false;
+    Object.defineProperty(controller, '_grounded', {
+        get: () => grounded,
+        set: () => {
+            const p = player.getPosition();
+            grounded = FEET.some(([x, z]) => {
+                from.set(p.x + x, p.y, p.z + z);
+                to.set(from.x, p.y - 1.1, from.z);
+                return !!sys.raycastFirst(from, to, solid);
+            });
         }
     });
 
