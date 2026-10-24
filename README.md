@@ -38,9 +38,19 @@ Every format uses TypeScript and includes Vite, ESLint, Prettier and a productio
 
 ## Starters
 
-Choose from 12 starter kits across basics, viewers, games, tools and XR. Run the creator to browse them; `spinning-cube` is the default.
+Choose from 13 starter kits across basics, viewers, games, tools and XR. Run the creator to browse them; `spinning-cube` is the default.
 
-![The twelve PlayCanvas starter scenes](images/starter-catalog.webp)
+![The PlayCanvas starter scenes](images/starter-catalog.webp)
+
+## Snapchat Web Lenses
+
+The `web-lens` starter is a portrait game ready to publish to Snapchat as a [Web Lens](https://developers.snap.com/web-lenses/home), with the [Web Lens API](https://developers.snap.com/web-lenses/web-lens-api) wired up for leaderboards, Bitmoji and storage:
+
+```bash
+npm create playcanvas@latest my-lens -- --starter web-lens
+```
+
+Its `npm run package` script builds the game, checks it against the Web Lens upload rules (size limits, relative paths and no network access) and writes the zip to upload through [My Lenses](https://my-lenses.snapchat.com/).
 
 ## CLI Options
 
