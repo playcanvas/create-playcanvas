@@ -28,6 +28,15 @@ It warns about any other host your scripts mention, since a Lens can't reach the
 - `src/lens.css` fills the phone screen and shows a 9:16 column on wider screens. It keeps the HUD clear of the controls Snapchat draws over the top of a Lens, and `npm run dev` marks the room they take.
 - `vite.config.ts` makes every URL in the build relative, which a Lens needs.
 
+### Make it your own
+
+The game is the only part that's specific to Dodge, so replace it and keep the rest:
+
+- **Replace** `src/dodge-game.ts` with your game. The HUD follows its `game:state` app event and shows the text in its `CARDS`, so fire the same event from your game, or rework the HUD in `index.html` and `src/main.ts` (`src/App.tsx` in React). Rename Dodge in the page `<title>` too.
+- **Keep** `src/lens.ts`, `src/lens.css`, `vite.config.ts` and `scripts/package-lens.mjs`. None of them depends on the game.
+- **Report each run to Snapchat** by calling `recordScore(score)` from `src/lens.ts` when it ends. That submits the score to the leaderboard, saves a new best to Snapchat storage and resolves the best score. Call `showLeaderboard()` from a button, and `loadBest()` and `loadAvatar()` at startup for the saved best and the player's Bitmoji.
+- **Stick to what a Lens needs:** a portrait layout, a HUD kept inside the safe area with the `--inset-*` properties from `src/lens.css`, a pause when the page is hidden, audio that starts from a tap, and every asset bundled into the build, since a Lens can't reach the network.
+
 Lenses run on phones, in portrait. To try the game on yours, run `npm run dev -- --host` and open the network URL it prints.
 
 When you're ready to publish, follow Snap's [publishing guide](https://developers.snap.com/web-lenses/publishing): you'll also need a 512 × 512 PNG icon and a 5-second, 720 × 1280 preview video.

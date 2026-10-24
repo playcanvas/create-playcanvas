@@ -1,3 +1,7 @@
+// The game, and the file to replace to make this starter your own (see "Make it your own" in
+// README.md). Only the entry file uses it, to attach `DodgeGame` and drive the HUD from the
+// `game:state` app event and `CARDS`. lens.ts, lens.css, vite.config.ts and scripts/ don't depend
+// on the game, so keep them
 import type { CameraComponent } from 'playcanvas';
 import { Color, Entity, Script, StandardMaterial, math } from 'playcanvas';
 
