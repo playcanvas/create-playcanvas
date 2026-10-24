@@ -12,6 +12,10 @@ let avatar: Promise<string | undefined> | undefined;
 let saving = Promise.resolve();
 let submitting = Promise.resolve();
 
+// set once the first read succeeds. If it fails, saving stays off for the session rather than
+// writing over a best score it couldn't read
+let loaded = false;
+
 const warn = (feature: string) => (err: Error) => console.warn(`Web Lens ${feature} unavailable:`, err.message);
 
 // phone browsers report only their own notch, so in development reserve the room Snapchat's own
@@ -29,38 +33,39 @@ export const hasLeaderboard = () => snapchat.isSupported('leaderboards');
  * `localStorage` starts empty every time the Lens opens.
  */
 export const loadBest = () =>
-    (best ??= initLens()
-        .then(async () => {
-            if (!snapchat.isSupported('storage')) return 0;
+    (best ??= initLens().then(async () => {
+        if (!snapchat.isSupported('storage')) return 0;
 
+        try {
             // the first read opens the store, which can take seconds on a cold start
             const result = await snapchat.storage.get(BEST_KEY);
+            loaded = true;
             return result.found && typeof result.value === 'number' ? result.value : 0;
-        })
-        .catch((err: Error) => {
-            warn('storage')(err);
+        } catch (err) {
+            warn('storage')(err as Error);
             return 0;
-        }));
+        }
+    }));
 
 /** Submits a finished run to the leaderboard and keeps the player's best. Resolves the best score. */
-export const recordScore = async (score: number) => {
-    await initLens();
-    if (snapchat.isSupported('leaderboards')) {
-        submitting = snapchat.leaderboards
+export const recordScore = (score: number) => {
+    submitting = initLens().then(() => {
+        if (!snapchat.isSupported('leaderboards')) return;
+        return snapchat.leaderboards
             .submitScore({ score: Math.round(score) })
             .then(() => undefined, warn('leaderboard'));
-    }
+    });
 
-    // wait for the first read, or this write could replace a save that is still loading
-    const previous = await loadBest();
-    if (score <= previous) return previous;
+    // each run waits for the first read and for the runs before it, so two runs that end while the
+    // read is still loading can't both compare against the same old best
+    best = loadBest().then((previous) => {
+        if (score <= previous) return previous;
 
-    best = Promise.resolve(score);
-    if (snapchat.isSupported('storage')) {
         // keep one write in flight at a time, and the chain going after a failed save
-        saving = saving.then(() => snapchat.storage.set(BEST_KEY, score)).catch(warn('storage'));
-    }
-    return score;
+        if (loaded) saving = saving.then(() => snapchat.storage.set(BEST_KEY, score)).catch(warn('storage'));
+        return score;
+    });
+    return best;
 };
 
 /** Opens Snapchat's leaderboard panel, once the latest score has reached it. */
