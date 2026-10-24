@@ -1,0 +1,155 @@
+:root {
+    color-scheme: dark;
+
+    /* Snapchat draws its own controls over the top of a Lens, so its top inset is much larger than a
+       notch. viewport-fit=cover in index.html makes these report real values */
+    --inset-top: env(safe-area-inset-top, 0px);
+    --inset-right: env(safe-area-inset-right, 0px);
+    --inset-bottom: env(safe-area-inset-bottom, 0px);
+    --inset-left: env(safe-area-inset-left, 0px);
+}
+
+/* development only (see lens.ts): reserve the room Snapchat's controls take */
+:root.simulate-insets {
+    --inset-top: max(env(safe-area-inset-top, 0px), 120px);
+}
+
+[hidden] {
+    display: none !important;
+}
+
+html,
+body {
+    height: 100%;
+    margin: 0;
+    overflow: hidden;
+    overscroll-behavior: none;
+    touch-action: none;
+    -webkit-tap-highlight-color: transparent;
+    -webkit-touch-callout: none;
+    user-select: none;
+
+    /* the scene's clear color, so nothing flashes while the game loads */
+    background: #0b1020;
+    color: #fff;
+    font-family: ui-rounded, 'SF Pro Rounded', system-ui, sans-serif;
+}
+
+/* the whole screen on a phone, and a centered 9:16 column on anything wider, such as a desktop browser */
+.lens {
+    position: relative;
+    width: min(100vw, 100dvh * 9 / 16);
+    height: 100dvh;
+    margin: 0 auto;
+    overflow: hidden;
+}
+
+.lens canvas,
+.lens pc-app {
+    display: block;
+    width: 100%;
+    height: 100%;
+}
+
+.simulate-insets .lens::before {
+    content: 'Snapchat controls';
+    position: absolute;
+    inset: 0 0 auto;
+    z-index: 2;
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+    height: var(--inset-top);
+    padding-bottom: 6px;
+    box-sizing: border-box;
+    border-bottom: 1px dashed #ffffff40;
+    background: repeating-linear-gradient(-45deg, #ffffff0d 0 8px, transparent 8px 16px);
+    color: #ffffff59;
+    font-size: 11px;
+    pointer-events: none;
+}
+
+/* taps pass through the HUD to the canvas, apart from its buttons */
+.lens-hud {
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    pointer-events: none;
+}
+
+/* insets go on each positioned element itself: padding on a parent wouldn't move it */
+.lens-bar {
+    position: absolute;
+    top: calc(var(--inset-top) + 12px);
+    right: calc(var(--inset-right) + 16px);
+    left: calc(var(--inset-left) + 16px);
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
+    align-items: center;
+}
+
+.lens-avatar {
+    grid-column: 1;
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    background: #ffffff1f;
+    object-fit: cover;
+}
+
+.lens-score {
+    grid-column: 2;
+    font-size: 48px;
+    font-variant-numeric: tabular-nums;
+    font-weight: 800;
+    text-shadow: 0 2px 12px #0008;
+}
+
+.lens-best {
+    grid-column: 3;
+    justify-self: end;
+    color: #ffffffb3;
+    font-size: 14px;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+}
+
+.lens-card {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: min(300px, calc(100% - 48px));
+    box-sizing: border-box;
+    padding: 24px;
+    border-radius: 24px;
+    background: #0b1020cc;
+    backdrop-filter: blur(10px);
+    text-align: center;
+    translate: -50% -50%;
+}
+
+.lens-title {
+    margin: 0;
+    font-size: 32px;
+    font-weight: 800;
+}
+
+.lens-leaderboard {
+    margin-top: 18px;
+    padding: 12px 22px;
+    border: 0;
+    border-radius: 999px;
+    background: #fffc00;
+    color: #000;
+    font: inherit;
+    font-size: 16px;
+    font-weight: 800;
+    pointer-events: auto;
+}
+
+.lens-hint {
+    margin: 14px 0 0;
+    color: #ffffffb3;
+    font-size: 16px;
+}

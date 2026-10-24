@@ -121,8 +121,10 @@ export const scaffoldProject = (opts: Options) => {
         const value = Object.assign(
             {},
             ...mergeOrder.map((part) => part?.[key] as Record<string, unknown> | undefined)
-        );
-        if (Object.keys(value).length) pkg[key] = value;
+        ) as Record<string, unknown>;
+        // sort, so keys a starter adds land in order, as npm writes them and the project's lint expects
+        const entries = Object.entries(value).sort(([a], [b]) => (a > b ? 1 : -1));
+        if (entries.length) pkg[key] = Object.fromEntries(entries);
         else delete pkg[key];
     }
     pkg.name = packageName;

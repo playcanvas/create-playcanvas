@@ -1,0 +1,9 @@
+{
+    "description": "A PlayCanvas game for Snapchat Web Lenses",
+    "scripts": {
+        "package": "vite build && node scripts/package-lens.mjs dist/lens"
+    },
+    "dependencies": {
+        "@snap/web-lens-api": "^0.1.2"
+    }
+}

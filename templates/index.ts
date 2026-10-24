@@ -91,6 +91,12 @@ export const STARTERS = [
         description: 'an orthographic camera, sprite animation and input'
     },
     {
+        name: 'web-lens',
+        display: 'Snapchat Web Lens',
+        category: 'Games',
+        description: 'a portrait game with Snapchat leaderboards, packaged for upload'
+    },
+    {
         name: 'scene-editor',
         display: 'Scene Editor',
         category: 'Tools',

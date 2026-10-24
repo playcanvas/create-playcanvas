@@ -87,6 +87,7 @@ jobs:
                     - first-person-controller
                     - third-person-controller
                     - sprite-game
+                    - web-lens
                     - scene-editor
                     - vr-starter
                     - ar-placement
@@ -148,3 +149,10 @@ jobs:
             - name: Build template
               working-directory: ${{ runner.temp }}/${{ matrix.format }}-${{ matrix.starter }}
               run: npm run build
+
+            - name: Package Web Lens
+              if: matrix.starter == 'web-lens'
+              working-directory: ${{ runner.temp }}/${{ matrix.format }}-${{ matrix.starter }}
+              run: |
+                  npm run package
+                  unzip -l "dist/${{ matrix.format }}-web-lens.zip" | grep -q ' index.html$'

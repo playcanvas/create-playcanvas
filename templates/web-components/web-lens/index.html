@@ -1,0 +1,36 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+        <title>Dodge</title>
+    </head>
+    <body>
+        <main class="lens">
+            <pc-app max-pixel-ratio="2">
+                <pc-scene>
+                    <pc-entity name="camera" position="0 0 7">
+                        <pc-camera clear-color="#0b1020" fov="45" horizontal-fov></pc-camera>
+                    </pc-entity>
+                    <pc-entity name="light" rotation="40 30 0">
+                        <pc-light type="directional" intensity="1.5"></pc-light>
+                    </pc-entity>
+                    <pc-entity name="game"></pc-entity>
+                </pc-scene>
+            </pc-app>
+            <div class="lens-hud">
+                <header class="lens-bar">
+                    <img class="lens-avatar" alt="Your Bitmoji" hidden />
+                    <span class="lens-score">0</span>
+                    <span class="lens-best">Best 0</span>
+                </header>
+                <section class="lens-card">
+                    <h1 class="lens-title">Dodge</h1>
+                    <button class="lens-leaderboard" hidden>Leaderboard</button>
+                    <p class="lens-hint">Drag to steer. Tap to play</p>
+                </section>
+            </div>
+        </main>
+        <script type="module" src="/src/main.ts"></script>
+    </body>
+</html>
