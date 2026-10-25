@@ -4,8 +4,8 @@ import { Asset, TEXTURETYPE_RGBP } from 'playcanvas';
 import { CameraControls } from 'playcanvas/scripts/esm/camera-controls.mjs';
 import { Grid } from 'playcanvas/scripts/esm/grid.mjs';
 
+import './counter.css';
 import './starter.css';
-import './style.css';
 
 const HOVER_COLOR = '#40ccff';
 const DEFAULT_COLOR = '#e6edf9';

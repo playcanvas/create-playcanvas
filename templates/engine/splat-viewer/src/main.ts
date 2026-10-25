@@ -16,7 +16,7 @@ import {
 } from 'playcanvas';
 import { CameraControls } from 'playcanvas/scripts/esm/camera-controls.mjs';
 
-import './style.css';
+import './starter.css';
 
 // Hosted so the template stays small. Capture or edit your own splat at https://superspl.at, then
 // drop the .sog or .ply in public/ and point this at it instead

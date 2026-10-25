@@ -4,6 +4,8 @@ import { useAppEvent } from '@playcanvas/react/hooks';
 import type { Entity as PcEntity } from 'playcanvas';
 import { useRef } from 'react';
 
+import './starter.css';
+
 function Scene() {
     const cube = useRef<PcEntity>(null);
 

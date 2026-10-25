@@ -1,12 +1,10 @@
-import './style.css';
 import { setupApp } from './App';
+import './counter.css';
+import './starter.css';
 
 let count = 0;
 
-document.querySelector<HTMLDivElement>('#root')!.innerHTML = `
-    <canvas id="application-canvas"></canvas>
-    <p id="counter" class="counter">Click count: ${count}</p>
-`;
+document.body.insertAdjacentHTML('beforeend', `<p id="counter" class="counter">Click count: ${count}</p>`);
 
 const counterElement = document.getElementById('counter')!;
 

@@ -17,7 +17,7 @@ import {
 import { CameraControls } from 'playcanvas/scripts/esm/camera-controls.mjs';
 import { ProceduralSky } from 'playcanvas/scripts/esm/sky/procedural-sky.mjs';
 
-import './style.css';
+import './starter.css';
 
 // Swap this for your own model - anything you drop in public/ is served from the site root
 const MODEL_URL = '/playcanvas-cube.glb';

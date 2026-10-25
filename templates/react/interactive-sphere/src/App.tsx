@@ -1,19 +1,18 @@
 import { Application } from '@playcanvas/react';
 import { useState } from 'react';
 
-import './App.css';
+import './counter.css';
 import Scene from './Scene';
+import './starter.css';
 
 function App() {
     const [count, setCount] = useState(0);
 
     return (
         <>
-            <div className="full-bleed">
-                <Application className="playcanvas-app">
-                    <Scene onClick={() => setCount((count) => count + 1)} />
-                </Application>
-            </div>
+            <Application className="playcanvas-app">
+                <Scene onClick={() => setCount((count) => count + 1)} />
+            </Application>
             <p className="counter">Click count: {count}</p>
         </>
     );
