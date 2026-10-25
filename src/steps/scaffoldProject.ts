@@ -45,7 +45,6 @@ export const scaffoldProject = (opts: Options) => {
     if (!templatesDir) {
         throw new Error(`Format directory not found for: ${format}`);
     }
-    const formatDir = path.join(templatesDir, format);
 
     for (const f of FORMATS) {
         for (const s of STARTERS) {
@@ -72,40 +71,38 @@ export const scaffoldProject = (opts: Options) => {
     }
 
     const sharedDir = path.join(templatesDir, '_shared', starter);
-    const baseDir = path.join(formatDir, 'base');
-    const starterDir = path.join(formatDir, starter);
-    const features = selected.features ?? [];
-    const featureDirs = features.flatMap((feature) =>
-        FEATURES[feature][format].map((layer) => path.join(templatesDir, '_features', feature, layer))
-    );
-
-    // shared concept files, format tooling, features, then format-specific scene files
-    const dirs = [sharedDir, baseDir, ...featureDirs, starterDir];
-    const manifests = dirs.map((dir) => {
-        const file = path.join(dir, 'package.json');
-        return fs.existsSync(file) ? (JSON.parse(fs.readFileSync(file, 'utf-8')) as Record<string, unknown>) : {};
-    });
-    const mergeOrder = [manifests[1], manifests[0], ...manifests.slice(2)];
-
+    const starterDir = path.join(templatesDir, format, starter);
     if (!fs.existsSync(starterDir)) {
         throw new Error(`Starter directory not found: ${format}/${starter}`);
     }
 
-    for (const dir of dirs) {
-        if (fs.existsSync(dir)) {
-            fs.cpSync(dir, root, { recursive: true });
-        }
+    // Layers apply in this order, and a file in a later layer replaces the same file in an earlier
+    // one: files every project gets, the format's tooling, the starter's format-independent files,
+    // the features it uses, then the starter's own files for this format
+    const layers = [
+        path.join(templatesDir, '_common'),
+        path.join(templatesDir, format, 'base'),
+        sharedDir,
+        ...(selected.features ?? []).flatMap((feature) =>
+            FEATURES[feature][format].map((layer) => path.join(templatesDir, '_features', feature, layer))
+        ),
+        starterDir
+    ].filter((dir) => fs.existsSync(dir));
+
+    // package.json files are merged in the same order instead, and the shared README.md is spliced
+    // into the base README rather than replacing it
+    const sharedReadme = path.join(sharedDir, 'README.md');
+    for (const dir of layers) {
+        const manifest = path.join(dir, 'package.json');
+        fs.cpSync(dir, root, { recursive: true, filter: (src) => src !== manifest && src !== sharedReadme });
     }
 
-    const starterReadme = path.join(sharedDir, 'README.md');
-    const readme = path.join(root, 'README.md');
-    if (fs.existsSync(starterReadme)) {
-        fs.writeFileSync(
-            readme,
-            fs
-                .readFileSync(readme, 'utf8')
-                .replace(README_SECTION, `${fs.readFileSync(starterReadme, 'utf8').trimEnd()}\n\n${README_SECTION}`)
-        );
+    if (fs.existsSync(sharedReadme)) {
+        const readme = path.join(root, 'README.md');
+        const section = `${fs.readFileSync(sharedReadme, 'utf8').trimEnd()}\n\n${README_SECTION}`;
+        // a function, so a `$` in the README is not read as a replacement pattern
+        const spliced = fs.readFileSync(readme, 'utf8').replace(README_SECTION, () => section);
+        fs.writeFileSync(readme, spliced);
     }
 
     for (const [from, to] of Object.entries(renameFiles)) {
@@ -115,12 +112,15 @@ export const scaffoldProject = (opts: Options) => {
         }
     }
 
-    const pkgPath = path.join(root, 'package.json');
-    const pkg = Object.assign({}, ...mergeOrder) as Record<string, unknown>;
+    const manifests = layers
+        .map((dir) => path.join(dir, 'package.json'))
+        .filter((file) => fs.existsSync(file))
+        .map((file) => JSON.parse(fs.readFileSync(file, 'utf-8')) as Record<string, unknown>);
+    const pkg = Object.assign({}, ...manifests) as Record<string, unknown>;
     for (const key of PACKAGE_MAPS) {
         const value = Object.assign(
             {},
-            ...mergeOrder.map((part) => part?.[key] as Record<string, unknown> | undefined)
+            ...manifests.map((part) => part[key] as Record<string, unknown> | undefined)
         ) as Record<string, unknown>;
         // sort, so keys a starter adds land in order, as npm writes them and the project's lint expects
         const entries = Object.entries(value).sort(([a], [b]) => (a > b ? 1 : -1));
@@ -128,7 +128,7 @@ export const scaffoldProject = (opts: Options) => {
         else delete pkg[key];
     }
     pkg.name = packageName;
-    fs.writeFileSync(pkgPath, JSON.stringify(pkg, null, 4) + '\n');
+    fs.writeFileSync(path.join(root, 'package.json'), JSON.stringify(pkg, null, 4) + '\n');
 
     if (skills) {
         const skillsDir = [
