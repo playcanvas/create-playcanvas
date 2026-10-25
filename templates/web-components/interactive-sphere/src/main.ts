@@ -25,7 +25,7 @@ const app = appElement.app!;
 const envAtlas = new Asset(
     'env-atlas',
     'texture',
-    { url: '/environment-map.png' },
+    { url: './environment-map.png' },
     {
         type: TEXTURETYPE_RGBP,
         mipmaps: false

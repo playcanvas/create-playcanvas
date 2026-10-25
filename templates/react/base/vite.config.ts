@@ -3,6 +3,9 @@ import { defineConfig } from 'vite';
 
 // https://vite.dev/config/
 export default defineConfig({
+    // Relative URLs, so the build runs wherever it's served from: a domain root, a subpath such as
+    // GitHub Pages or itch.io, or a Snapchat Web Lens
+    base: './',
     plugins: [
         react(),
         {

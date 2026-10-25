@@ -16,12 +16,7 @@
             <pc-material id="shirt-material" diffuse="#268bd2"></pc-material>
             <pc-material id="skin-material" diffuse="#c78759"></pc-material>
             <pc-material id="pants-material" diffuse="#2e4a85"></pc-material>
-            <pc-wasm
-                name="Ammo"
-                glue="/ammo/ammo.wasm.js"
-                wasm="/ammo/ammo.wasm.wasm"
-                fallback="/ammo/ammo.js"
-            ></pc-wasm>
+            <pc-wasm name="Ammo" glue="./ammo/ammo.wasm.js" wasm="./ammo/ammo.wasm.wasm"></pc-wasm>
             <pc-scene>
                 <pc-entity name="camera" position="0 3 6"><pc-camera clear-color="#7ab8e6"></pc-camera></pc-entity>
                 <pc-entity name="light" rotation="45 30 0"

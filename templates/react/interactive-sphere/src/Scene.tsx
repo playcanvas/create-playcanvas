@@ -18,7 +18,7 @@ function Scene({ onClick }: SceneProps) {
     const material = useMaterial({ diffuse });
 
     // Load the environment map
-    const { asset: envMap } = useEnvAtlas('/environment-map.png');
+    const { asset: envMap } = useEnvAtlas('./environment-map.png');
 
     // Change the mouse cursor based on the hover state
     useEffect(() => {

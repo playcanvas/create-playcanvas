@@ -21,9 +21,8 @@ import { addFirstPersonController } from './controller';
 import './starter.css';
 
 WasmModule.setConfig('Ammo', {
-    glueUrl: '/ammo/ammo.wasm.js',
-    wasmUrl: '/ammo/ammo.wasm.wasm',
-    fallbackUrl: '/ammo/ammo.js'
+    glueUrl: './ammo/ammo.wasm.js',
+    wasmUrl: './ammo/ammo.wasm.wasm'
 });
 await new Promise<void>((resolve) => {
     WasmModule.getInstance('Ammo', () => resolve());
