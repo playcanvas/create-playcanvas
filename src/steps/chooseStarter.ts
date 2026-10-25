@@ -13,9 +13,9 @@ export const chooseStarter = async ({
 }) => {
     if (argStarter && STARTERS.some((s) => s.name === argStarter)) return argStarter;
 
-    // the picker cannot be answered without a TTY, so a scripted run takes the default rather than
-    // blocking on it, and a bad name fails loudly rather than silently falling back
-    if (!process.stdout.isTTY || yes) {
+    // a run that can't show the picker (--yes, or no terminal) takes the default, and fails loudly
+    // on a bad name rather than silently falling back
+    if (yes) {
         if (!argStarter) return STARTERS[0].name;
         throw new Error(`Unknown starter: ${argStarter}. Choose from: ${STARTERS.map((s) => s.name).join(', ')}`);
     }

@@ -41,6 +41,9 @@ Options:
       --no-skills            omit the PlayCanvas agent skills
   -y, --yes                  skip the prompts and take the defaults
   -h, --help                 show help
+
+Without a terminal, as when an AI agent or CI runs it, the CLI takes the
+defaults for any option not passed, as --yes does.
 `;
 
 const renameFiles: Record<string, string> = {
@@ -55,12 +58,20 @@ const init = async () => {
     const argFormat = argv.format ?? argv.template;
     const argStarter = argv.starter ?? argv.boilerplate;
     const argOverwrite = argv.overwrite;
-    const yes = argv.yes;
+
+    // nothing can answer a prompt without a terminal, as when an AI agent or CI runs the command,
+    // so take the defaults as --yes does, rather than exit without creating a project
+    const interactive = Boolean(process.stdin.isTTY && process.stdout.isTTY);
+    const yes = argv.yes || !interactive;
 
     const help = argv.help;
     if (help) {
         console.log(helpMessage);
         return;
+    }
+
+    if (!interactive && !argv.yes) {
+        prompts.log.info('Not running in a terminal, so using the defaults for any option not passed');
     }
 
     const cancel = () => {
