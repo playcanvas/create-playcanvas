@@ -8,8 +8,8 @@
     </head>
     <body>
         <pc-app>
-            <!-- Swap this for your own model - anything you drop in public/ is served from the site root -->
-            <pc-asset id="model" src="/playcanvas-cube.glb"></pc-asset>
+            <!-- Swap this for your own model - files in public/ are served next to index.html, so use a ./ path -->
+            <pc-asset id="model" src="./playcanvas-cube.glb"></pc-asset>
 
             <pc-scene>
                 <!-- Camera. Orbit controls are attached in src/main.ts. The sky is HDR, so it needs

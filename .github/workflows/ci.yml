@@ -223,6 +223,10 @@ jobs:
               working-directory: ${{ runner.temp }}/${{ matrix.format }}-${{ matrix.starter }}
               run: npm run build
 
+            - name: Check build paths are relative
+              working-directory: ${{ runner.temp }}/${{ matrix.format }}-${{ matrix.starter }}
+              run: node "$GITHUB_WORKSPACE/.github/scripts/check-relative-urls.mjs" ${{ matrix.starter == 'web-lens' && 'dist/lens' || 'dist' }}
+
             - name: Package Web Lens
               if: matrix.starter == 'web-lens'
               working-directory: ${{ runner.temp }}/${{ matrix.format }}-${{ matrix.starter }}

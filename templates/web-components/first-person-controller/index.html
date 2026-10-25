@@ -14,12 +14,7 @@
             <pc-material id="green-material" diffuse="#2e6638" emissive="#09140b" gloss="0.2"></pc-material>
             <pc-material id="wood-material" diffuse="#7a451a" emissive="#180e05" gloss="0.2"></pc-material>
             <pc-material id="metal-material" diffuse="#475461" emissive="#0e1113" gloss="0.5"></pc-material>
-            <pc-wasm
-                name="Ammo"
-                glue="/ammo/ammo.wasm.js"
-                wasm="/ammo/ammo.wasm.wasm"
-                fallback="/ammo/ammo.js"
-            ></pc-wasm>
+            <pc-wasm name="Ammo" glue="./ammo/ammo.wasm.js" wasm="./ammo/ammo.wasm.wasm"></pc-wasm>
             <pc-scene>
                 <pc-entity name="light" rotation="50 30 0"
                     ><pc-light

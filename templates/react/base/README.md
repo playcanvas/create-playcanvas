@@ -32,7 +32,7 @@ Open <http://localhost:5173>. Edit the files under `src/` and save to see the sc
 | `npm run fmt`       | Check formatting                  |
 | `npm run typecheck` | Run TypeScript checks             |
 
-Run `npm run build` to generate a deployable static site in `dist/`.
+Run `npm run build` to generate a deployable static site in `dist/`. Its paths are relative, so it runs from any folder, such as a GitHub Pages project site or an itch.io upload.
 
 ## Agent skills
 

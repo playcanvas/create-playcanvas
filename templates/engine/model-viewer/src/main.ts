@@ -19,8 +19,8 @@ import { ProceduralSky } from 'playcanvas/scripts/esm/sky/procedural-sky.mjs';
 
 import './starter.css';
 
-// Swap this for your own model - anything you drop in public/ is served from the site root
-const MODEL_URL = '/playcanvas-cube.glb';
+// Swap this for your own model - files in public/ are served next to index.html, so use a ./ path
+const MODEL_URL = './playcanvas-cube.glb';
 
 const canvas = document.getElementById('application-canvas') as HTMLCanvasElement;
 
