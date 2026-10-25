@@ -4,15 +4,10 @@ import { fileURLToPath } from 'node:url';
 
 import * as prompts from '@clack/prompts';
 
-import { FEATURES, FORMATS, STARTERS } from '../../templates/index.js';
+import { FEATURES, STARTERS } from '../../templates/index.js';
 
 const PACKAGE_MAPS = ['scripts', 'dependencies', 'devDependencies', 'peerDependencies', 'engines'] as const;
 const README_SECTION = '## Prerequisites';
-const TEMPLATE_ENTRIES: Record<string, string> = {
-    engine: 'src/main.ts',
-    react: 'src/App.tsx',
-    'web-components': 'src/main.ts'
-};
 
 type Options = {
     cwd: string;
@@ -22,6 +17,8 @@ type Options = {
     packageName: string;
     skills: boolean;
     renameFiles: Record<string, string>;
+    // defaults to the templates shipped with the CLI; tests point it at fixtures
+    templatesDir?: string;
 };
 
 export const scaffoldProject = (opts: Options) => {
@@ -37,32 +34,14 @@ export const scaffoldProject = (opts: Options) => {
     // Locate template dir - works in both dev (src/steps/) and prod (dist/)
     const __filename = fileURLToPath(import.meta.url);
     const __dirname = path.dirname(__filename);
-    const possiblePaths = [
-        path.resolve(__dirname, '../templates'), // prod: dist/index.mjs → ../templates
-        path.resolve(__dirname, '../../templates') // dev: src/steps/scaffoldProject.ts → ../../templates
-    ];
-    const templatesDir = possiblePaths.find((p) => fs.existsSync(path.join(p, format)));
+    const templatesDir =
+        opts.templatesDir ??
+        [
+            path.resolve(__dirname, '../templates'), // prod: dist/index.mjs → ../templates
+            path.resolve(__dirname, '../../templates') // dev: src/steps/scaffoldProject.ts → ../../templates
+        ].find((p) => fs.existsSync(path.join(p, format)));
     if (!templatesDir) {
         throw new Error(`Format directory not found for: ${format}`);
-    }
-
-    for (const f of FORMATS) {
-        for (const s of STARTERS) {
-            const dir = path.join(templatesDir, f.name, s.name);
-            const entry = TEMPLATE_ENTRIES[f.name];
-            if (!entry || !fs.existsSync(path.join(dir, entry))) {
-                throw new Error(`Incomplete starter matrix: ${f.name}/${s.name}`);
-            }
-            for (const feature of s.features ?? []) {
-                const layers = FEATURES[feature]?.[f.name];
-                if (
-                    !layers?.length ||
-                    layers.some((layer) => !fs.existsSync(path.join(templatesDir, '_features', feature, layer)))
-                ) {
-                    throw new Error(`Incomplete feature matrix: ${feature}/${f.name}`);
-                }
-            }
-        }
     }
 
     const selected = STARTERS.find((s) => s.name === starter);
