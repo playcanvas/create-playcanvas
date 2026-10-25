@@ -3,7 +3,6 @@ import { whenReady } from '@playcanvas/web-components';
 import { Script } from 'playcanvas';
 
 import './starter.css';
-import './style.css';
 
 class Rotate extends Script {
     static scriptName = 'rotate';

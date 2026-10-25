@@ -4,7 +4,6 @@ import { CameraControls } from 'playcanvas/scripts/esm/camera-controls.mjs';
 import { ProceduralSky } from 'playcanvas/scripts/esm/sky/procedural-sky.mjs';
 
 import './starter.css';
-import './style.css';
 
 // The camera is awaited as <pc-camera> rather than the <pc-entity> holding it - an entity becomes
 // ready before its component children do, and CameraControls needs the camera component to exist

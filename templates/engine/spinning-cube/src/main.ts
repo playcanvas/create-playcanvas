@@ -13,7 +13,7 @@ import {
     createGraphicsDevice
 } from 'playcanvas';
 
-import './style.css';
+import './starter.css';
 
 const canvas = document.getElementById('application-canvas') as HTMLCanvasElement;
 
