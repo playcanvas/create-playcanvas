@@ -38,7 +38,7 @@ Every format uses TypeScript and includes Vite, ESLint, Prettier and a productio
 
 ## Starters
 
-Choose from 13 starter kits across basics, viewers, games, tools and XR. Run the creator to browse them; `spinning-cube` is the default.
+Choose from starter kits across basics, viewers, games, tools and XR. Run the creator to browse them; `spinning-cube` is the default.
 
 ![The PlayCanvas starter scenes](images/starter-catalog.webp)
 
@@ -79,11 +79,24 @@ Every project includes [`@playcanvas/skills`](https://github.com/playcanvas/skil
 
 ```bash
 npm install
+npm test
 npm run build
 node dist/index.mjs
 ```
 
 Contributions are welcome. Please open an issue before proposing a new format, starter or another substantial change.
+
+### Adding a starter
+
+A project is assembled from the layers under `templates/`, in this order. A file in a later layer replaces the same file in an earlier one, and each layer's `package.json` is merged into those before it.
+
+1. `_common/`: files every project gets
+2. `<format>/base/`: the format's tooling and README, a default `index.html` for Engine and React, and React's `src/main.tsx`
+3. `_shared/<starter>/`: the starter's format-independent code and assets. Its `README.md` is inserted into the base README above `## Prerequisites`
+4. `_features/<feature>/<layer>/`: what each of the starter's `features` needs in that format, as mapped by `FEATURES` in `templates/index.ts`
+5. `<format>/<starter>/`: the starter's scene in that format
+
+To add a starter, list it in `STARTERS` in `templates/index.ts`, add `_shared/<starter>/README.md`, and add its scene to every format: `engine/<starter>/src/main.ts`, `react/<starter>/src/App.tsx`, and `web-components/<starter>/index.html` with `src/main.ts`. Import `./starter.css` for the shared page and panel styles, and override a base file only when the starter needs something different. `npm test` checks that the starter exists in every format, and CI scaffolds and builds it in each one.
 
 ## License
 

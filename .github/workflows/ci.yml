@@ -124,6 +124,9 @@ jobs:
     test:
         name: Test
         runs-on: ubuntu-latest
+        outputs:
+            formats: ${{ steps.catalog.outputs.formats }}
+            starters: ${{ steps.catalog.outputs.starters }}
         steps:
             - name: Check out code
               uses: actions/checkout@v7
@@ -141,27 +144,26 @@ jobs:
             - name: Run tests
               run: npm test
 
+            # the tests check that every starter exists in every format, so the matrix below can take
+            # its formats and starters straight from the catalog
+            - name: List formats and starters
+              id: catalog
+              run: |
+                  node --input-type=module -e "
+                      import { FORMATS, STARTERS } from './templates/index.ts';
+                      console.log('formats=' + JSON.stringify(FORMATS.map((f) => f.name)));
+                      console.log('starters=' + JSON.stringify(STARTERS.map((s) => s.name)));
+                  " >> "$GITHUB_OUTPUT"
+
     templates:
         name: Starter (${{ matrix.format }} / ${{ matrix.starter }})
+        needs: test
         runs-on: ubuntu-latest
         strategy:
             fail-fast: false
             matrix:
-                format: [engine, react, web-components]
-                starter:
-                    - spinning-cube
-                    - interactive-sphere
-                    - model-viewer
-                    - splat-viewer
-                    - product-configurator
-                    - physics-playground
-                    - first-person-controller
-                    - third-person-controller
-                    - sprite-game
-                    - web-lens
-                    - scene-editor
-                    - vr-starter
-                    - ar-placement
+                format: ${{ fromJSON(needs.test.outputs.formats) }}
+                starter: ${{ fromJSON(needs.test.outputs.starters) }}
         steps:
             - name: Check out code
               uses: actions/checkout@v7
