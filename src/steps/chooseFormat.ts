@@ -13,8 +13,9 @@ export const chooseFormat = async ({
 }) => {
     if (argFormat && FORMATS.some((f) => f.name === argFormat)) return argFormat;
 
-    // falling back to the picker would hang a scripted run, so fail loudly instead
-    if (argFormat && (!process.stdout.isTTY || yes)) {
+    // a run that can't show the picker (--yes, or no terminal) fails loudly on a bad name rather
+    // than silently falling back
+    if (argFormat && yes) {
         throw new Error(`Unknown format: ${argFormat}. Choose from: ${FORMATS.map((f) => f.name).join(', ')}`);
     }
 

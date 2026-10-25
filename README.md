@@ -69,7 +69,7 @@ npm create playcanvas@latest my-game -- -f react -y
 | `--yes`            | `-y`      | Skip the prompts and take the defaults                  |
 | `--help`           | `-h`      | Show command help                                       |
 
-`--yes` takes `playcanvas-project`, the `engine` format and the `spinning-cube` starter for anything you don't pass. It never deletes files, so a non-empty target directory still needs `--overwrite`. The previous `--template` and `--boilerplate` long flags remain accepted for compatibility.
+`--yes` takes `playcanvas-project`, the `engine` format and the `spinning-cube` starter for anything you don't pass. It never deletes files, so a non-empty target directory still needs `--overwrite`. A run without a terminal, such as one started by an AI agent or in CI, takes the same defaults, so it never waits on a prompt. The previous `--template` and `--boilerplate` long flags remain accepted for compatibility.
 
 ## Agent skills
 
