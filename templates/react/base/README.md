@@ -9,8 +9,6 @@ Node.js 22.23.2 or later.
 ## Getting started
 
 ```bash
-npm create playcanvas@latest playcanvas-project -- --format react
-cd playcanvas-project
 npm install
 npm run dev
 ```
@@ -23,14 +21,16 @@ Open <http://localhost:5173>. Edit the files under `src/` and save to see the sc
 
 ## Scripts
 
-| Command             | Description                       |
-| ------------------- | --------------------------------- |
-| `npm run dev`       | Start the Vite development server |
-| `npm run build`     | Build for production              |
-| `npm run start`     | Preview the production build      |
-| `npm run lint`      | Run ESLint                        |
-| `npm run fmt`       | Check formatting                  |
-| `npm run typecheck` | Run TypeScript checks             |
+Run these with `npm run <script>`:
+
+| Script      | Description                       |
+| ----------- | --------------------------------- |
+| `dev`       | Start the Vite development server |
+| `build`     | Build for production              |
+| `start`     | Preview the production build      |
+| `lint`      | Run ESLint                        |
+| `fmt`       | Check formatting                  |
+| `typecheck` | Run TypeScript checks             |
 
 Run `npm run build` to generate a deployable static site in `dist/`. Its paths are relative, so it runs from any folder, such as a GitHub Pages project site or an itch.io upload.
 

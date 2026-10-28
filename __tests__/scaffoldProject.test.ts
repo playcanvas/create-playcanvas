@@ -3,6 +3,7 @@ import os from 'node:os';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 
+import * as prompts from '@clack/prompts';
 import { afterEach, beforeEach, describe, expect, test, vi } from 'vitest';
 
 import { scaffoldProject } from '../src/steps/scaffoldProject.js';
@@ -31,6 +32,7 @@ beforeEach(() => {
 
 afterEach(() => {
     fs.rmSync(tmp, { recursive: true, force: true });
+    vi.unstubAllEnvs();
 });
 
 const write = (files: Record<string, string>) => {
@@ -115,6 +117,41 @@ test('the shared README is inserted into the base README above its Prerequisites
     );
 });
 
+describe('package manager', () => {
+    const readme = (install: string, run: string, host: string) =>
+        [
+            '# Demo',
+            '',
+            '```bash',
+            install,
+            `${run} dev`,
+            '```',
+            '',
+            `Run these with \`${run} <script>\`, or open it on a phone with \`${host}\`.`,
+            ''
+        ].join('\n');
+
+    test.each([
+        ['npm', 'npm/12.0.1 node/v24.18.0', 'npm install', 'npm run', 'npm run dev -- --host'],
+        ['pnpm', 'pnpm/10.20.0 npm/? node/v24.18.0', 'pnpm install', 'pnpm run', 'pnpm run dev --host'],
+        ['yarn', 'yarn/1.22.22 npm/? node/v24.18.0', 'yarn', 'yarn', 'yarn dev --host'],
+        ['bun', 'bun/1.3.1 npm/? node/v24.18.0', 'bun install', 'bun run', 'bun run dev --host'],
+        // one whose commands differ from npm's in more than the name gets npm's
+        ['deno', 'deno/2.5.6 npm/? deno/2.5.6', 'npm install', 'npm run', 'npm run dev -- --host'],
+        ['none', undefined, 'npm install', 'npm run', 'npm run dev -- --host']
+    ])('the README and closing message give commands for %s', (_, agent, install, run, host) => {
+        vi.stubEnv('npm_config_user_agent', agent);
+        write({ 'engine/base/README.md': readme('npm install', 'npm run', 'npm run dev -- --host') });
+
+        const root = scaffold();
+
+        expect(read(root, 'README.md')).toBe(readme(install, run, host));
+        expect(prompts.outro).toHaveBeenLastCalledWith(
+            `Project created. Now run:\n\n  cd app\n  ${install}\n  ${run} dev`
+        );
+    });
+});
+
 test('renames files once every layer is copied', () => {
     write({ '_common/_gitignore': 'node_modules\n', '_common/_npmrc': 'registry=https://registry.npmjs.org/\n' });
 
@@ -125,6 +162,8 @@ test('renames files once every layer is copied', () => {
 });
 
 describe('skills', () => {
+    const README = '# Demo\n\n## Inspector\n\nPress `.\n\n## Agent skills\n\nSkills.\n\n## Further reading\n\nLinks.\n';
+
     test('copies every skill for Claude Code, and for Codex and Cursor', () => {
         const root = scaffold({ skills: true });
 
@@ -141,10 +180,21 @@ describe('skills', () => {
         }
     });
 
-    test('are left out with --no-skills', () => {
+    test('keep their README section', () => {
+        write({ 'engine/base/README.md': README });
+
+        const root = scaffold({ skills: true });
+
+        expect(read(root, 'README.md')).toBe(README);
+    });
+
+    test('are left out with --no-skills, along with their README section', () => {
+        write({ 'engine/base/README.md': README });
+
         const root = scaffold({ skills: false });
 
         expect(fs.existsSync(path.join(root, '.claude'))).toBe(false);
         expect(fs.existsSync(path.join(root, '.agents'))).toBe(false);
+        expect(read(root, 'README.md')).toBe('# Demo\n\n## Inspector\n\nPress `.\n\n## Further reading\n\nLinks.\n');
     });
 });
