@@ -62,6 +62,10 @@ JetBrains IDEs pick it up automatically. For VS Code, add to `.vscode/settings.j
 }
 ```
 
+## Coding agents
+
+`AGENTS.md` gives coding agents such as Claude Code, Codex and Cursor this project's commands, layout, conventions and checks. `CLAUDE.md` imports it for Claude Code.
+
 ## Agent skills
 
 This project includes [`@playcanvas/skills`](https://github.com/playcanvas/skills) under `.claude/skills/` and `.agents/skills/`, so Claude Code, Codex and Cursor pick up PlayCanvas-specific workflows automatically.

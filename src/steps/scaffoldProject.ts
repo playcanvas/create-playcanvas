@@ -7,10 +7,14 @@ import * as prompts from '@clack/prompts';
 import { FEATURES, STARTERS } from '../../templates/index.js';
 
 const PACKAGE_MAPS = ['scripts', 'dependencies', 'devDependencies', 'peerDependencies', 'engines'] as const;
-const README_SECTION = '## Prerequisites';
+// the docs a starter's own copy is spliced into, above the given heading, rather than replacing
+const DOCS: Record<string, string> = {
+    'README.md': '## Prerequisites',
+    'AGENTS.md': '## Checking your work'
+};
 const SKILLS_SECTION = '## Agent skills';
 
-// the package managers whose commands the README and the closing message give; any other, such as
+// the package managers whose commands the docs and the closing message give; any other, such as
 // Deno, gets npm's
 const PKG_MANAGERS = ['npm', 'pnpm', 'yarn', 'bun'];
 
@@ -81,37 +85,42 @@ export const scaffoldProject = (opts: Options) => {
         starterDir
     ].filter((dir) => fs.existsSync(dir));
 
-    // package.json files are merged in the same order instead, and the shared README.md is spliced
-    // into the base README rather than replacing it
-    const sharedReadme = path.join(sharedDir, 'README.md');
+    // package.json files are merged in the same order instead, and the shared README.md and AGENTS.md
+    // are spliced into the base ones rather than replacing them
+    const sharedDocs = Object.keys(DOCS).map((doc) => path.join(sharedDir, doc));
     for (const dir of layers) {
         const manifest = path.join(dir, 'package.json');
-        fs.cpSync(dir, root, { recursive: true, filter: (src) => src !== manifest && src !== sharedReadme });
+        fs.cpSync(dir, root, { recursive: true, filter: (src) => src !== manifest && !sharedDocs.includes(src) });
     }
 
-    const readmePath = path.join(root, 'README.md');
-    if (fs.existsSync(readmePath)) {
-        let readme = fs.readFileSync(readmePath, 'utf8');
-        if (fs.existsSync(sharedReadme)) {
-            const section = `${fs.readFileSync(sharedReadme, 'utf8').trimEnd()}\n\n${README_SECTION}`;
-            // a function, so a `$` in the README is not read as a replacement pattern
-            readme = readme.replace(README_SECTION, () => section);
+    for (const [doc, heading] of Object.entries(DOCS)) {
+        const docPath = path.join(root, doc);
+        if (!fs.existsSync(docPath)) continue;
+
+        let text = fs.readFileSync(docPath, 'utf8');
+        const sharedDoc = path.join(sharedDir, doc);
+        if (fs.existsSync(sharedDoc)) {
+            const section = `${fs.readFileSync(sharedDoc, 'utf8').trimEnd()}\n\n${heading}`;
+            // a function, so a `$` in the doc is not read as a replacement pattern
+            text = text.replace(heading, () => section);
         }
         if (!skills) {
-            readme = readme
+            // the section may be the last, so end on a single newline once it's gone
+            text = `${text
                 .split(/^(?=## )/m)
                 .filter((section) => !section.startsWith(SKILLS_SECTION))
-                .join('');
+                .join('')
+                .trimEnd()}\n`;
         }
-        // the READMEs give npm commands, so name the package manager that ran the creator instead. Only
+        // the docs give npm commands, so name the package manager that ran the creator instead. Only
         // npm needs `--` before the script's own arguments; pnpm would pass it on to the script
         if (pkgManager !== 'npm') {
-            readme = readme
+            text = text
                 .replace(/\bnpm run ([^\s`]+) -- /g, `${run} $1 `)
                 .replace(/\bnpm run\b/g, run)
                 .replace(/\bnpm install\b/g, install);
         }
-        fs.writeFileSync(readmePath, readme);
+        fs.writeFileSync(docPath, text);
     }
 
     for (const [from, to] of Object.entries(renameFiles)) {
