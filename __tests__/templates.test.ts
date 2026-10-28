@@ -67,5 +67,6 @@ test.each([
 });
 
 test('every project gets a CLAUDE.md that imports its AGENTS.md', () => {
-    expect(fs.readFileSync(path.join(TEMPLATES_DIR, '_common', 'CLAUDE.md'), 'utf8')).toBe('@AGENTS.md\n');
+    // the import alone, whichever line endings the checkout has
+    expect(fs.readFileSync(path.join(TEMPLATES_DIR, '_common', 'CLAUDE.md'), 'utf8')).toMatch(/^@AGENTS\.md\r?\n$/);
 });
