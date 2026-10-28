@@ -98,6 +98,8 @@ A project is assembled from the layers under `templates/`, in this order. A file
 
 To add a starter, list it in `STARTERS` in `templates/index.ts`, add `_shared/<starter>/README.md`, and add its scene to every format: `engine/<starter>/src/main.ts`, `react/<starter>/src/App.tsx`, and `web-components/<starter>/index.html` with `src/main.ts`. Import `./starter.css` for the shared page and panel styles, and override a base file only when the starter needs something different. `npm test` checks that the starter exists in every format, and CI scaffolds and builds it in each one.
 
+Write README commands for npm, as `npm install`, `npm run <script>` and `npm run <script> -- <args>`. The scaffolder rewrites them for the package manager that created the project, and leaves out the `## Agent skills` section when run with `--no-skills`.
+
 ## License
 
 [MIT](LICENSE)

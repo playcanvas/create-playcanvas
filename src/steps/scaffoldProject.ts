@@ -8,6 +8,17 @@ import { FEATURES, STARTERS } from '../../templates/index.js';
 
 const PACKAGE_MAPS = ['scripts', 'dependencies', 'devDependencies', 'peerDependencies', 'engines'] as const;
 const README_SECTION = '## Prerequisites';
+const SKILLS_SECTION = '## Agent skills';
+
+// the package managers whose commands the README and the closing message give; any other, such as
+// Deno, gets npm's
+const PKG_MANAGERS = ['npm', 'pnpm', 'yarn', 'bun'];
+
+// how each installs a project's dependencies and runs one of its scripts
+const pkgCommands = (pkgManager: string) =>
+    pkgManager === 'yarn'
+        ? { install: 'yarn', run: 'yarn' }
+        : { install: `${pkgManager} install`, run: `${pkgManager} run` };
 
 type Options = {
     cwd: string;
@@ -27,7 +38,9 @@ export const scaffoldProject = (opts: Options) => {
     const root = path.resolve(cwd, targetDir);
     fs.mkdirSync(root, { recursive: true });
 
-    const pkgManager = process.env.npm_config_user_agent?.split('/')[0] ?? 'npm';
+    const agent = process.env.npm_config_user_agent?.split('/')[0] ?? 'npm';
+    const pkgManager = PKG_MANAGERS.includes(agent) ? agent : 'npm';
+    const { install, run } = pkgCommands(pkgManager);
 
     prompts.log.step(`Creating project in ${root}...`);
 
@@ -76,12 +89,29 @@ export const scaffoldProject = (opts: Options) => {
         fs.cpSync(dir, root, { recursive: true, filter: (src) => src !== manifest && src !== sharedReadme });
     }
 
-    if (fs.existsSync(sharedReadme)) {
-        const readme = path.join(root, 'README.md');
-        const section = `${fs.readFileSync(sharedReadme, 'utf8').trimEnd()}\n\n${README_SECTION}`;
-        // a function, so a `$` in the README is not read as a replacement pattern
-        const spliced = fs.readFileSync(readme, 'utf8').replace(README_SECTION, () => section);
-        fs.writeFileSync(readme, spliced);
+    const readmePath = path.join(root, 'README.md');
+    if (fs.existsSync(readmePath)) {
+        let readme = fs.readFileSync(readmePath, 'utf8');
+        if (fs.existsSync(sharedReadme)) {
+            const section = `${fs.readFileSync(sharedReadme, 'utf8').trimEnd()}\n\n${README_SECTION}`;
+            // a function, so a `$` in the README is not read as a replacement pattern
+            readme = readme.replace(README_SECTION, () => section);
+        }
+        if (!skills) {
+            readme = readme
+                .split(/^(?=## )/m)
+                .filter((section) => !section.startsWith(SKILLS_SECTION))
+                .join('');
+        }
+        // the READMEs give npm commands, so name the package manager that ran the creator instead. Only
+        // npm needs `--` before the script's own arguments; pnpm would pass it on to the script
+        if (pkgManager !== 'npm') {
+            readme = readme
+                .replace(/\bnpm run ([^\s`]+) -- /g, `${run} $1 `)
+                .replace(/\bnpm run\b/g, run)
+                .replace(/\bnpm install\b/g, install);
+        }
+        fs.writeFileSync(readmePath, readme);
     }
 
     for (const [from, to] of Object.entries(renameFiles)) {
@@ -139,15 +169,7 @@ export const scaffoldProject = (opts: Options) => {
     if (root !== cwd) {
         doneMessage += `\n  cd ${cdProjectName.includes(' ') ? `"${cdProjectName}"` : cdProjectName}`;
     }
-    switch (pkgManager) {
-        case 'yarn':
-            doneMessage += '\n  yarn';
-            doneMessage += '\n  yarn dev';
-            break;
-        default:
-            doneMessage += `\n  ${pkgManager} install`;
-            doneMessage += `\n  ${pkgManager} run dev`;
-            break;
-    }
+    doneMessage += `\n  ${install}`;
+    doneMessage += `\n  ${run} dev`;
     prompts.outro(doneMessage);
 };
