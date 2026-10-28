@@ -187,11 +187,13 @@ jobs:
                     --format "${{ matrix.format }}" \
                     --starter "${{ matrix.starter }}"
 
-            - name: Assert skills present
+            - name: Assert skills and agent instructions present
               working-directory: ${{ runner.temp }}/${{ matrix.format }}-${{ matrix.starter }}
               run: |
                   test -d .claude/skills/build-app
                   test -d .agents/skills/build-app
+                  grep -q '^## Checking your work' AGENTS.md
+                  grep -qx '@AGENTS.md' CLAUDE.md
 
             - name: Check legacy flags and --no-skills
               if: matrix.format == 'engine' && matrix.starter == 'spinning-cube'

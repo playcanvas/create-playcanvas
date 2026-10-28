@@ -52,10 +52,21 @@ test('every starter directory belongs to a starter in the catalog', () => {
     expect(strays).toEqual([]);
 });
 
-test('every base README has the heading the shared READMEs are inserted above', () => {
+test.each([
+    ['README.md', '## Prerequisites'],
+    ['AGENTS.md', '## Checking your work']
+])('every base %s has the heading the shared ones are inserted above, and a skills section', (doc, heading) => {
     for (const f of FORMATS) {
-        expect(fs.readFileSync(path.join(TEMPLATES_DIR, f.name, 'base', 'README.md'), 'utf8')).toContain(
-            '## Prerequisites'
-        );
+        // a whole line, whichever line endings the checkout has
+        const line = (text: string) => new RegExp(`^${text}\\r?$`, 'm');
+        const text = fs.readFileSync(path.join(TEMPLATES_DIR, f.name, 'base', doc), 'utf8');
+        expect(text).toMatch(line(heading));
+        // --no-skills removes this section
+        expect(text).toMatch(line('## Agent skills'));
     }
+});
+
+test('every project gets a CLAUDE.md that imports its AGENTS.md', () => {
+    // the import alone, whichever line endings the checkout has
+    expect(fs.readFileSync(path.join(TEMPLATES_DIR, '_common', 'CLAUDE.md'), 'utf8')).toMatch(/^@AGENTS\.md\r?\n$/);
 });

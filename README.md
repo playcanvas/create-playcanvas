@@ -71,9 +71,11 @@ npm create playcanvas@latest my-game -- -f react -y
 
 `--yes` takes `playcanvas-project`, the `engine` format and the `spinning-cube` starter for anything you don't pass. It never deletes files, so a non-empty target directory still needs `--overwrite`. A run without a terminal, such as one started by an AI agent or in CI, takes the same defaults, so it never waits on a prompt. The previous `--template` and `--boilerplate` long flags remain accepted for compatibility.
 
-## Agent skills
+## Coding agents
 
-Every project includes [`@playcanvas/skills`](https://github.com/playcanvas/skills) so AI coding agents such as Claude Code, Codex and Cursor pick up PlayCanvas-specific workflows automatically, with no install step. They are copied into `.claude/skills/` and `.agents/skills/`. Pass `--no-skills` to leave them out.
+Every project includes an `AGENTS.md` that gives AI coding agents such as Claude Code, Codex and Cursor its commands, layout and conventions, and how to check a change. Its `CLAUDE.md` imports it, since Claude Code skips `AGENTS.md` when a `CLAUDE.md` exists in the project or a folder above it.
+
+Every project also includes [`@playcanvas/skills`](https://github.com/playcanvas/skills), so those agents pick up PlayCanvas-specific workflows automatically, with no install step. They are copied into `.claude/skills/` and `.agents/skills/`. Pass `--no-skills` to leave them out.
 
 ## Development
 
@@ -91,14 +93,14 @@ Contributions are welcome. Please open an issue before proposing a new format, s
 A project is assembled from the layers under `templates/`, in this order. A file in a later layer replaces the same file in an earlier one, and each layer's `package.json` is merged into those before it.
 
 1. `_common/`: files every project gets
-2. `<format>/base/`: the format's tooling and README, a default `index.html` for Engine and React, and React's `src/main.tsx`
-3. `_shared/<starter>/`: the starter's format-independent code and assets. Its `README.md` is inserted into the base README above `## Prerequisites`
+2. `<format>/base/`: the format's tooling, README and `AGENTS.md`, a default `index.html` for Engine and React, and React's `src/main.tsx`
+3. `_shared/<starter>/`: the starter's format-independent code and assets. Its `README.md` is inserted into the base README above `## Prerequisites`, and an optional `AGENTS.md`, for what an agent must know about the starter, into the base `AGENTS.md` above `## Checking your work`
 4. `_features/<feature>/<layer>/`: what each of the starter's `features` needs in that format, as mapped by `FEATURES` in `templates/index.ts`
 5. `<format>/<starter>/`: the starter's scene in that format
 
 To add a starter, list it in `STARTERS` in `templates/index.ts`, add `_shared/<starter>/README.md`, and add its scene to every format: `engine/<starter>/src/main.ts`, `react/<starter>/src/App.tsx`, and `web-components/<starter>/index.html` with `src/main.ts`. Import `./starter.css` for the shared page and panel styles, and override a base file only when the starter needs something different. `npm test` checks that the starter exists in every format, and CI scaffolds and builds it in each one.
 
-Write README commands for npm, as `npm install`, `npm run <script>` and `npm run <script> -- <args>`. The scaffolder rewrites them for the package manager that created the project, and leaves out the `## Agent skills` section when run with `--no-skills`.
+Write commands in a README or `AGENTS.md` for npm, as `npm install`, `npm run <script>` and `npm run <script> -- <args>`. The scaffolder rewrites them for the package manager that created the project, and leaves out the `## Agent skills` section of both when run with `--no-skills`.
 
 ## License
 

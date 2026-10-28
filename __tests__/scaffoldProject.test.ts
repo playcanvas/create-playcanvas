@@ -103,17 +103,20 @@ test('package.json files merge in layer order, with their dependency maps sorted
     expect(read(root, 'package.json')).toBe(`${JSON.stringify(expected, null, 4)}\n`);
 });
 
-test('the shared README is inserted into the base README above its Prerequisites', () => {
+test.each([
+    ['README.md', '## Prerequisites'],
+    ['AGENTS.md', '## Checking your work']
+])('the shared %s is inserted into the base one above its %s', (doc, heading) => {
     write({
-        'engine/base/README.md': '# PlayCanvas Engine\n\nA project.\n\n## Prerequisites\n\nNode.js.\n',
+        [`engine/base/${doc}`]: `# PlayCanvas Engine\n\nA project.\n\n${heading}\n\nNode.js.\n`,
         // a `$` is kept as written, rather than read as a replacement pattern
-        '_shared/demo/README.md': '## Demo\n\nRun `echo $$` and `$&`.\n\n'
+        [`_shared/demo/${doc}`]: '## Demo\n\nRun `echo $$` and `$&`.\n\n'
     });
 
     const root = scaffold();
 
-    expect(read(root, 'README.md')).toBe(
-        '# PlayCanvas Engine\n\nA project.\n\n## Demo\n\nRun `echo $$` and `$&`.\n\n## Prerequisites\n\nNode.js.\n'
+    expect(read(root, doc)).toBe(
+        `# PlayCanvas Engine\n\nA project.\n\n## Demo\n\nRun \`echo $$\` and \`$&\`.\n\n${heading}\n\nNode.js.\n`
     );
 });
 
@@ -139,13 +142,17 @@ describe('package manager', () => {
         // one whose commands differ from npm's in more than the name gets npm's
         ['deno', 'deno/2.5.6 npm/? deno/2.5.6', 'npm install', 'npm run', 'npm run dev -- --host'],
         ['none', undefined, 'npm install', 'npm run', 'npm run dev -- --host']
-    ])('the README and closing message give commands for %s', (_, agent, install, run, host) => {
+    ])('the docs and closing message give commands for %s', (_, agent, install, run, host) => {
         vi.stubEnv('npm_config_user_agent', agent);
-        write({ 'engine/base/README.md': readme('npm install', 'npm run', 'npm run dev -- --host') });
+        write({
+            'engine/base/README.md': readme('npm install', 'npm run', 'npm run dev -- --host'),
+            'engine/base/AGENTS.md': readme('npm install', 'npm run', 'npm run dev -- --host')
+        });
 
         const root = scaffold();
 
         expect(read(root, 'README.md')).toBe(readme(install, run, host));
+        expect(read(root, 'AGENTS.md')).toBe(readme(install, run, host));
         expect(prompts.outro).toHaveBeenLastCalledWith(
             `Project created. Now run:\n\n  cd app\n  ${install}\n  ${run} dev`
         );
@@ -162,7 +169,9 @@ test('renames files once every layer is copied', () => {
 });
 
 describe('skills', () => {
+    // their section is in the middle of the README, and last in AGENTS.md
     const README = '# Demo\n\n## Inspector\n\nPress `.\n\n## Agent skills\n\nSkills.\n\n## Further reading\n\nLinks.\n';
+    const AGENTS = '# AGENTS.md\n\n## Commands\n\nRun it.\n\n## Agent skills\n\nSkills.\n';
 
     test('copies every skill for Claude Code, and for Codex and Cursor', () => {
         const root = scaffold({ skills: true });
@@ -180,21 +189,23 @@ describe('skills', () => {
         }
     });
 
-    test('keep their README section', () => {
-        write({ 'engine/base/README.md': README });
+    test('keep their section in the README and AGENTS.md', () => {
+        write({ 'engine/base/README.md': README, 'engine/base/AGENTS.md': AGENTS });
 
         const root = scaffold({ skills: true });
 
         expect(read(root, 'README.md')).toBe(README);
+        expect(read(root, 'AGENTS.md')).toBe(AGENTS);
     });
 
-    test('are left out with --no-skills, along with their README section', () => {
-        write({ 'engine/base/README.md': README });
+    test('are left out with --no-skills, along with their section in the README and AGENTS.md', () => {
+        write({ 'engine/base/README.md': README, 'engine/base/AGENTS.md': AGENTS });
 
         const root = scaffold({ skills: false });
 
         expect(fs.existsSync(path.join(root, '.claude'))).toBe(false);
         expect(fs.existsSync(path.join(root, '.agents'))).toBe(false);
         expect(read(root, 'README.md')).toBe('# Demo\n\n## Inspector\n\nPress `.\n\n## Further reading\n\nLinks.\n');
+        expect(read(root, 'AGENTS.md')).toBe('# AGENTS.md\n\n## Commands\n\nRun it.\n');
     });
 });
