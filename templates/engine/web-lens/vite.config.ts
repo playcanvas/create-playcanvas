@@ -19,7 +19,10 @@ export default defineConfig({
         // npm run package zips this folder and writes the zip beside it, inside the ignored dist/
         outDir: 'dist/lens',
         // source maps only add to the 8 MB upload
-        sourcemap: false
+        sourcemap: false,
+        // a PlayCanvas build is 1-2.5 MB minified, nearly all of it engine code the first frame needs,
+        // so warn only for chunks well past that rather than at Vite's 500 kB default
+        chunkSizeWarningLimit: 3000
     },
     preview: {
         // npm run start serves the build under the Lens rules, so a request for anything outside
