@@ -41,7 +41,7 @@ const UNAVAILABLE_APIS = [
     },
     {
         pattern: /\b(?:localStorage|indexedDB)\b/g,
-        reason: "localStorage and IndexedDB reset when the Lens closes, so keep data between launches in the Web Lens API's storage"
+        reason: "localStorage and IndexedDB start empty every time the Lens opens, so keep data between launches with the Web Lens API's storage (snapchat.storage)"
     }
 ];
 
