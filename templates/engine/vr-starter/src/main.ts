@@ -3,6 +3,7 @@ import {
     AppOptions,
     CameraComponentSystem,
     Color,
+    ContainerHandler,
     Entity,
     FILLMODE_FILL_WINDOW,
     LightComponentSystem,
@@ -10,6 +11,7 @@ import {
     RESOLUTION_AUTO,
     ScriptComponentSystem,
     StandardMaterial,
+    TextureHandler,
     XrManager,
     createGraphicsDevice
 } from 'playcanvas';
@@ -27,6 +29,8 @@ const device = await createGraphicsDevice(canvas);
 const options = new AppOptions();
 options.graphicsDevice = device;
 options.componentSystems = [RenderComponentSystem, CameraComponentSystem, LightComponentSystem, ScriptComponentSystem];
+// XrControllers loads each controller's model as a container asset
+options.resourceHandlers = [TextureHandler, ContainerHandler];
 options.xr = XrManager;
 
 const app = new AppBase(canvas);
