@@ -6,12 +6,12 @@
     "type": "module",
     "scripts": {
         "build": "vite build",
-        "dev": "vite",
+        "dev": "vite --open",
         "fmt": "prettier --check .",
         "fmt:fix": "prettier --write .",
         "lint": "eslint .",
         "lint:fix": "eslint . --fix",
-        "start": "vite preview",
+        "start": "vite preview --open",
         "typecheck": "tsc --noEmit"
     },
     "dependencies": {

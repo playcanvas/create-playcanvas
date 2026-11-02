@@ -13,7 +13,7 @@ npm install
 npm run dev
 ```
 
-Open <http://localhost:5173>. Edit the files under `src/` and save to see the scene update.
+The app opens in your browser at <http://localhost:5173>. Edit the files under `src/` and save to see the scene update.
 
 ## Inspector
 
@@ -23,14 +23,14 @@ Open <http://localhost:5173>. Edit the files under `src/` and save to see the sc
 
 Run these with `npm run <script>`:
 
-| Script      | Description                       |
-| ----------- | --------------------------------- |
-| `dev`       | Start the Vite development server |
-| `build`     | Build for production              |
-| `start`     | Preview the production build      |
-| `lint`      | Run ESLint                        |
-| `fmt`       | Check formatting                  |
-| `typecheck` | Run TypeScript checks             |
+| Script      | Description                                        |
+| ----------- | -------------------------------------------------- |
+| `dev`       | Start the Vite development server and open the app |
+| `build`     | Build for production                               |
+| `start`     | Preview the production build and open the app      |
+| `lint`      | Run ESLint                                         |
+| `fmt`       | Check formatting                                   |
+| `typecheck` | Run TypeScript checks                              |
 
 Run `npm run build` to generate a deployable static site in `dist/`. Its paths are relative, so it runs from any folder, such as a GitHub Pages project site or an itch.io upload.
 
