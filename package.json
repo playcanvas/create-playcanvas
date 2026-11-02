@@ -52,7 +52,7 @@
         "prettier": "^3.9.10",
         "unbuild": "^3.6.1",
         "vite": "^8.3.5",
-        "vitest": "^5.0.5"
+        "vitest": "^5.1.0"
     },
     "engines": {
         "node": ">=22.23.2"
