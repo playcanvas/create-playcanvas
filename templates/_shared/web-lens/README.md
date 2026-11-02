@@ -18,8 +18,9 @@ This builds the game into `dist/lens/`, checks it against the [Web Lens upload r
 - the build refers to one of its own files by an absolute path, such as `/assets/game.js`
 - the build loads anything from another host, such as a script from a CDN or a web font
 - the build uses something the Lens sandbox blocks, such as an `<iframe>` or a web app manifest
+- the build's code asks for the camera, microphone or screen (`getUserMedia`, `getDisplayMedia` or `ImageCapture`), which Snapchat disables for Web Lenses
 
-It warns about any other host your scripts mention, since a Lens can't reach the network. To check the build itself, `npm run start` serves it under the same rules, so a request for anything outside the zip fails in the browser console as it would in Snapchat.
+It warns about any other host your scripts mention, since a Lens can't reach the network. It also warns about code that uses something Snapchat [turns off for Web Lenses](https://developers.snap.com/web-lenses/capabilities): motion sensors, geolocation, payments, MIDI, USB and WebRTC, and `localStorage` or IndexedDB, which start empty every time the Lens opens, so keep data between launches with the Web Lens API's [storage](https://developers.snap.com/web-lenses/storage) instead. To check the build itself, `npm run start` serves it under the same rules, so a request for anything outside the zip, or for a device such as the camera, fails in the browser console as it would in Snapchat.
 
 ### How it fits together
 

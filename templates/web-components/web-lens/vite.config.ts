@@ -11,6 +11,21 @@ const LENS_SANDBOX = [
     "form-action 'none'"
 ].join('; ');
 
+// Approximates its permissions policy, which turns off device features such as the camera and
+// motion sensors
+const LENS_PERMISSIONS = [
+    'camera=()',
+    'microphone=()',
+    'display-capture=()',
+    'accelerometer=()',
+    'gyroscope=()',
+    'magnetometer=()',
+    'geolocation=()',
+    'payment=()',
+    'usb=()',
+    'midi=()'
+].join(', ');
+
 // https://vite.dev/config/
 export default defineConfig({
     // Snapchat serves a Lens from its own origin, so every URL in the build must be relative
@@ -25,10 +40,11 @@ export default defineConfig({
         chunkSizeWarningLimit: 3000
     },
     preview: {
-        // npm run start serves the build under the Lens rules, so a request for anything outside
-        // the zip fails in the browser console as it would in Snapchat
+        // npm run start serves the build under the Lens rules, so loading anything from outside the
+        // zip, or using a device such as the camera, fails in the browser as it would in Snapchat
         headers: {
             'Content-Security-Policy': LENS_SANDBOX,
+            'Permissions-Policy': LENS_PERMISSIONS,
             'Cross-Origin-Opener-Policy': 'same-origin',
             'Cross-Origin-Embedder-Policy': 'require-corp'
         }
