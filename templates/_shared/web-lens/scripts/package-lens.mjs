@@ -23,6 +23,28 @@ const TEXT_HOSTS = ['www.w3.org', 'github.com', 'react.dev', 'api.playcanvas.com
 const CAPTURE_APIS =
     /\b(?:mediaDevices|getUserMedia|webkitGetUserMedia|mozGetUserMedia|getDisplayMedia|ImageCapture)\b/g;
 
+// other features Snapchat turns off for Web Lenses: code that relies on them gets nothing, so it's
+// worth a look rather than a failure
+const UNAVAILABLE_APIS = [
+    {
+        pattern:
+            /\b(?:deviceorientation|devicemotion|DeviceOrientationEvent|DeviceMotionEvent|Accelerometer|Gyroscope|Magnetometer|LinearAccelerationSensor|GravitySensor|AbsoluteOrientationSensor|RelativeOrientationSensor)\b/g,
+        reason: 'Motion sensors are off in a Web Lens, so design for pointer input rather than tilt'
+    },
+    {
+        pattern: /\b(?:geolocation|PaymentRequest|requestMIDIAccess|navigator\.usb)\b/g,
+        reason: 'Geolocation, payments, MIDI and USB are off in a Web Lens'
+    },
+    {
+        pattern: /\bRTC(?:PeerConnection|DataChannel)\b/g,
+        reason: "A Web Lens can't make WebRTC connections"
+    },
+    {
+        pattern: /\b(?:localStorage|indexedDB)\b/g,
+        reason: "localStorage and IndexedDB reset when the Lens closes, so keep data between launches in the Web Lens API's storage"
+    }
+];
+
 const buildDir = path.resolve(process.argv[2] ?? 'dist/lens');
 const { name = 'web-lens' } = JSON.parse(fs.readFileSync('package.json', 'utf8'));
 const zipFile = path.join(path.dirname(buildDir), `${name.replace(/^@/, '').replace('/', '-')}.zip`);
@@ -138,17 +160,30 @@ for (const file of files.filter((f) => /\.m?js$/.test(f))) {
     }
 }
 
-// capture code in scripts or inline in markup
+// where `pattern` first matches in `source`, as line:column, and every API name it matched
+const findUses = (source, pattern) => {
+    const uses = Array.from(source.matchAll(pattern));
+    if (!uses.length) return null;
+    const before = source.slice(0, uses[0].index);
+    return {
+        at: `${before.split('\n').length}:${uses[0].index - before.lastIndexOf('\n')}`,
+        apis: [...new Set(uses.map(([api]) => api))].join(', ')
+    };
+};
+
+// features a Lens can't use, in scripts or inline in markup
 for (const file of files.filter((f) => /\.(?:html|m?js)$/.test(f))) {
     const source = read(file);
-    const uses = Array.from(source.matchAll(CAPTURE_APIS));
-    if (!uses.length) continue;
-    const before = source.slice(0, uses[0].index);
-    const line = before.split('\n').length;
-    const column = uses[0].index - before.lastIndexOf('\n');
-    errors.push(
-        `${file}:${line}:${column}: uses ${[...new Set(uses.map(([api]) => api))].join(', ')}. Snapchat disables the camera and microphone for Web Lenses, so remove the capture code`
-    );
+    const capture = findUses(source, CAPTURE_APIS);
+    if (capture) {
+        errors.push(
+            `${file}:${capture.at}: uses ${capture.apis}. Snapchat disables the camera and microphone for Web Lenses, so remove the capture code`
+        );
+    }
+    for (const { pattern, reason } of UNAVAILABLE_APIS) {
+        const use = findUses(source, pattern);
+        if (use) warnings.push(`${file}:${use.at}: uses ${use.apis}. ${reason}`);
+    }
 }
 
 // a plain zip: deflated entries with forward-slash names and index.html at the root

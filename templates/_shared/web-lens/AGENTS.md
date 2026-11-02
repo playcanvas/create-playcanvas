@@ -6,6 +6,8 @@ This project is a Snapchat Web Lens: Snapchat runs it in a sandbox, from an uplo
 - A Lens can't reach the network. Bundle every asset into the build, and load nothing from another host, such as a script from a CDN, a web font or a remote model.
 - The zip must stay under 8 MB and `index.html` under 1 MB.
 - Snapchat disables the camera and microphone for Web Lenses. Keep `getUserMedia`, `getDisplayMedia` and `ImageCapture` out of the build entirely.
+- Motion sensors, geolocation, payments, MIDI, USB and WebRTC are off too, so design for pointer input.
+- `localStorage` and IndexedDB reset when the Lens closes. Keep anything that must last between launches in Snapchat storage, as `loadBest()` and `recordScore()` in `src/lens.ts` do.
 - `npm run start` serves the build under the Lens sandbox's rules, so a request that would fail in Snapchat also fails in the browser console.
 - `src/lens.ts` is the only code that talks to Snapchat. Outside Snapchat, the Web Lens API answers from a stub with canned data, so the game runs in any browser. Call `recordScore(score)` when a run ends.
 - Keep the layout portrait and the HUD inside the safe area, using the `--inset-*` properties from `src/lens.css`.
