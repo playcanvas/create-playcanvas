@@ -10,6 +10,7 @@ A PlayCanvas app in TypeScript and React, built with Vite. The scene is declared
 - `npm run lint` runs ESLint, and `npm run lint:fix` fixes what it can.
 - `npm run fmt` checks formatting, and `npm run fmt:fix` applies Prettier.
 - `npm run build` builds the production site into `dist/`, and `npm run start` serves it.
+- `npm run dev` and `npm run start` open the page in the default browser.
 
 ## Layout
 
