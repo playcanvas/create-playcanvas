@@ -52,6 +52,12 @@ export const STARTERS = [
         description: 'a glTF model, orbit controls and a procedural sky'
     },
     {
+        name: 'vtuber-studio',
+        display: 'VTuber Studio',
+        category: 'Viewers',
+        description: 'an interactive avatar with speech, camera tracking and chat'
+    },
+    {
         name: 'splat-viewer',
         display: 'Splat Viewer',
         category: 'Viewers',
