@@ -19,6 +19,10 @@ const BLOCKED_TAGS = ['base', 'embed', 'iframe', 'object'];
 // error messages link to
 const TEXT_HOSTS = ['www.w3.org', 'github.com', 'react.dev', 'api.playcanvas.com'];
 
+// APIs that open the camera, microphone or screen, which Snapchat disables for Web Lenses
+const CAPTURE_APIS =
+    /\b(?:mediaDevices|getUserMedia|webkitGetUserMedia|mozGetUserMedia|getDisplayMedia|ImageCapture)\b/g;
+
 const buildDir = path.resolve(process.argv[2] ?? 'dist/lens');
 const { name = 'web-lens' } = JSON.parse(fs.readFileSync('package.json', 'utf8'));
 const zipFile = path.join(path.dirname(buildDir), `${name.replace(/^@/, '').replace('/', '-')}.zip`);
@@ -132,6 +136,19 @@ for (const file of files.filter((f) => /\.m?js$/.test(f))) {
             `${file}: mentions ${[...hosts].join(', ')}. A Lens can't reach other hosts, so check none of them is loaded at runtime (npm run start blocks them the way Snapchat does)`
         );
     }
+}
+
+// capture code in scripts or inline in markup
+for (const file of files.filter((f) => /\.(?:html|m?js)$/.test(f))) {
+    const source = read(file);
+    const uses = Array.from(source.matchAll(CAPTURE_APIS));
+    if (!uses.length) continue;
+    const before = source.slice(0, uses[0].index);
+    const line = before.split('\n').length;
+    const column = uses[0].index - before.lastIndexOf('\n');
+    errors.push(
+        `${file}:${line}:${column}: uses ${[...new Set(uses.map(([api]) => api))].join(', ')}. Snapchat disables the camera and microphone for Web Lenses, so remove the capture code`
+    );
 }
 
 // a plain zip: deflated entries with forward-slash names and index.html at the root

@@ -25,10 +25,11 @@ export default defineConfig({
         chunkSizeWarningLimit: 3000
     },
     preview: {
-        // npm run start serves the build under the Lens rules, so a request for anything outside
-        // the zip fails in the browser console as it would in Snapchat
+        // npm run start serves the build under the Lens rules, so loading anything from outside the
+        // zip, or asking for the camera or microphone, fails in the browser as it would in Snapchat
         headers: {
             'Content-Security-Policy': LENS_SANDBOX,
+            'Permissions-Policy': 'camera=(), microphone=(), display-capture=()',
             'Cross-Origin-Opener-Policy': 'same-origin',
             'Cross-Origin-Embedder-Policy': 'require-corp'
         }

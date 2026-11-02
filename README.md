@@ -50,7 +50,7 @@ The `web-lens` starter is a portrait game ready to publish to Snapchat as a [Web
 npm create playcanvas@latest my-lens -- --starter web-lens
 ```
 
-Its `npm run package` script builds the game, checks it against the Web Lens upload rules (size limits, relative paths and no network access) and writes the zip to upload through [My Lenses](https://my-lenses.snapchat.com/).
+Its `npm run package` script builds the game, checks it against the Web Lens upload rules (size limits, relative paths, no network access and no camera or microphone) and writes the zip to upload through [My Lenses](https://my-lenses.snapchat.com/).
 
 ## CLI Options
 
