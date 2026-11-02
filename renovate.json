@@ -1,26 +1,12 @@
 {
+    "$schema": "https://docs.renovatebot.com/renovate-schema.json",
     "extends": ["config:recommended"],
     "rangeStrategy": "bump",
     "packageRules": [
         {
-            "description": "Batch RUNTIME deps in templates",
             "matchManagers": ["npm"],
-            "matchFileNames": ["templates/*/base/package.json"],
-            "matchDepTypes": ["dependencies", "optionalDependencies"],
-            "groupName": "Template runtime deps",
-            "groupSlug": "templates-runtime",
-            "separateMinorPatch": false,
-            "labels": ["templates", "runtime"]
-        },
-        {
-            "description": "Batch DEV deps in templates",
-            "matchManagers": ["npm"],
-            "matchFileNames": ["templates/*/base/package.json"],
-            "matchDepTypes": ["devDependencies"],
-            "groupName": "Template dev deps",
-            "groupSlug": "templates-dev",
-            "separateMinorPatch": false,
-            "labels": ["templates", "dev"]
+            "groupName": "all npm dependencies",
+            "schedule": ["on monday at 10:00am"]
         },
         {
             "matchPackageNames": ["eslint"],
