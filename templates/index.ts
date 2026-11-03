@@ -31,7 +31,9 @@ export const FEATURES: Record<string, Record<string, string[]>> = {
     }
 };
 
-// every format holds a base plus one directory per starter; the first starter is the default
+// every format holds a base plus one directory per starter; the first starter is the default. A
+// starter's `omit` lists files and folders every project gets that it has no use for, and its
+// `outro` follows the commands in the closing message
 export const STARTERS = [
     {
         name: 'spinning-cube',
@@ -94,7 +96,10 @@ export const STARTERS = [
         name: 'web-lens',
         display: 'Snapchat Web Lens',
         category: 'Games',
-        description: 'a portrait game with Snapchat leaderboards, packaged for upload'
+        description: 'a portrait game with Snapchat leaderboards, packaged for upload',
+        // lens.css styles the page, and a Lens has no favicon
+        omit: ['src/starter.css', 'src/assets'],
+        outro: 'To publish it to Snapchat, run:\n\n  npm run package\n\nand upload the zip it writes to dist/ at https://my-lenses.snapchat.com/'
     },
     {
         name: 'scene-editor',

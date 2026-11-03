@@ -12,7 +12,7 @@ Drag left and right to steer the ball around the falling blocks. Tap to start, a
 npm run package
 ```
 
-This builds the game into `dist/lens/`, checks it against the [Web Lens upload rules](https://developers.snap.com/web-lenses/requirements) and writes a zip to `dist/` to upload through [My Lenses](https://my-lenses.snapchat.com/). It writes no zip if:
+This builds the game into `dist/lens/`, checks it against the [Web Lens upload rules](https://developers.snap.com/web-lenses/requirements) and writes a zip to `dist/` to upload through [My Lenses](https://my-lenses.snapchat.com/). The zip is named for the project and its version, such as `my-lens-v0.0.0.zip`, as Snap recommends, so bump `version` in `package.json` before each upload. It writes no zip if:
 
 - the zip is over 8 MB, or `index.html` is over 1 MB
 - the build refers to one of its own files by an absolute path, such as `/assets/game.js`
@@ -20,7 +20,7 @@ This builds the game into `dist/lens/`, checks it against the [Web Lens upload r
 - the build uses something the Lens sandbox blocks, such as an `<iframe>` or a web app manifest
 - the build's code asks for the camera, microphone or screen (`getUserMedia`, `getDisplayMedia` or `ImageCapture`), which Snapchat disables for Web Lenses
 
-It warns about any other host your scripts mention, since a Lens can't reach the network. It also warns about code that uses something Snapchat [turns off for Web Lenses](https://developers.snap.com/web-lenses/capabilities): motion sensors, geolocation, payments, MIDI, USB and WebRTC, and `localStorage` or IndexedDB, which start empty every time the Lens opens, so keep data between launches with the Web Lens API's [storage](https://developers.snap.com/web-lenses/storage) instead. To check the build itself, `npm run start` serves it under the same rules, so a request for anything outside the zip, or for a device such as the camera, fails in the browser console as it would in Snapchat.
+It warns about any other host your scripts mention, since a Lens can't reach the network. It also warns about code that uses something Snapchat [turns off for Web Lenses](https://developers.snap.com/web-lenses/capabilities): motion sensors, geolocation, payments, MIDI, USB and WebRTC, and `localStorage` or IndexedDB, which start empty every time the Lens opens, so keep data between launches with the Web Lens API's [storage](https://developers.snap.com/web-lenses/storage) instead. And it warns about audio or video in any format but `.mp3` or `.mp4`, which Snapchat serves as generic binary data that an `<audio>` or `<video>` element may not play. To check the build itself, `npm run start` serves it under the same rules, so a request for anything outside the zip, or for a device such as the camera, fails in the browser console as it would in Snapchat.
 
 ### How it fits together
 
@@ -35,9 +35,10 @@ The game is the only part that's specific to Dodge, so replace it and keep the r
 
 - **Replace** `src/dodge-game.ts` with your game. The HUD follows its `game:state` app event and shows the text in its `CARDS`, so fire the same event from your game, or rework the HUD in `index.html` and `src/main.ts` (`src/App.tsx` in React). Rename Dodge in the page `<title>` too.
 - **Keep** `src/lens.ts`, `src/lens.css`, `vite.config.ts` and `scripts/package-lens.mjs`. None of them depends on the game.
-- **Report each run to Snapchat** by calling `recordScore(score)` from `src/lens.ts` when it ends. That submits the score to the leaderboard, saves a new best to Snapchat storage and resolves the best score. Call `showLeaderboard()` from a button, and `loadBest()` and `loadAvatar()` at startup for the saved best and the player's Bitmoji.
+- **Report each run to Snapchat** by calling `recordScore(score)` from `src/lens.ts` when it ends. That submits the score to the leaderboard, saves a new best to Snapchat storage and resolves the best score. If a lower score wins, as in a time trial, call `recordScore(score, 'ascending')` every time, so both rank it that way. Call `showLeaderboard()` from a button, and `loadBest()` and `loadAvatar()` at startup for the saved best and the player's Bitmoji.
+- **Expect no leaderboard** until the Lens is set up with one: inside Snapchat, `hasLeaderboard()` is false for a Lens without one, so the Leaderboard button stays hidden. The stub outside Snapchat always has one.
 - **Stick to what a Lens needs:** a portrait layout, a HUD kept inside the safe area with the `--inset-*` properties from `src/lens.css`, a pause when the page is hidden, audio that starts from a tap, and every asset bundled into the build, since a Lens can't reach the network.
 
-Lenses run on phones, in portrait. To try the game on yours, run `npm run dev -- --host` and open the network URL it prints.
+Lenses run on phones, in portrait. To try the game on yours, run `npm run dev -- --host` and open the network URL it prints. To try the build Snapchat would run, under the Lens rules, run `npm run build`, then `npm run start -- --host`. Only `npm run dev` marks the room Snapchat's controls take, so check the layout there.
 
-When you're ready to publish, follow Snap's [publishing guide](https://developers.snap.com/web-lenses/publishing): you'll also need a 512 × 512 PNG icon and a 5-second, 720 × 1280 preview video.
+When you're ready to publish, follow Snap's [publishing guide](https://developers.snap.com/web-lenses/publishing): you'll also need a 512 × 512 PNG icon and a 5-second, 720 × 1280 preview video. Snapchat can't open a Lens until it passes review, so try each change in the browser and on your phone first, and save changes up into fewer uploads.
