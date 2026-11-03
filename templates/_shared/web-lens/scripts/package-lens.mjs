@@ -23,6 +23,10 @@ const TEXT_HOSTS = ['www.w3.org', 'github.com', 'react.dev', 'api.playcanvas.com
 const CAPTURE_APIS =
     /\b(?:mediaDevices|getUserMedia|webkitGetUserMedia|mozGetUserMedia|getDisplayMedia|ImageCapture)\b/g;
 
+// Snapchat picks each file's media type from its extension, and serves audio and video in any
+// format but .mp3 and .mp4 as generic binary data, which <audio> and <video> elements may refuse
+const UNTYPED_MEDIA = /\.(?:aac|flac|m4a|m4v|mov|oga|ogg|ogv|opus|wav|weba|webm)$/i;
+
 // other features Snapchat turns off for Web Lenses: code that relies on them gets nothing, so it's
 // worth a look rather than a failure
 const UNAVAILABLE_APIS = [
@@ -46,8 +50,9 @@ const UNAVAILABLE_APIS = [
 ];
 
 const buildDir = path.resolve(process.argv[2] ?? 'dist/lens');
-const { name = 'web-lens' } = JSON.parse(fs.readFileSync('package.json', 'utf8'));
-const zipFile = path.join(path.dirname(buildDir), `${name.replace(/^@/, '').replace('/', '-')}.zip`);
+// named for the version as well, as Snap recommends, so each upload can be told apart
+const { name = 'web-lens', version = '0.0.0' } = JSON.parse(fs.readFileSync('package.json', 'utf8'));
+const zipFile = path.join(path.dirname(buildDir), `${name.replace(/^@/, '').replace('/', '-')}-v${version}.zip`);
 
 if (!fs.existsSync(buildDir)) {
     console.error(`No build found at ${path.relative('.', buildDir)}. Run npm run package to build and package.`);
@@ -88,6 +93,13 @@ if (!indexSize) {
 
 for (const file of files.filter((f) => f.startsWith('__snap/'))) {
     errors.push(`${file}: __snap/ is reserved for Snapchat, so rename the folder`);
+}
+
+const media = files.filter((f) => UNTYPED_MEDIA.test(f));
+if (media.length) {
+    warnings.push(
+        `${media.join(', ')}: Snapchat serves audio and video as generic binary data unless it's .mp3 or .mp4, so an <audio> or <video> element may not play it. Use .mp3 for audio and .mp4 for video`
+    );
 }
 
 // URLs in markup and styles: anything on another host is blocked, and a root-absolute path
@@ -281,3 +293,4 @@ console.log(`  files       ${files.length}`);
 console.log('\nLargest files, before compression:');
 for (const { file, size } of largest) console.log(`  ${file.padEnd(width)}  ${formatSize(size)}`);
 console.log('\nUpload the zip at https://my-lenses.snapchat.com/');
+console.log('Bump the version in package.json before the next upload, so its zip gets a new name.');

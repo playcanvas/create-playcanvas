@@ -52,6 +52,17 @@ test('every starter directory belongs to a starter in the catalog', () => {
     expect(strays).toEqual([]);
 });
 
+test('every file a starter omits is one every project gets', () => {
+    const layers = ['_common', ...FORMATS.map((f) => `${f.name}/base`)];
+    const stale = STARTERS.flatMap((s) =>
+        (s.omit ?? [])
+            .filter((file) => !layers.some((layer) => exists(`${layer}/${file}`)))
+            .map((file) => `${s.name}: ${file}`)
+    );
+
+    expect(stale).toEqual([]);
+});
+
 test.each([
     ['README.md', '## Prerequisites'],
     ['AGENTS.md', '## Checking your work']

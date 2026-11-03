@@ -46,6 +46,17 @@ export const scaffoldProject = (opts: Options) => {
     const pkgManager = PKG_MANAGERS.includes(agent) ? agent : 'npm';
     const { install, run } = pkgCommands(pkgManager);
 
+    // the docs and a starter's outro give npm commands, so name the package manager that ran the
+    // creator instead. Only npm needs `--` before the script's own arguments; pnpm would pass it on
+    // to the script
+    const forPkgManager = (text: string) =>
+        pkgManager === 'npm'
+            ? text
+            : text
+                  .replace(/\bnpm run ([^\s`]+) -- /g, `${run} $1 `)
+                  .replace(/\bnpm run\b/g, run)
+                  .replace(/\bnpm install\b/g, install);
+
     prompts.log.step(`Creating project in ${root}...`);
 
     // Locate template dir - works in both dev (src/steps/) and prod (dist/)
@@ -66,6 +77,8 @@ export const scaffoldProject = (opts: Options) => {
         throw new Error(`Starter not found: ${starter}`);
     }
 
+    const commonDir = path.join(templatesDir, '_common');
+    const baseDir = path.join(templatesDir, format, 'base');
     const sharedDir = path.join(templatesDir, '_shared', starter);
     const starterDir = path.join(templatesDir, format, starter);
     if (!fs.existsSync(starterDir)) {
@@ -76,8 +89,8 @@ export const scaffoldProject = (opts: Options) => {
     // one: files every project gets, the format's tooling, the starter's format-independent files,
     // the features it uses, then the starter's own files for this format
     const layers = [
-        path.join(templatesDir, '_common'),
-        path.join(templatesDir, format, 'base'),
+        commonDir,
+        baseDir,
         sharedDir,
         ...(selected.features ?? []).flatMap((feature) =>
             FEATURES[feature][format].map((layer) => path.join(templatesDir, '_features', feature, layer))
@@ -85,12 +98,20 @@ export const scaffoldProject = (opts: Options) => {
         starterDir
     ].filter((dir) => fs.existsSync(dir));
 
+    // what every project gets that this starter has no use for. A folder goes whole, since copying
+    // creates each folder before the files in it
+    const omit = selected.omit ?? [];
+    const omitted = omit.flatMap((file) => [commonDir, baseDir].map((dir) => path.join(dir, file)));
+
     // package.json files are merged in the same order instead, and the shared README.md and AGENTS.md
     // are spliced into the base ones rather than replacing them
     const sharedDocs = Object.keys(DOCS).map((doc) => path.join(sharedDir, doc));
     for (const dir of layers) {
         const manifest = path.join(dir, 'package.json');
-        fs.cpSync(dir, root, { recursive: true, filter: (src) => src !== manifest && !sharedDocs.includes(src) });
+        fs.cpSync(dir, root, {
+            recursive: true,
+            filter: (src) => src !== manifest && !sharedDocs.includes(src) && !omitted.includes(src)
+        });
     }
 
     for (const [doc, heading] of Object.entries(DOCS)) {
@@ -112,15 +133,12 @@ export const scaffoldProject = (opts: Options) => {
                 .join('')
                 .trimEnd()}\n`;
         }
-        // the docs give npm commands, so name the package manager that ran the creator instead. Only
-        // npm needs `--` before the script's own arguments; pnpm would pass it on to the script
-        if (pkgManager !== 'npm') {
-            text = text
-                .replace(/\bnpm run ([^\s`]+) -- /g, `${run} $1 `)
-                .replace(/\bnpm run\b/g, run)
-                .replace(/\bnpm install\b/g, install);
-        }
-        fs.writeFileSync(docPath, text);
+        // a bullet that describes a file the starter leaves out goes with it
+        text = text
+            .split('\n')
+            .filter((line) => !omit.some((file) => line.startsWith(`- \`${file}\``)))
+            .join('\n');
+        fs.writeFileSync(docPath, forPkgManager(text));
     }
 
     for (const [from, to] of Object.entries(renameFiles)) {
@@ -180,5 +198,8 @@ export const scaffoldProject = (opts: Options) => {
     }
     doneMessage += `\n  ${install}`;
     doneMessage += `\n  ${run} dev`;
+    if (selected.outro) {
+        doneMessage += `\n\n${forPkgManager(selected.outro)}`;
+    }
     prompts.outro(doneMessage);
 };

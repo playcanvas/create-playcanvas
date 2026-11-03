@@ -35,9 +35,9 @@ function Scene({ onState }: { onState: GameEvents['game:state'] }) {
 }
 
 function App() {
-    const [state, setState] = useState<GameState>('ready');
+    const [state, setState] = useState<GameState>('loading');
     const [score, setScore] = useState(0);
-    const [best, setBest] = useState(0);
+    const [best, setBest] = useState<number>();
     const [avatar, setAvatar] = useState<string>();
 
     useEffect(() => {
@@ -64,7 +64,8 @@ function App() {
                 <header className="lens-bar">
                     {avatar && <img className="lens-avatar" src={avatar} alt="Your Bitmoji" />}
                     <span className="lens-score">{score}</span>
-                    <span className="lens-best">Best {best}</span>
+                    {/* there's no best until the player finishes a run */}
+                    {best !== undefined && <span className="lens-best">Best {best}</span>}
                 </header>
                 {card && (
                     <section className="lens-card">
