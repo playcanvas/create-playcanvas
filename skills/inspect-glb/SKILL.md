@@ -37,4 +37,5 @@ transforms:
 npx --yes @gltf-transform/cli@4.4.2 copy in.glb scratch.glb
 ```
 
-The Engine cannot load `EXT_meshopt_compression`; see `load-assets` before shipping such files.
+The Engine loads Meshopt files only from 2.24, with a decoder; see `load-assets` before shipping
+them.

@@ -15,8 +15,9 @@ and `EXT_mesh_gpu_instancing`; do not rebuild these by hand. Preload asset sets 
 
 ## Compress for size
 
-- Geometry: Draco (`KHR_draco_mesh_compression`). Meshopt is not supported, so decode such files
-  before shipping.
+- Geometry: Draco (`KHR_draco_mesh_compression`), or from Engine 2.24 Meshopt
+  (`EXT_meshopt_compression`, `KHR_meshopt_compression`). Older Engines cannot load Meshopt, so
+  decode such files before shipping.
 - Textures: KTX2 with Basis (`KHR_texture_basisu`) transcodes to a GPU format, cutting both
   download size and VRAM. ETC1S is smallest and lossy. UASTC is larger and keeps
   detail, which matters most for normal maps. Weigh size against visible detail.
@@ -41,6 +42,10 @@ basisInitialize({
     fallbackUrl: '/wasm/basis/basis.js'
 });
 ```
+
+From 2.24, also copy `meshopt/` and call
+`meshoptInitialize({ url: '/wasm/meshopt/meshopt_decoder.mjs' })` before loading Meshopt files;
+without it they fail unless they carry uncompressed fallback buffers.
 
 In Web Components, a `<pc-wasm name="DracoDecoderModule">` element under `<pc-app>` sets the Draco
 config with `glue`, `wasm`, and `fallback` attributes.

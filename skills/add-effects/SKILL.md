@@ -8,7 +8,8 @@ description: Use when adding visual effects to a PlayCanvas app, to choose betwe
 Pick the Engine building block first, then adapt its closest official example with
 `find-examples`:
 
-- Particle systems: the `particlesystem` component (`graphics/particles-*` examples).
+- Particle systems: the `particlesystem` component (`particles/*` examples; `graphics/particles-*`
+  before 2.24).
 - Custom shading on existing surfaces: `StandardMaterial` chunk overrides
   (`override-shader-chunks`), or a `ShaderMaterial` when the effect needs its own shader pair.
 - Procedural or per-frame geometry: a runtime-updated `Mesh` on a `render` component
