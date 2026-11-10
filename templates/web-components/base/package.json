@@ -15,7 +15,7 @@
         "typecheck": "tsc --noEmit"
     },
     "dependencies": {
-        "@playcanvas/web-components": "^0.29.0",
+        "@playcanvas/web-components": "^0.30.0",
         "playcanvas": "^2.24.0"
     },
     "devDependencies": {
@@ -24,7 +24,7 @@
         "eslint": "^9.39.5",
         "prettier": "^3.9.10",
         "typescript": "~6.0.3",
-        "vite": "^8.3.5"
+        "vite": "^8.3.7"
     },
     "engines": {
         "node": ">=22.23.2"
