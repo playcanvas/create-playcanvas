@@ -15,17 +15,18 @@ it locally. The npm package omits `examples/`, so otherwise fetch from the insta
 
 ```sh
 TAG="v$(node -p "JSON.parse(require('fs').readFileSync('node_modules/playcanvas/package.json')).version")" || exit 1
-gh api "repos/playcanvas/engine/git/trees/$TAG?recursive=1" | grep -o '"examples/src/examples/[^"]*\.example\.mjs"'
-gh api "repos/playcanvas/engine/contents/examples/src/examples/<category>/<name>.example.mjs?ref=$TAG" \
-  --jq .content | base64 --decode
+gh api "repos/playcanvas/engine/git/trees/$TAG?recursive=1" | grep -o '"examples/src/examples/[^"]*example\.mjs"'
+gh api "repos/playcanvas/engine/contents/<listed path>?ref=$TAG" --jq .content | base64 --decode
 ```
 
 Read the resolved package, not the dependency list; `playcanvas` is often transitive. An empty list
-means an invalid tag: stop rather than guess. Use `main` only when the version has no tag.
+means an invalid tag: stop rather than guess. Use `main` only when the version has no tag. From
+2.24, each Engine example is a folder with the shaders and other files it imports; earlier tags use
+`<name>.example.mjs` with sibling `<name>.*` files.
 
 | Surface | Repository | Ref | Example paths |
 | --- | --- | --- | --- |
-| direct Engine | `playcanvas/engine` | `v<version>` | `examples/src/examples/<category>/<name>.example.mjs` |
+| direct Engine | `playcanvas/engine` | `v<version>` | `examples/src/examples/<category>/<name>/example.mjs` |
 | Web Components | `playcanvas/web-components` | `v<version>` | `examples/<name>.html` |
 | React | `playcanvas/developer-site` | `main` | `docs/user-manual/react/examples/<name>.mdx` |
 
