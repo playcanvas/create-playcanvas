@@ -16,8 +16,9 @@ const hud = {
     hint: document.querySelector('.lens-hint')!,
     leaderboard: document.querySelector<HTMLButtonElement>('.lens-leaderboard')!
 };
-const showBest = (best: number) => {
-    hud.best.textContent = `Best ${best}`;
+// there's no best until the player finishes a run
+const showBest = (best: number | undefined) => {
+    hud.best.textContent = best === undefined ? '' : `Best ${best}`;
 };
 
 const { app } = await whenReady('pc-app');

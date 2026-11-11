@@ -234,4 +234,4 @@ jobs:
               working-directory: ${{ runner.temp }}/${{ matrix.format }}-${{ matrix.starter }}
               run: |
                   npm run package
-                  unzip -l "dist/${{ matrix.format }}-web-lens.zip" | grep -q ' index.html$'
+                  unzip -l "dist/${{ matrix.format }}-web-lens-v0.0.0.zip" | grep -q ' index.html$'

@@ -13,7 +13,14 @@ vi.mock('@clack/prompts', () => ({ log: { step: vi.fn() }, outro: vi.fn() }));
 // one starter using one feature, to match the fixture templates each test writes
 vi.mock('../templates/index.js', () => ({
     FEATURES: { physics: { engine: ['assets'] } },
-    STARTERS: [{ name: 'demo', features: ['physics'] }]
+    STARTERS: [
+        {
+            name: 'demo',
+            features: ['physics'],
+            omit: ['src/unused.css', 'src/assets'],
+            outro: 'Publish it with npm run package -- --zip.'
+        }
+    ]
 }));
 
 // the layers of engine/demo, in the order they apply
@@ -153,10 +160,27 @@ describe('package manager', () => {
 
         expect(read(root, 'README.md')).toBe(readme(install, run, host));
         expect(read(root, 'AGENTS.md')).toBe(readme(install, run, host));
+        // the starter's outro follows the commands, and passes its argument as `host` does
+        const publish = host.replace('dev', 'package').replace('--host', '--zip');
         expect(prompts.outro).toHaveBeenLastCalledWith(
-            `Project created. Now run:\n\n  cd app\n  ${install}\n  ${run} dev`
+            `Project created. Now run:\n\n  cd app\n  ${install}\n  ${run} dev\n\nPublish it with ${publish}.`
         );
     });
+});
+
+test('leaves out what every project gets that the starter omits, and the doc bullets about it', () => {
+    write({
+        '_common/src/unused.css': 'body {}\n',
+        '_common/src/assets/logo.png': '',
+        '_common/src/kept.ts': '',
+        'engine/base/src/unused.css': 'body {}\n',
+        'engine/base/AGENTS.md': '# AGENTS.md\n\n- `src/kept.ts` stays.\n- `src/unused.css` styles the page.\n'
+    });
+
+    const root = scaffold();
+
+    expect(list(root)).toEqual(['AGENTS.md', 'package.json', 'src', path.join('src', 'kept.ts')]);
+    expect(read(root, 'AGENTS.md')).toBe('# AGENTS.md\n\n- `src/kept.ts` stays.\n');
 });
 
 test('renames files once every layer is copied', () => {

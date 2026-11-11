@@ -5,8 +5,11 @@
 import type { CameraComponent } from 'playcanvas';
 import { Color, Entity, Script, StandardMaterial, math } from 'playcanvas';
 
-/** Where a run is: waiting for the first tap, in play, held while the Lens is hidden, or crashed. */
-export type GameState = 'ready' | 'playing' | 'paused' | 'over';
+/**
+ * Where a run is: loading, waiting for the first tap, in play, held while the Lens is hidden, or
+ * crashed. The page starts at `loading`, and the game moves to `ready` on its first frame.
+ */
+export type GameState = 'loading' | 'ready' | 'playing' | 'paused' | 'over';
 
 /** The app event the game fires whenever its state or score changes, for the HUD to follow. */
 export type GameEvents = {
@@ -15,6 +18,8 @@ export type GameEvents = {
 
 /** What the HUD card says in each state. `null` hides the card. */
 export const CARDS: Record<GameState, { title: string; hint: string } | null> = {
+    // so the first tap isn't asked for before anything can answer it
+    loading: { title: 'Dodge', hint: 'Loading…' },
     ready: { title: 'Dodge', hint: 'Drag to steer. Tap to play' },
     playing: null,
     paused: { title: 'Paused', hint: 'Tap to resume' },
@@ -56,7 +61,7 @@ const createMaterial = (color: Color, glow: number) => {
 class DodgeGame extends Script {
     static scriptName = 'dodgeGame';
 
-    state: GameState = 'ready';
+    state: GameState = 'loading';
     score = 0;
 
     elapsed = 0;
@@ -122,8 +127,6 @@ class DodgeGame extends Script {
             document.removeEventListener('visibilitychange', this.onVisibilityChange);
             for (const material of [...blockMaterials, playerMaterial, starMaterial]) material.destroy();
         });
-
-        this.setState('ready');
     }
 
     onPointerDown = (event: PointerEvent) => {
@@ -213,6 +216,10 @@ class DodgeGame extends Script {
     }
 
     update(dt: number) {
+        // say so from the first frame rather than from initialize(), where the page may not be
+        // listening yet: React subscribes to the app event only after it creates the script
+        if (this.state === 'loading') this.setState('ready');
+
         this.fitField();
 
         // blocks fall faster the longer a run lasts
