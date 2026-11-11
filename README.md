@@ -106,6 +106,8 @@ Every project includes an `AGENTS.md` that gives AI coding agents such as Claude
 
 Every project also includes [`@playcanvas/skills`](https://github.com/playcanvas/skills), so those agents pick up PlayCanvas-specific workflows automatically, with no install step. They are copied into `.claude/skills/` and `.agents/skills/`. Pass `--no-skills` to leave them out.
 
+Coding agents: start from the [PlayCanvas documentation index](https://developer.playcanvas.com/llms.txt), which leads to a Markdown version of every guide and API page.
+
 ## Development
 
 ```bash
