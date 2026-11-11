@@ -28,6 +28,7 @@ A PlayCanvas app in TypeScript, built with Vite. The scene is declared in HTML w
 - Builds use relative URLs (`base: './'` in `vite.config.ts`), so they run from any folder. Load files in `public/` with relative paths such as `./model.glb`, not `/model.glb`.
 - The engine ships ready-made scripts, such as camera controls and character controllers, under `playcanvas/scripts/esm/`. Use one before writing the same behavior yourself.
 - `node_modules/playcanvas/build/playcanvas.d.ts` documents the installed engine's API.
+- For guides, start from the [Web Components guides index](https://developer.playcanvas.com/user-manual/web-components/llms.txt), which links a Markdown version of every page.
 - TypeScript is strict, and unused locals and parameters are errors.
 
 ## Checking your work
