@@ -3,6 +3,8 @@
 import * as prompts from '@clack/prompts';
 import mri from 'mri';
 
+import { FORMATS, STARTERS } from '../templates/index.js';
+
 import { chooseFormat } from './steps/chooseFormat.js';
 import { chooseStarter } from './steps/chooseStarter.js';
 import { getPackageName } from './steps/getPackageName.js';
@@ -18,29 +20,42 @@ const argv = mri<{
     boilerplate?: string;
     help?: boolean;
     overwrite?: boolean;
+    keep?: boolean;
     yes?: boolean;
     skills?: boolean;
 }>(process.argv.slice(2), {
     alias: { b: 'boilerplate', f: 'format', h: 'help', s: 'starter', t: 'template', y: 'yes' },
-    boolean: ['help', 'overwrite', 'yes'],
+    boolean: ['help', 'overwrite', 'keep', 'yes'],
     string: ['format', 'starter', 'template', 'boilerplate']
 });
 
 const cwd = process.cwd();
 
-const helpMessage = `\
-Usage: npm create playcanvas@latest [OPTION]...
+// the names --format and --starter take, in the options' two columns. The first is the default
+const catalog = (items: { name: string; description: string }[]) =>
+    items.map((item, i) => `  ${item.name.padEnd(27)}${item.description}${i ? '' : ' (default)'}`).join('\n');
 
-Create a new PlayCanvas project with TypeScript.
+const helpMessage = `\
+Usage: npm create playcanvas@latest [DIRECTORY] -- [OPTION]...
+
+Create a new PlayCanvas project with TypeScript in DIRECTORY.
 With no arguments, start the CLI in interactive mode.
+npm needs the -- before the options. pnpm, yarn and bun take them without it.
 
 Options:
   -f, --format NAME          use a specific format
   -s, --starter NAME         use a specific starter
       --overwrite            remove existing files from a non-empty target directory
+      --keep                 add the project to a non-empty target directory, replacing no files
       --no-skills            omit the PlayCanvas agent skills
   -y, --yes                  skip the prompts and take the defaults
   -h, --help                 show help
+
+Formats:
+${catalog(FORMATS)}
+
+Starters:
+${catalog(STARTERS)}
 
 Without a terminal, as when an AI agent or CI runs it, the CLI takes the
 defaults for any option not passed, as --yes does.
@@ -58,6 +73,7 @@ const init = async () => {
     const argFormat = argv.format ?? argv.template;
     const argStarter = argv.starter ?? argv.boilerplate;
     const argOverwrite = argv.overwrite;
+    const argKeep = argv.keep;
 
     // nothing can answer a prompt without a terminal, as when an AI agent or CI runs the command,
     // so take the defaults as --yes does, rather than exit without creating a project
@@ -80,7 +96,7 @@ const init = async () => {
     };
 
     const targetDir = await getTargetDir({ argTargetDir, defaultTargetDir, yes, cancel });
-    await handleExistingDir({ targetDir, argOverwrite, yes, cancel });
+    const keep = await handleExistingDir({ targetDir, argOverwrite, argKeep, yes, cancel });
     const packageName = await getPackageName({ targetDir, yes, cancel });
     const format = await chooseFormat({ argFormat, yes, cancel });
     const starter = await chooseStarter({ argStarter, yes, cancel });
@@ -95,6 +111,7 @@ const init = async () => {
         starter,
         packageName,
         skills,
+        keep,
         renameFiles
     });
 };

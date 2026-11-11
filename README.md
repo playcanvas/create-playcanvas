@@ -38,7 +38,7 @@ Every format uses TypeScript and includes Vite, ESLint, Prettier and a productio
 
 ## Starters
 
-Choose from starter kits across basics, viewers, games, tools and XR. Run the creator to browse them; `spinning-cube` is the default.
+Choose from starter kits across basics, viewers, games, tools and XR. Run the creator to browse them, or pass `--help` to list them; `spinning-cube` is the default.
 
 ![The PlayCanvas starter scenes](images/starter-catalog.webp)
 
@@ -65,11 +65,14 @@ npm create playcanvas@latest my-game -- -f react -y
 | `--format <name>`  | `-f`      | Use a format from the list above                        |
 | `--starter <name>` | `-s`      | Use a starter from the list above                       |
 | `--overwrite`      |           | Remove existing files from a non-empty target directory |
+| `--keep`           |           | Add the project to a non-empty target directory         |
 | `--no-skills`      |           | Omit the PlayCanvas agent skills (included by default)  |
 | `--yes`            | `-y`      | Skip the prompts and take the defaults                  |
-| `--help`           | `-h`      | Show command help                                       |
+| `--help`           | `-h`      | Show command help, with the formats and starters        |
 
-`--yes` takes `playcanvas-project`, the `engine` format and the `spinning-cube` starter for anything you don't pass. It never deletes files, so a non-empty target directory still needs `--overwrite`. A run without a terminal, such as one started by an AI agent or in CI, takes the same defaults, so it never waits on a prompt. The previous `--template` and `--boilerplate` long flags remain accepted for compatibility.
+`--yes` takes `playcanvas-project`, the `engine` format and the `spinning-cube` starter for anything you don't pass. It never touches files that are already there, so a non-empty target directory still needs `--keep` or `--overwrite`. A run without a terminal, such as one started by an AI agent or in CI, takes the same defaults, so it never waits on a prompt. The previous `--template` and `--boilerplate` long flags remain accepted for compatibility.
+
+`--keep` adds the project to a directory that already holds files, such as a brief, assets or a README, and replaces none of them: where the project has a file of the same name, yours stays and the creator lists it. It stops at a directory with a `package.json`, which is a project already.
 
 ## Coding agents
 

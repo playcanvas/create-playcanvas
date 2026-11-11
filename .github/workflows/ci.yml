@@ -103,12 +103,42 @@ jobs:
                   node "$GITHUB_WORKSPACE/dist/index.mjs" react-app --format react < /dev/null
                   test -f react-app/src/App.tsx
 
+            - name: Keep the files already in the target directory
+              working-directory: ${{ runner.temp }}
+              run: |
+                  mkdir -p brief && echo '# Mine' > brief/README.md && echo 'A game.' > brief/spec.md
+                  node "$GITHUB_WORKSPACE/dist/index.mjs" brief --keep < /dev/null
+                  grep -qx '# Mine' brief/README.md
+                  test -f brief/spec.md
+                  test -f brief/package.json
+                  test -f brief/src/main.ts
+                  if node "$GITHUB_WORKSPACE/dist/index.mjs" brief --keep < /dev/null; then
+                      echo "::error::--keep in a directory with a package.json should fail"
+                      exit 1
+                  fi
+
+            - name: List the formats and starters in the help
+              run: |
+                  node dist/index.mjs --help > help.txt
+                  node --input-type=module -e "
+                      import fs from 'node:fs';
+                      import { FORMATS, STARTERS } from './templates/index.ts';
+                      const help = fs.readFileSync('help.txt', 'utf8');
+                      const missing = [...FORMATS, ...STARTERS].filter((item) => !help.includes('  ' + item.name + ' '));
+                      if (missing.length) throw new Error('not in --help: ' + missing.map((item) => item.name).join(', '));
+                  "
+
             - name: Fail where no default is safe
               working-directory: ${{ runner.temp }}
               run: |
                   mkdir -p taken && touch taken/keep
                   if node "$GITHUB_WORKSPACE/dist/index.mjs" taken < /dev/null; then
-                      echo "::error::a non-empty target directory without --overwrite should fail"
+                      echo "::error::a non-empty target directory without --keep or --overwrite should fail"
+                      exit 1
+                  fi
+                  test -f taken/keep
+                  if node "$GITHUB_WORKSPACE/dist/index.mjs" taken --keep --overwrite < /dev/null; then
+                      echo "::error::--keep with --overwrite should fail"
                       exit 1
                   fi
                   test -f taken/keep

@@ -8,7 +8,7 @@ import { afterEach, beforeEach, describe, expect, test, vi } from 'vitest';
 
 import { scaffoldProject } from '../src/steps/scaffoldProject.js';
 
-vi.mock('@clack/prompts', () => ({ log: { step: vi.fn() }, outro: vi.fn() }));
+vi.mock('@clack/prompts', () => ({ log: { step: vi.fn(), warn: vi.fn() }, outro: vi.fn() }));
 
 // one starter using one feature, to match the fixture templates each test writes
 vi.mock('../templates/index.js', () => ({
@@ -190,6 +190,53 @@ test('renames files once every layer is copied', () => {
 
     expect(list(root)).toEqual(['.gitignore', '.npmrc', 'package.json']);
     expect(read(root, '.gitignore')).toBe('node_modules\n');
+});
+
+describe('keep', () => {
+    // what the target holds before the project is added to it
+    const existing = (files: Record<string, string>) => {
+        for (const [file, content] of Object.entries(files)) {
+            fs.mkdirSync(path.dirname(path.join(tmp, 'app', file)), { recursive: true });
+            fs.writeFileSync(path.join(tmp, 'app', file), content);
+        }
+    };
+
+    test('adds the project to the files already there, replacing none of them', () => {
+        write({
+            '_common/_gitignore': 'node_modules\n',
+            '_common/src/style.css': 'common',
+            'engine/base/README.md': '# Demo\n',
+            'engine/base/src/style.css': 'base',
+            'engine/demo/src/main.ts': 'starter'
+        });
+        existing({ 'README.md': '# Mine\n', '.gitignore': 'dist\n', 'src/notes.md': 'notes', 'spec.md': 'spec' });
+
+        const root = scaffold({ keep: true, renameFiles: { _gitignore: '.gitignore' } });
+
+        // the target's own files are as they were, a renamed file included
+        expect(read(root, 'README.md')).toBe('# Mine\n');
+        expect(read(root, '.gitignore')).toBe('dist\n');
+        expect(read(root, 'src/notes.md')).toBe('notes');
+        expect(read(root, 'spec.md')).toBe('spec');
+        // the rest of the project is added, with its layers applied as usual
+        expect(read(root, 'src/style.css')).toBe('base');
+        expect(read(root, 'src/main.ts')).toBe('starter');
+        expect(JSON.parse(read(root, 'package.json'))).toEqual({ name: 'my-app' });
+        expect(prompts.log.warn).toHaveBeenLastCalledWith(
+            "Kept these existing files rather than the project's: .gitignore, README.md"
+        );
+    });
+
+    test('says nothing where no file was already there', () => {
+        vi.mocked(prompts.log.warn).mockClear();
+        write({ 'engine/demo/src/main.ts': 'starter' });
+        existing({ 'spec.md': 'spec' });
+
+        const root = scaffold({ keep: true });
+
+        expect(list(root)).toEqual(['package.json', 'spec.md', 'src', path.join('src', 'main.ts')]);
+        expect(prompts.log.warn).not.toHaveBeenCalled();
+    });
 });
 
 describe('skills', () => {
