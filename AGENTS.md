@@ -19,7 +19,7 @@
 
 ## What a starter is for
 
-A starter is a minimal working version of one kind of application, such as a model viewer, a product configurator, a first-person game or a Web Lens. Someone picks it by saying what they are building. It is not a how-to for a technique, such as picking or rigid bodies: the [engine examples](https://playcanvas.github.io/) teach those, and a starter uses a technique only where its application needs it. `spinning-cube` is the one exception, the blank project for someone who wants only the skeleton.
+A starter is a minimal working version of one kind of application, such as a model viewer, a product configurator, a first-person game or a Web Lens. Someone picks it by saying what they are building. It is not a how-to for a technique, such as picking or rigid bodies: the [engine examples](https://playcanvas.com/examples) teach those, and a starter uses a technique only where its application needs it. `spinning-cube` is the one exception, the blank project for someone who wants only the skeleton.
 
 Minimal means the smallest complete loop for that kind of application, not a list of features. A game starts, can be won or lost and starts again. A configurator holds the choices as state and shows them in the scene. A viewer loads an asset and lets you look around it.
 

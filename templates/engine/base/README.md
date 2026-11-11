@@ -45,6 +45,6 @@ This project includes [`@playcanvas/skills`](https://github.com/playcanvas/skill
 ## Further reading
 
 - [PlayCanvas Engine manual](https://developer.playcanvas.com/user-manual/engine/)
-- [PlayCanvas examples](https://playcanvas.github.io/)
+- [PlayCanvas examples](https://playcanvas.com/examples)
 - [Vite documentation](https://vite.dev/)
 - [TypeScript documentation](https://www.typescriptlang.org/docs/)

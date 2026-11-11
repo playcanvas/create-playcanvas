@@ -7,7 +7,7 @@
 [![Reddit](https://img.shields.io/badge/Reddit-FF4500?style=flat&logo=reddit&logoColor=white&color=black)](https://www.reddit.com/r/PlayCanvas)
 [![X](https://img.shields.io/badge/X-000000?style=flat&logo=x&logoColor=white&color=black)](https://x.com/intent/follow?screen_name=playcanvas)
 
-| [Engine Manual](https://developer.playcanvas.com/user-manual/engine/) | [React Manual](https://developer.playcanvas.com/user-manual/react/) | [Web Components Manual](https://developer.playcanvas.com/user-manual/web-components/) | [Examples](https://playcanvas.github.io/) | [Forum](https://forum.playcanvas.com/) |
+| [Engine Manual](https://developer.playcanvas.com/user-manual/engine/) | [React Manual](https://developer.playcanvas.com/user-manual/react/) | [Web Components Manual](https://developer.playcanvas.com/user-manual/web-components/) | [Examples](https://playcanvas.com/examples) | [Forum](https://forum.playcanvas.com/) |
 
 Scaffold a Vite-powered PlayCanvas project with TypeScript. Pick a format and a runnable starter, then build from there.
 
