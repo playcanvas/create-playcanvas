@@ -7,45 +7,52 @@
         <title>Scene Editor</title>
     </head>
     <body>
-        <pc-app>
-            <pc-material id="coral" diffuse="#ff5145"></pc-material>
-            <pc-material id="cyan" diffuse="#24addf"></pc-material>
+        <pc-app max-pixel-ratio="2">
             <pc-scene>
-                <pc-entity name="camera" position="4 3.2 5" rotation="-18 39 0"
-                    ><pc-camera clear-color="#0a0f17"></pc-camera
-                ></pc-entity>
-                <pc-entity name="light" rotation="45 30 0"
-                    ><pc-light
-                        type="directional"
-                        intensity="2.5"
-                        cast-shadows
-                        shadow-bias="0.2"
-                        normal-offset-bias="0.05"
-                    ></pc-light
-                ></pc-entity>
+                <pc-entity name="light" rotation="45 30 0">
+                    <pc-light type="directional" intensity="2.5"></pc-light>
+                </pc-entity>
+
+                <!-- A weaker light from behind keeps the sides the first can't reach from going black -->
+                <pc-entity name="fill" rotation="-25 -140 0">
+                    <pc-light type="directional" intensity="0.8"></pc-light>
+                </pc-entity>
+
+                <!-- The grid script is attached in src/main.ts -->
                 <pc-entity name="grid" scale="12 12 12"></pc-entity>
-                <pc-entity name="cube" position="-1.2 0.5 0"
-                    ><pc-render type="box" material="coral"></pc-render
-                ></pc-entity>
-                <pc-entity name="sphere" position="1.2 0.5 0"
-                    ><pc-render type="sphere" material="cyan"></pc-render
-                ></pc-entity>
+
+                <!-- Camera. Orbit controls are attached in src/main.ts -->
+                <pc-entity name="camera" position="4 3.2 5" rotation="-23 39 0">
+                    <pc-camera clear-color="#0a0f17"></pc-camera>
+                </pc-entity>
+
+                <!-- The editor script is attached in src/main.ts. It creates the objects under this
+                     entity, from the scene saved in this browser -->
                 <pc-entity name="editor"></pc-entity>
             </pc-scene>
         </pc-app>
+
         <div class="hud">
             <section class="panel">
                 <h1>Scene Editor</h1>
-                <p>Select an object, then translate, rotate or scale it.</p>
+                <p>Click an object to select it, then drag its gizmo. Drag anywhere else to orbit.</p>
                 <div class="controls">
-                    <button data-target="0" aria-pressed="true">Cube</button><button data-target="1">Sphere</button>
+                    <button data-mode="translate" aria-pressed="true">Move</button>
+                    <button data-mode="rotate" aria-pressed="false">Rotate</button>
+                    <button data-mode="scale" aria-pressed="false">Scale</button>
                 </div>
                 <div class="controls">
-                    <button data-mode="translate" aria-pressed="true">Move</button
-                    ><button data-mode="rotate">Rotate</button><button data-mode="scale">Scale</button>
+                    <button data-add="box">Add box</button>
+                    <button data-add="sphere">Add sphere</button>
+                    <button data-add="cone">Add cone</button>
+                </div>
+                <div class="controls">
+                    <button id="delete" disabled>Delete</button>
+                    <button id="reset">Reset</button>
                 </div>
             </section>
         </div>
+
         <script type="module" src="/src/main.ts"></script>
     </body>
 </html>

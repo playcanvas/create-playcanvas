@@ -50,7 +50,7 @@ Every starter is a runnable scene, available in every format. Run the creator to
 | `third-person-controller` | Games    | An animated character, follow camera and locomotion             |
 | `sprite-game`             | Games    | An orthographic camera, sprite animation and input              |
 | `web-lens`                | Games    | A portrait game with Snapchat leaderboards, packaged for upload |
-| `scene-editor`            | Tools    | Selection and translate, rotate and scale gizmos                |
+| `scene-editor`            | Tools    | Click to select, gizmos and a scene saved in the browser        |
 | `vr-starter`              | XR       | Immersive VR, controllers and locomotion                        |
 | `ar-placement`            | XR       | Mobile AR, hit testing and object placement                     |
 

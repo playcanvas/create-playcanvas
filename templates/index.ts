@@ -92,7 +92,7 @@ export const STARTERS = [
         name: 'scene-editor',
         display: 'Scene Editor',
         category: 'Tools',
-        description: 'selection and translate, rotate and scale gizmos'
+        description: 'click to select, gizmos and a scene saved in the browser'
     },
     {
         name: 'vr-starter',
