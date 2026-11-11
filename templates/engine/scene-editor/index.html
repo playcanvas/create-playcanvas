@@ -1,0 +1,33 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <link rel="icon" type="image/png" href="/src/assets/playcanvas.png" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Scene Editor</title>
+    </head>
+    <body>
+        <canvas id="application-canvas"></canvas>
+        <div class="hud">
+            <section class="panel">
+                <h1>Scene Editor</h1>
+                <p>Click an object to select it, then drag its gizmo. Drag anywhere else to orbit.</p>
+                <div class="controls">
+                    <button data-mode="translate" aria-pressed="true">Move</button>
+                    <button data-mode="rotate" aria-pressed="false">Rotate</button>
+                    <button data-mode="scale" aria-pressed="false">Scale</button>
+                </div>
+                <div class="controls">
+                    <button data-add="box">Add box</button>
+                    <button data-add="sphere">Add sphere</button>
+                    <button data-add="cone">Add cone</button>
+                </div>
+                <div class="controls">
+                    <button id="delete" disabled>Delete</button>
+                    <button id="reset">Reset</button>
+                </div>
+            </section>
+        </div>
+        <script type="module" src="/src/main.ts"></script>
+    </body>
+</html>
