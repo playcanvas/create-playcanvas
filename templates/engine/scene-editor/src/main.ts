@@ -6,52 +6,57 @@ import {
     Entity,
     FILLMODE_FILL_WINDOW,
     LightComponentSystem,
-    RenderComponentSystem,
     RESOLUTION_AUTO,
+    RenderComponentSystem,
     ScriptComponentSystem,
-    StandardMaterial,
     createGraphicsDevice
 } from 'playcanvas';
+import { CameraControls } from 'playcanvas/scripts/esm/camera-controls.mjs';
 import { Grid } from 'playcanvas/scripts/esm/grid.mjs';
 
 import { SceneEditor } from './scene-editor';
+import type { Mode, Shape } from './scene-editor';
 import './starter.css';
 
-document.body.insertAdjacentHTML(
-    'beforeend',
-    '<div class="hud"><section class="panel"><h1>Scene Editor</h1><p>Select an object, then translate, rotate or scale it.</p><div class="controls"><button data-target="0" aria-pressed="true">Cube</button><button data-target="1">Sphere</button></div><div class="controls"><button data-mode="translate" aria-pressed="true">Move</button><button data-mode="rotate">Rotate</button><button data-mode="scale">Scale</button></div></section></div>'
-);
-
 const canvas = document.getElementById('application-canvas') as HTMLCanvasElement;
+
 const device = await createGraphicsDevice(canvas);
-const options = new AppOptions();
-options.graphicsDevice = device;
-options.componentSystems = [RenderComponentSystem, CameraComponentSystem, LightComponentSystem, ScriptComponentSystem];
+device.maxPixelRatio = Math.min(window.devicePixelRatio, 2);
+
+const createOptions = new AppOptions();
+createOptions.graphicsDevice = device;
+createOptions.componentSystems = [
+    RenderComponentSystem,
+    CameraComponentSystem,
+    LightComponentSystem,
+    ScriptComponentSystem
+];
 
 const app = new AppBase(canvas);
-app.init(options);
+app.init(createOptions);
 app.start();
+
+// Set the canvas to fill the window and automatically change resolution to be the same as the canvas size
 app.setCanvasFillMode(FILLMODE_FILL_WINDOW);
 app.setCanvasResolution(RESOLUTION_AUTO);
 
-app.scene.ambientLight = new Color(0.25, 0.28, 0.34);
+// Ensure canvas is resized when window changes size
+const resize = () => app.resizeCanvas();
+window.addEventListener('resize', resize);
+app.on('destroy', () => {
+    window.removeEventListener('resize', resize);
+});
 
-const coral = new StandardMaterial();
-coral.diffuse = new Color(1, 0.32, 0.27);
-coral.update();
-const cyan = new StandardMaterial();
-cyan.diffuse = new Color(0.14, 0.68, 0.88);
-cyan.update();
+const light = new Entity('light');
+light.addComponent('light', { type: 'directional', intensity: 2.5 });
+light.setEulerAngles(45, 30, 0);
+app.root.addChild(light);
 
-const cube = new Entity('cube');
-cube.addComponent('render', { type: 'box', material: coral });
-cube.setPosition(-1.2, 0.5, 0);
-app.root.addChild(cube);
-
-const sphere = new Entity('sphere');
-sphere.addComponent('render', { type: 'sphere', material: cyan });
-sphere.setPosition(1.2, 0.5, 0);
-app.root.addChild(sphere);
+// A weaker light from behind keeps the sides the first can't reach from going black
+const fill = new Entity('fill');
+fill.addComponent('light', { type: 'directional', intensity: 0.8 });
+fill.setEulerAngles(-25, -140, 0);
+app.root.addChild(fill);
 
 const grid = new Entity('grid');
 grid.addComponent('script');
@@ -59,32 +64,36 @@ grid.script!.create(Grid);
 grid.setLocalScale(12, 12, 12);
 app.root.addChild(grid);
 
+// Create camera entity with orbit controls
 const camera = new Entity('camera');
 camera.addComponent('camera', { clearColor: new Color(0.04, 0.06, 0.09) });
 camera.setPosition(4, 3.2, 5);
 camera.lookAt(0, 0.5, 0);
+camera.addComponent('script');
+camera.script!.create(CameraControls, { properties: { sceneSize: 5 } });
 app.root.addChild(camera);
 
-const light = new Entity('light');
-light.addComponent('light', {
-    type: 'directional',
-    intensity: 2.5,
-    castShadows: true,
-    shadowBias: 0.2,
-    normalOffsetBias: 0.05
-});
-light.setEulerAngles(45, 30, 0);
-app.root.addChild(light);
+// The editor creates the objects under its own entity, from the scene saved in this browser
+const host = new Entity('editor');
+host.addComponent('script');
+const editor = host.script!.create(SceneEditor, { properties: { camera } }) as SceneEditor;
+app.root.addChild(host);
 
-const editor = new Entity('editor');
-editor.addComponent('script');
-editor.script!.create(SceneEditor, {
-    properties: {
-        camera,
-        targets: [cube, sphere],
-        layer: app.scene.layers.getLayerByName('World')
-    }
+// The HUD drives the editor, and follows its selection
+const modes = document.querySelectorAll<HTMLButtonElement>('[data-mode]');
+modes.forEach((button) => {
+    button.addEventListener('click', () => {
+        editor.mode = button.dataset.mode as Mode;
+        modes.forEach((other) => (other.ariaPressed = String(other === button)));
+    });
 });
-app.root.addChild(editor);
+document.querySelectorAll<HTMLButtonElement>('[data-add]').forEach((button) => {
+    button.addEventListener('click', () => editor.add(button.dataset.add as Shape));
+});
 
-window.addEventListener('resize', () => app.resizeCanvas());
+const remove = document.getElementById('delete') as HTMLButtonElement;
+remove.addEventListener('click', () => editor.remove());
+document.getElementById('reset')!.addEventListener('click', () => editor.reset());
+app.on('editor:select', (selected: Entity | null) => {
+    remove.disabled = !selected;
+});

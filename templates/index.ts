@@ -42,12 +42,6 @@ export const STARTERS = [
         description: 'a rotating cube and a light'
     },
     {
-        name: 'interactive-sphere',
-        display: 'Interactive Sphere',
-        category: 'Basics',
-        description: 'orbit controls, a grid and pointer picking'
-    },
-    {
         name: 'model-viewer',
         display: 'Model Viewer',
         category: 'Viewers',
@@ -64,13 +58,6 @@ export const STARTERS = [
         display: 'Product Configurator',
         category: 'Viewers',
         description: 'product variants, materials and orbit controls'
-    },
-    {
-        name: 'physics-playground',
-        display: 'Physics Playground',
-        category: 'Games',
-        description: 'rigid bodies, collisions, spawning and reset',
-        features: ['physics']
     },
     {
         name: 'first-person-controller',
@@ -105,7 +92,7 @@ export const STARTERS = [
         name: 'scene-editor',
         display: 'Scene Editor',
         category: 'Tools',
-        description: 'selection and translate, rotate and scale gizmos'
+        description: 'click to select, gizmos and a scene saved in the browser'
     },
     {
         name: 'vr-starter',
