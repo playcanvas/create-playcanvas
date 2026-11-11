@@ -48,7 +48,7 @@ When lean and inspiring pull apart, improve the picture, not the feature list.
 - A shared script talks to the page through its properties and app events, as `web-lens` does with `game:state`. It doesn't look up DOM elements.
 - The HUD is markup: `index.html` in Engine and Web Components, JSX in React. Don't build it from an HTML string in TypeScript. Style it with the classes in `starter.css`.
 - Use the engine's named constants, such as `PROJECTION_ORTHOGRAPHIC`, and name a tuned number or say in a comment what it was tuned for.
-- Cap the device pixel ratio at 2.
+- Render at the display's pixel ratio, capped at 2. The engine's own default is 1, which looks soft on a high-density display, so an Engine starter sets `device.maxPixelRatio`.
 - Remove what you add: event listeners, and the materials, textures and meshes you create.
 - Bundle the assets a starter needs in `_shared/<starter>/public/`, keep them small and record third-party ones in an `ASSET_LICENSES.md`. A sample too large to bundle can load from `developer.playcanvas.com`, with a comment that says how to swap it for a local file. Use no asset that depicts a third party's brand or product.
 - Replacing the sample asset must not break the code. Don't depend on a model's material or node names without saying so where the asset is named.

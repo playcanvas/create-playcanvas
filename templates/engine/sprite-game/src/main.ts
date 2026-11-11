@@ -16,24 +16,34 @@ import {
 import { SpriteGame } from './sprite-game';
 import './starter.css';
 
-document.body.insertAdjacentHTML(
-    'beforeend',
-    '<div class="hud"><section class="panel"><h1>Sprite Game</h1><p>Use A/D or the arrow keys to move and Space to jump.</p></section></div>'
-);
-
 const canvas = document.getElementById('application-canvas') as HTMLCanvasElement;
+
 const device = await createGraphicsDevice(canvas);
 device.maxPixelRatio = Math.min(window.devicePixelRatio, 2);
 
-const options = new AppOptions();
-options.graphicsDevice = device;
-options.componentSystems = [RenderComponentSystem, CameraComponentSystem, SpriteComponentSystem, ScriptComponentSystem];
+const createOptions = new AppOptions();
+createOptions.graphicsDevice = device;
+createOptions.componentSystems = [
+    RenderComponentSystem,
+    CameraComponentSystem,
+    SpriteComponentSystem,
+    ScriptComponentSystem
+];
 
 const app = new AppBase(canvas);
-app.init(options);
+app.init(createOptions);
 app.start();
+
+// Set the canvas to fill the window and automatically change resolution to be the same as the canvas size
 app.setCanvasFillMode(FILLMODE_FILL_WINDOW);
 app.setCanvasResolution(RESOLUTION_AUTO);
+
+// Ensure canvas is resized when window changes size
+const resize = () => app.resizeCanvas();
+window.addEventListener('resize', resize);
+app.on('destroy', () => {
+    window.removeEventListener('resize', resize);
+});
 
 const camera = new Entity('camera');
 camera.addComponent('camera', {
@@ -68,5 +78,3 @@ game.setPosition(0, -2.15, 0);
 game.addComponent('script');
 game.script!.create(SpriteGame);
 app.root.addChild(game);
-
-window.addEventListener('resize', () => app.resizeCanvas());

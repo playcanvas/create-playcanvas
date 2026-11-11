@@ -28,16 +28,14 @@ await new Promise<void>((resolve) => {
     WasmModule.getInstance('Ammo', () => resolve());
 });
 
-document.body.insertAdjacentHTML(
-    'beforeend',
-    '<div class="hud"><section class="panel"><h1>First-Person Controller</h1><p>Click the scene, then use WASD, mouse look and Space to jump.</p></section></div>'
-);
-
 const canvas = document.getElementById('application-canvas') as HTMLCanvasElement;
+
 const device = await createGraphicsDevice(canvas);
-const options = new AppOptions();
-options.graphicsDevice = device;
-options.componentSystems = [
+device.maxPixelRatio = Math.min(window.devicePixelRatio, 2);
+
+const createOptions = new AppOptions();
+createOptions.graphicsDevice = device;
+createOptions.componentSystems = [
     RenderComponentSystem,
     CameraComponentSystem,
     LightComponentSystem,
@@ -47,10 +45,19 @@ options.componentSystems = [
 ];
 
 const app = new AppBase(canvas);
-app.init(options);
+app.init(createOptions);
 app.start();
+
+// Set the canvas to fill the window and automatically change resolution to be the same as the canvas size
 app.setCanvasFillMode(FILLMODE_FILL_WINDOW);
 app.setCanvasResolution(RESOLUTION_AUTO);
+
+// Ensure canvas is resized when window changes size
+const resize = () => app.resizeCanvas();
+window.addEventListener('resize', resize);
+app.on('destroy', () => {
+    window.removeEventListener('resize', resize);
+});
 
 const material = (color: Color) => {
     const result = new StandardMaterial();
@@ -134,5 +141,3 @@ const fill = new Entity('fill');
 fill.addComponent('light', { type: 'directional', intensity: 0.8 });
 fill.setEulerAngles(-25, -140, 0);
 app.root.addChild(fill);
-
-window.addEventListener('resize', () => app.resizeCanvas());

@@ -77,6 +77,32 @@ test.each([
     }
 });
 
+test('no starter builds markup from a string in its code', () => {
+    // the HUD is markup: index.html in Engine and Web Components, JSX in React. _common is left
+    // out, since its inspector hint is development tooling, not part of a starter
+    const offenders = ['_shared', ...FORMATS.map((f) => f.name)].flatMap((dir) =>
+        (fs.readdirSync(path.join(TEMPLATES_DIR, dir), { recursive: true }) as string[])
+            .filter((file) => /\.tsx?$/.test(file))
+            .map((file) => path.join(dir, file))
+            .filter((file) =>
+                /insertAdjacentHTML|innerHTML/.test(fs.readFileSync(path.join(TEMPLATES_DIR, file), 'utf8'))
+            )
+    );
+
+    expect(offenders).toEqual([]);
+});
+
+test('every Engine starter renders at the display pixel ratio, capped at 2', () => {
+    const missing = STARTERS.map((s) => `engine/${s.name}/src/main.ts`).filter(
+        (file) =>
+            !fs
+                .readFileSync(path.join(TEMPLATES_DIR, file), 'utf8')
+                .includes('device.maxPixelRatio = Math.min(window.devicePixelRatio, 2);')
+    );
+
+    expect(missing).toEqual([]);
+});
+
 test('every project gets a CLAUDE.md that imports its AGENTS.md', () => {
     // the import alone, whichever line endings the checkout has
     expect(fs.readFileSync(path.join(TEMPLATES_DIR, '_common', 'CLAUDE.md'), 'utf8')).toMatch(/^@AGENTS\.md\r?\n$/);

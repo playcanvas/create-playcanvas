@@ -17,23 +17,35 @@ import {
 import './starter.css';
 import { setupVr } from './vr';
 
-document.body.insertAdjacentHTML(
-    'beforeend',
-    '<div class="hud"><section class="panel"><h1>VR Starter</h1><p id="xr-status">Checking VR support…</p><div class="controls"><button id="xr-button" disabled>Enter VR</button></div></section></div>'
-);
-
 const canvas = document.getElementById('application-canvas') as HTMLCanvasElement;
+
 const device = await createGraphicsDevice(canvas);
-const options = new AppOptions();
-options.graphicsDevice = device;
-options.componentSystems = [RenderComponentSystem, CameraComponentSystem, LightComponentSystem, ScriptComponentSystem];
-options.xr = XrManager;
+device.maxPixelRatio = Math.min(window.devicePixelRatio, 2);
+
+const createOptions = new AppOptions();
+createOptions.graphicsDevice = device;
+createOptions.componentSystems = [
+    RenderComponentSystem,
+    CameraComponentSystem,
+    LightComponentSystem,
+    ScriptComponentSystem
+];
+createOptions.xr = XrManager;
 
 const app = new AppBase(canvas);
-app.init(options);
+app.init(createOptions);
 app.start();
+
+// Set the canvas to fill the window and automatically change resolution to be the same as the canvas size
 app.setCanvasFillMode(FILLMODE_FILL_WINDOW);
 app.setCanvasResolution(RESOLUTION_AUTO);
+
+// Ensure canvas is resized when window changes size
+const resize = () => app.resizeCanvas();
+window.addEventListener('resize', resize);
+app.on('destroy', () => {
+    window.removeEventListener('resize', resize);
+});
 app.scene.ambientLight = new Color(0.32, 0.34, 0.38);
 
 const material = (color: Color) => {
@@ -97,5 +109,3 @@ light.addComponent('light', {
 });
 light.setEulerAngles(45, 30, 0);
 app.root.addChild(light);
-
-window.addEventListener('resize', () => app.resizeCanvas());

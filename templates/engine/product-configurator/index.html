@@ -1,0 +1,30 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <link rel="icon" type="image/png" href="/src/assets/playcanvas.png" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Product Configurator</title>
+    </head>
+    <body>
+        <canvas id="application-canvas"></canvas>
+        <div class="hud">
+            <section class="panel">
+                <h1>Product Configurator</h1>
+                <p>Choose a paint finish, then drag to orbit.</p>
+                <div class="controls variants" id="paints">
+                    <button aria-pressed="true" data-color="#d6293e" data-shade="#9b1731">
+                        <span class="finish" style="--color: #d6293e"></span>Crimson
+                    </button>
+                    <button data-color="#d8e4e9" data-shade="#8fa8b5">
+                        <span class="finish" style="--color: #d8e4e9"></span>Arctic
+                    </button>
+                    <button data-color="#9acb34" data-shade="#3c742d">
+                        <span class="finish" style="--color: #9acb34"></span>Volt
+                    </button>
+                </div>
+            </section>
+        </div>
+        <script type="module" src="/src/main.ts"></script>
+    </body>
+</html>
