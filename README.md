@@ -102,6 +102,10 @@ To add a starter, list it in `STARTERS` in `templates/index.ts`, add `_shared/<s
 
 Write commands in a README or `AGENTS.md` for npm, as `npm install`, `npm run <script>` and `npm run <script> -- <args>`. The scaffolder rewrites them for the package manager that created the project, and leaves out the `## Agent skills` section of both when run with `--no-skills`.
 
+### Agent skills
+
+The skills given to each project come from the `@playcanvas/skills` dev dependency, pinned to a release tag of [playcanvas/skills](https://github.com/playcanvas/skills). `npm run build` copies them into `dist/skills`, and Renovate proposes each new release. Change a skill in that repository, not here.
+
 ## License
 
 [MIT](LICENSE)

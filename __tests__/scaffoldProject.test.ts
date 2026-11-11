@@ -19,7 +19,7 @@ vi.mock('../templates/index.js', () => ({
 // the layers of engine/demo, in the order they apply
 const LAYERS = ['_common', 'engine/base', '_shared/demo', '_features/physics/assets', 'engine/demo'];
 
-const SKILLS_DIR = fileURLToPath(new URL('../skills', import.meta.url));
+const SKILLS_DIR = fileURLToPath(new URL('../node_modules/@playcanvas/skills/skills', import.meta.url));
 
 let tmp: string;
 let templates: string;
