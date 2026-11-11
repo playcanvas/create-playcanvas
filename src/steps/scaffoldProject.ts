@@ -150,8 +150,8 @@ export const scaffoldProject = (opts: Options) => {
 
     if (skills) {
         const skillsDir = [
-            path.resolve(__dirname, '../skills'), // prod: dist/index.mjs → ../skills
-            path.resolve(__dirname, '../../skills') // dev: src/steps → ../../skills
+            path.resolve(__dirname, 'skills'), // prod: dist/index.mjs → dist/skills, copied there by the build
+            path.resolve(__dirname, '../../node_modules/@playcanvas/skills/skills') // dev: src/steps → the dependency
         ].find((p) => fs.existsSync(p));
         if (!skillsDir) {
             throw new Error('Skills directory not found');
