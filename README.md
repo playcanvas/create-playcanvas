@@ -7,11 +7,11 @@
 [![Reddit](https://img.shields.io/badge/Reddit-FF4500?style=flat&logo=reddit&logoColor=white&color=black)](https://www.reddit.com/r/PlayCanvas)
 [![X](https://img.shields.io/badge/X-000000?style=flat&logo=x&logoColor=white&color=black)](https://x.com/intent/follow?screen_name=playcanvas)
 
-| [Engine Manual](https://developer.playcanvas.com/user-manual/engine/) | [React Manual](https://developer.playcanvas.com/user-manual/react/) | [Examples](https://playcanvas.github.io/) | [Forum](https://forum.playcanvas.com/) |
+| [Engine Manual](https://developer.playcanvas.com/user-manual/engine/) | [React Manual](https://developer.playcanvas.com/user-manual/react/) | [Web Components Manual](https://developer.playcanvas.com/user-manual/web-components/) | [Examples](https://playcanvas.github.io/) | [Forum](https://forum.playcanvas.com/) |
 
 Scaffold a Vite-powered PlayCanvas project with TypeScript. Pick a format and a runnable starter, then build from there.
 
-## Getting Started
+## Getting started
 
 ```bash
 # npm
@@ -34,11 +34,27 @@ Then follow the prompts. Requires Node.js 22.23.2 or later.
 | `react`          | `@playcanvas/react` components               |
 | `web-components` | `@playcanvas/web-components` custom elements |
 
-Every format uses TypeScript and includes Vite, ESLint, Prettier and a production build.
+Every format uses TypeScript and includes Vite with hot reload, ESLint and Prettier. The development server loads the [PlayCanvas Inspector](https://github.com/playcanvas/inspector), a debug panel for the running scene, and production builds use relative paths, so they run from any folder, such as a GitHub Pages project site or an itch.io upload.
 
 ## Starters
 
-Choose from starter kits across basics, viewers, games, tools and XR. Run the creator to browse them, or pass `--help` to list them; `spinning-cube` is the default.
+Every starter is a runnable scene, available in every format. Run the creator to browse them, or pass `--help` to list them; `spinning-cube` is the default.
+
+| Starter                   | Category | Description                                                     |
+| ------------------------- | -------- | --------------------------------------------------------------- |
+| `spinning-cube`           | Basics   | A rotating cube and a light                                     |
+| `interactive-sphere`      | Basics   | Orbit controls, a grid and pointer picking                      |
+| `model-viewer`            | Viewers  | A glTF model, orbit controls and a procedural sky               |
+| `splat-viewer`            | Viewers  | A Gaussian splat and orbit controls                             |
+| `product-configurator`    | Viewers  | Product variants, materials and orbit controls                  |
+| `physics-playground`      | Games    | Rigid bodies, collisions, spawning and reset                    |
+| `first-person-controller` | Games    | First-person movement, mouse look and jumping                   |
+| `third-person-controller` | Games    | An animated character, follow camera and locomotion             |
+| `sprite-game`             | Games    | An orthographic camera, sprite animation and input              |
+| `web-lens`                | Games    | A portrait game with Snapchat leaderboards, packaged for upload |
+| `scene-editor`            | Tools    | Selection and translate, rotate and scale gizmos                |
+| `vr-starter`              | XR       | Immersive VR, controllers and locomotion                        |
+| `ar-placement`            | XR       | Mobile AR, hit testing and object placement                     |
 
 ![The PlayCanvas starter scenes](images/starter-catalog.webp)
 
@@ -52,7 +68,7 @@ npm create playcanvas@latest my-lens -- --starter web-lens
 
 Its `npm run package` script builds the game, checks it against the Web Lens upload rules (size limits, relative paths, no network access and no camera or microphone) and writes the zip to upload through [My Lenses](https://my-lenses.snapchat.com/).
 
-## CLI Options
+## CLI options
 
 Pass a project name and options to skip the prompts:
 
@@ -60,23 +76,35 @@ Pass a project name and options to skip the prompts:
 npm create playcanvas@latest my-game -- -f react -y
 ```
 
-| Option             | Shorthand | Description                                             |
-| ------------------ | --------- | ------------------------------------------------------- |
-| `--format <name>`  | `-f`      | Use a format from the list above                        |
-| `--starter <name>` | `-s`      | Use a starter from the list above                       |
-| `--overwrite`      |           | Remove existing files from a non-empty target directory |
-| `--keep`           |           | Add the project to a non-empty target directory         |
-| `--no-skills`      |           | Omit the PlayCanvas agent skills (included by default)  |
-| `--yes`            | `-y`      | Skip the prompts and take the defaults                  |
-| `--help`           | `-h`      | Show command help, with the formats and starters        |
+npm needs the `--` before the options. pnpm, yarn and bun take them without it, and may ignore them after one:
 
-`--yes` takes `playcanvas-project`, the `engine` format and the `spinning-cube` starter for anything you don't pass. It never touches files that are already there, so a non-empty target directory still needs `--keep` or `--overwrite`. A run without a terminal, such as one started by an AI agent or in CI, takes the same defaults, so it never waits on a prompt. The previous `--template` and `--boilerplate` long flags remain accepted for compatibility.
+```bash
+pnpm create playcanvas@latest my-game -f react -y
+```
 
-`--keep` adds the project to a directory that already holds files, such as a brief, assets or a README, and replaces none of them: where the project has a file of the same name, yours stays and the creator lists it. It stops at a directory with a `package.json`, which is a project already.
+Use `.` as the project name to create the project in the current directory.
+
+| Option             | Shorthand | Description                                                             |
+| ------------------ | --------- | ----------------------------------------------------------------------- |
+| `--format <name>`  | `-f`      | Use a format from the list above                                        |
+| `--starter <name>` | `-s`      | Use a starter from the list above                                       |
+| `--overwrite`      |           | Remove existing files, except `.git`, from a non-empty target directory |
+| `--keep`           |           | Add the project to a non-empty target directory                         |
+| `--no-skills`      |           | Omit the PlayCanvas agent skills (included by default)                  |
+| `--yes`            | `-y`      | Skip the prompts and take the defaults                                  |
+| `--help`           | `-h`      | Show command help, with the formats and starters                        |
+
+`--yes` takes `playcanvas-project`, the `engine` format and the `spinning-cube` starter for anything you don't pass. It never touches files that are already there, so a non-empty target directory still needs `--keep` or `--overwrite`. A run without a terminal, such as one started by an AI agent or in CI, takes the same defaults, so it never waits on a prompt. The previous `--template` (`-t`) and `--boilerplate` (`-b`) flags remain accepted for compatibility.
+
+`--keep` adds the project to a directory that already holds files, such as a brief, assets or a README, and replaces none of them: where the project has a file of the same name, yours stays and the creator lists it. It refuses a directory that already has a `package.json`, since that is a project already. To add a project to the current directory:
+
+```bash
+npm create playcanvas@latest . -- --keep
+```
 
 ## Coding agents
 
-Every project includes an `AGENTS.md` that gives AI coding agents such as Claude Code, Codex and Cursor its commands, layout and conventions, and how to check a change. Its `CLAUDE.md` imports it, since Claude Code skips `AGENTS.md` when a `CLAUDE.md` exists in the project or a folder above it.
+Every project includes an `AGENTS.md` that gives AI coding agents such as Claude Code, Codex and Cursor the project's commands, layout and conventions, and how to check a change. The project's `CLAUDE.md` imports `AGENTS.md`, since Claude Code skips `AGENTS.md` when a `CLAUDE.md` exists in the working directory or a folder above it.
 
 Every project also includes [`@playcanvas/skills`](https://github.com/playcanvas/skills), so those agents pick up PlayCanvas-specific workflows automatically, with no install step. They are copied into `.claude/skills/` and `.agents/skills/`. Pass `--no-skills` to leave them out.
 
@@ -84,9 +112,17 @@ Every project also includes [`@playcanvas/skills`](https://github.com/playcanvas
 
 ```bash
 npm install
-npm test
 npm run build
 node dist/index.mjs
+```
+
+`npm run dev` builds a stub that runs the creator straight from `src/`, so a change takes effect without a rebuild. Before opening a pull request, run the checks CI runs:
+
+```bash
+npm test
+npm run lint
+npm run fmt
+npm run typecheck
 ```
 
 Contributions are welcome. Please open an issue before proposing a new format, starter or another substantial change.
@@ -101,7 +137,16 @@ A project is assembled from the layers under `templates/`, in this order. A file
 4. `_features/<feature>/<layer>/`: what each of the starter's `features` needs in that format, as mapped by `FEATURES` in `templates/index.ts`
 5. `<format>/<starter>/`: the starter's scene in that format
 
-To add a starter, list it in `STARTERS` in `templates/index.ts`, add `_shared/<starter>/README.md`, and add its scene to every format: `engine/<starter>/src/main.ts`, `react/<starter>/src/App.tsx`, and `web-components/<starter>/index.html` with `src/main.ts`. Import `./starter.css` for the shared page and panel styles, and override a base file only when the starter needs something different. `npm test` checks that the starter exists in every format, and CI scaffolds and builds it in each one.
+To add a starter:
+
+1. List it in `STARTERS` in `templates/index.ts`, with the `name`, `display`, `category` and `description` that the prompts and `--help` show. The first entry is the default. A starter can also name the `features` it uses, the files and folders of `_common/` and the format bases to `omit`, and an `outro` to follow the commands in the closing message.
+2. Add `_shared/<starter>/README.md`, a `##` section that describes the starter and its controls.
+3. Add its scene to every format: `engine/<starter>/src/main.ts`, `react/<starter>/src/App.tsx`, and `web-components/<starter>/index.html` with `src/main.ts`. Import `./starter.css` for the shared page and panel styles, and override a base file only when the starter needs something different.
+4. Add it to the table under [Starters](#starters) and to `images/starter-catalog.webp`.
+
+`npm test` checks that the starter exists in every format, and CI scaffolds it in each one, then checks its formatting, lints, typechecks and builds it.
+
+Name a layer's `.gitignore` or `.npmrc` as `_gitignore` or `_npmrc`, since npm leaves those two out of a published package. The scaffolder renames them.
 
 Write commands in a README or `AGENTS.md` for npm, as `npm install`, `npm run <script>` and `npm run <script> -- <args>`. The scaffolder rewrites them for the package manager that created the project, and leaves out the `## Agent skills` section of both when run with `--no-skills`.
 
