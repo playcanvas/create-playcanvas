@@ -29,32 +29,37 @@ import './product.css';
 import './starter.css';
 
 const PRODUCT_URL = 'https://developer.playcanvas.com/assets/lambo.glb';
-const PAINTS = [
-    { name: 'Crimson', color: '#d6293e', shade: '#9b1731' },
-    { name: 'Arctic', color: '#d8e4e9', shade: '#8fa8b5' },
-    { name: 'Volt', color: '#9acb34', shade: '#3c742d' }
-];
 const CAMERA_FOCUS = new Vec3(0, 0.8, 0);
 const CAMERA_PITCH = new Vec2(-85, -4);
 
-document.body.insertAdjacentHTML(
-    'beforeend',
-    `<div class="hud"><section class="panel"><h1>Product Configurator</h1><p>Choose a paint finish, then drag to orbit.</p><div class="controls variants" id="paints">${PAINTS.map(({ name, color }, i) => `<button aria-pressed="${i === 0}" data-color="${color}"><span class="finish" style="--color:${color}"></span>${name}</button>`).join('')}</div></section></div>`
-);
-
 const canvas = document.getElementById('application-canvas') as HTMLCanvasElement;
-const device = await createGraphicsDevice(canvas);
-device.maxPixelRatio = Math.min(device.maxPixelRatio, 2);
 
-const options = new AppOptions();
-options.graphicsDevice = device;
-options.componentSystems = [RenderComponentSystem, CameraComponentSystem, LightComponentSystem, ScriptComponentSystem];
-options.resourceHandlers = [TextureHandler, ContainerHandler];
+const device = await createGraphicsDevice(canvas);
+device.maxPixelRatio = Math.min(window.devicePixelRatio, 2);
+
+const createOptions = new AppOptions();
+createOptions.graphicsDevice = device;
+createOptions.componentSystems = [
+    RenderComponentSystem,
+    CameraComponentSystem,
+    LightComponentSystem,
+    ScriptComponentSystem
+];
+createOptions.resourceHandlers = [TextureHandler, ContainerHandler];
 
 const app = new AppBase(canvas);
-app.init(options);
+app.init(createOptions);
+
+// Set the canvas to fill the window and automatically change resolution to be the same as the canvas size
 app.setCanvasFillMode(FILLMODE_FILL_WINDOW);
 app.setCanvasResolution(RESOLUTION_AUTO);
+
+// Ensure canvas is resized when window changes size
+const resize = () => app.resizeCanvas();
+window.addEventListener('resize', resize);
+app.on('destroy', () => {
+    window.removeEventListener('resize', resize);
+});
 
 const product = new Asset('car', 'container', { url: PRODUCT_URL });
 await new Promise<void>((resolve) => new AssetListLoader([product], app.assets).load(() => resolve()));
@@ -82,10 +87,18 @@ const paint = body[0].material!.clone() as StandardMaterial;
 const shade = panels[0].material!.clone() as StandardMaterial;
 body.forEach((mesh) => (mesh.material = paint));
 panels.forEach((mesh) => (mesh.material = shade));
-paint.diffuse.fromString(PAINTS[0].color);
-shade.diffuse.fromString(PAINTS[0].shade);
-paint.update();
-shade.update();
+
+// Each paint button in index.html carries its finish's two colors
+const buttons = document.querySelectorAll<HTMLButtonElement>('#paints button');
+const choose = (button: HTMLButtonElement) => {
+    paint.diffuse.fromString(button.dataset.color!);
+    shade.diffuse.fromString(button.dataset.shade!);
+    paint.update();
+    shade.update();
+    buttons.forEach((item) => (item.ariaPressed = String(item === button)));
+};
+buttons.forEach((button) => (button.onclick = () => choose(button)));
+choose(buttons[0]);
 
 const sky = new Entity('sky');
 sky.addComponent('script');
@@ -141,15 +154,3 @@ light.addComponent('light', {
 });
 light.setEulerAngles(45, -145, 0);
 app.root.addChild(light);
-
-document.querySelectorAll<HTMLButtonElement>('#paints button').forEach((button, i, buttons) => {
-    button.onclick = () => {
-        paint.diffuse.fromString(PAINTS[i].color);
-        shade.diffuse.fromString(PAINTS[i].shade);
-        paint.update();
-        shade.update();
-        buttons.forEach((item, j) => (item.ariaPressed = String(i === j)));
-    };
-});
-
-window.addEventListener('resize', () => app.resizeCanvas());
