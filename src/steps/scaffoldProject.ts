@@ -1,4 +1,5 @@
 import fs from 'node:fs';
+import os from 'node:os';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 
@@ -31,13 +32,15 @@ type Options = {
     starter: string;
     packageName: string;
     skills: boolean;
+    // add the project to the files the target directory already holds, replacing none of them
+    keep?: boolean;
     renameFiles: Record<string, string>;
     // defaults to the templates shipped with the CLI; tests point it at fixtures
     templatesDir?: string;
 };
 
 export const scaffoldProject = (opts: Options) => {
-    const { cwd, targetDir, format, starter, packageName, skills, renameFiles } = opts;
+    const { cwd, targetDir, format, starter, packageName, skills, keep, renameFiles } = opts;
 
     const root = path.resolve(cwd, targetDir);
     fs.mkdirSync(root, { recursive: true });
@@ -85,6 +88,10 @@ export const scaffoldProject = (opts: Options) => {
         throw new Error(`Starter directory not found: ${format}/${starter}`);
     }
 
+    // a project that keeps the target's files is assembled in a scratch folder, since its layers
+    // replace each other's files, then copied in without the files the target already has
+    const out = keep ? fs.mkdtempSync(path.join(os.tmpdir(), 'create-playcanvas-')) : root;
+
     // Layers apply in this order, and a file in a later layer replaces the same file in an earlier
     // one: files every project gets, the format's tooling, the starter's format-independent files,
     // the features it uses, then the starter's own files for this format
@@ -108,14 +115,14 @@ export const scaffoldProject = (opts: Options) => {
     const sharedDocs = Object.keys(DOCS).map((doc) => path.join(sharedDir, doc));
     for (const dir of layers) {
         const manifest = path.join(dir, 'package.json');
-        fs.cpSync(dir, root, {
+        fs.cpSync(dir, out, {
             recursive: true,
             filter: (src) => src !== manifest && !sharedDocs.includes(src) && !omitted.includes(src)
         });
     }
 
     for (const [doc, heading] of Object.entries(DOCS)) {
-        const docPath = path.join(root, doc);
+        const docPath = path.join(out, doc);
         if (!fs.existsSync(docPath)) continue;
 
         let text = fs.readFileSync(docPath, 'utf8');
@@ -142,9 +149,9 @@ export const scaffoldProject = (opts: Options) => {
     }
 
     for (const [from, to] of Object.entries(renameFiles)) {
-        const fromPath = path.join(root, from);
+        const fromPath = path.join(out, from);
         if (fs.existsSync(fromPath)) {
-            fs.renameSync(fromPath, path.join(root, to));
+            fs.renameSync(fromPath, path.join(out, to));
         }
     }
 
@@ -164,7 +171,7 @@ export const scaffoldProject = (opts: Options) => {
         else delete pkg[key];
     }
     pkg.name = packageName;
-    fs.writeFileSync(path.join(root, 'package.json'), JSON.stringify(pkg, null, 4) + '\n');
+    fs.writeFileSync(path.join(out, 'package.json'), JSON.stringify(pkg, null, 4) + '\n');
 
     if (skills) {
         const skillsDir = [
@@ -182,12 +189,35 @@ export const scaffoldProject = (opts: Options) => {
             .map((d) => d.name);
         for (const dir of ['.claude/skills', '.agents/skills']) {
             for (const name of names) {
-                fs.cpSync(path.join(skillsDir, name), path.join(root, dir, name), {
+                fs.cpSync(path.join(skillsDir, name), path.join(out, dir, name), {
                     recursive: true
                 });
             }
         }
         prompts.log.step('Added PlayCanvas agent skills (opt out with --no-skills)');
+    }
+
+    if (keep) {
+        const kept: string[] = [];
+        try {
+            for (const file of (fs.readdirSync(out, { recursive: true }) as string[]).sort()) {
+                const from = path.join(out, file);
+                if (!fs.statSync(from).isFile()) continue;
+
+                const to = path.join(root, file);
+                if (fs.existsSync(to)) {
+                    kept.push(file.split(path.sep).join('/'));
+                } else {
+                    fs.mkdirSync(path.dirname(to), { recursive: true });
+                    fs.copyFileSync(from, to);
+                }
+            }
+        } finally {
+            fs.rmSync(out, { recursive: true, force: true });
+        }
+        if (kept.length) {
+            prompts.log.warn(`Kept these existing files rather than the project's: ${kept.join(', ')}`);
+        }
     }
 
     let doneMessage = 'Project created. Now run:\n';
