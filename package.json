@@ -49,9 +49,9 @@
         "eslint": "^9.39.5",
         "mri": "^1.2.0",
         "picocolors": "^1.1.1",
-        "prettier": "^3.9.10",
+        "prettier": "^3.10.0",
         "unbuild": "^3.6.1",
-        "vite": "^8.3.7",
+        "vite": "^8.3.8",
         "vitest": "^5.1.0"
     },
     "engines": {
