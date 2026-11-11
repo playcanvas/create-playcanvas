@@ -28,11 +28,11 @@ Then follow the prompts. Requires Node.js 22.23.2 or later.
 
 ## Formats
 
-| Format           | Description                                  |
-| ---------------- | -------------------------------------------- |
-| `engine`         | The PlayCanvas Engine API directly           |
-| `react`          | `@playcanvas/react` components               |
-| `web-components` | `@playcanvas/web-components` custom elements |
+| Format                                                           | Description                                  |
+| ---------------------------------------------------------------- | -------------------------------------------- |
+| [`engine`](https://github.com/playcanvas/engine)                 | The PlayCanvas Engine API directly           |
+| [`react`](https://github.com/playcanvas/react)                   | `@playcanvas/react` components               |
+| [`web-components`](https://github.com/playcanvas/web-components) | `@playcanvas/web-components` custom elements |
 
 Every format uses TypeScript and includes Vite with hot reload, ESLint and Prettier. The development server loads the [PlayCanvas Inspector](https://github.com/playcanvas/inspector), a debug panel for the running scene, and production builds use relative paths, so they run from any folder, such as a GitHub Pages project site or an itch.io upload.
 
