@@ -38,21 +38,21 @@ Every format uses TypeScript and includes Vite with hot reload, ESLint and Prett
 
 ## Starters
 
-Every starter is a runnable scene, available in every format. Run the creator to browse them, or pass `--help` to list them; `spinning-cube` is the default.
+Every starter is a runnable scene, available in every format. Run the creator to browse them, or pass `--help` to list them; `blank` is the default.
 
-| Starter                   | Category | Description                                                     |
-| ------------------------- | -------- | --------------------------------------------------------------- |
-| `spinning-cube`           | Basics   | A rotating cube and a light                                     |
-| `model-viewer`            | Viewers  | A glTF model, orbit controls and a procedural sky               |
-| `splat-viewer`            | Viewers  | A Gaussian splat and orbit controls                             |
-| `product-configurator`    | Viewers  | Product variants, materials and orbit controls                  |
-| `first-person-controller` | Games    | First-person movement, mouse look and jumping                   |
-| `third-person-controller` | Games    | An animated character, follow camera and locomotion             |
-| `sprite-game`             | Games    | An orthographic camera, sprite animation and input              |
-| `web-lens`                | Games    | A portrait game with Snapchat leaderboards, packaged for upload |
-| `scene-editor`            | Tools    | Click to select, gizmos and a scene saved in the browser        |
-| `vr-starter`              | XR       | Immersive VR, controllers and locomotion                        |
-| `ar-placement`            | XR       | Mobile AR, hit testing and object placement                     |
+| Starter                | Category | Description                                                     |
+| ---------------------- | -------- | --------------------------------------------------------------- |
+| `blank`                | Basics   | Just the skeleton, with a rotating cube and a light             |
+| `model-viewer`         | Viewers  | A glTF model, orbit controls and a procedural sky               |
+| `splat-viewer`         | Viewers  | A Gaussian splat and orbit controls                             |
+| `product-configurator` | Viewers  | Product variants, materials and orbit controls                  |
+| `first-person-game`    | Games    | First-person movement, mouse look and jumping                   |
+| `third-person-game`    | Games    | An animated character, follow camera and locomotion             |
+| `platformer`           | Games    | An orthographic camera, sprite animation and input              |
+| `web-lens`             | Games    | A portrait game with Snapchat leaderboards, packaged for upload |
+| `scene-editor`         | Tools    | Click to select, gizmos and a scene saved in the browser        |
+| `vr`                   | XR       | Immersive VR, controllers and locomotion                        |
+| `ar`                   | XR       | Mobile AR, hit testing and object placement                     |
 
 ![The PlayCanvas starter scenes](images/starter-catalog.webp)
 
@@ -92,7 +92,7 @@ Use `.` as the project name to create the project in the current directory.
 | `--yes`            | `-y`      | Skip the prompts and take the defaults                                  |
 | `--help`           | `-h`      | Show command help, with the formats and starters                        |
 
-`--yes` takes `playcanvas-project`, the `engine` format and the `spinning-cube` starter for anything you don't pass. It never touches files that are already there, so a non-empty target directory still needs `--keep` or `--overwrite`. A run without a terminal, such as one started by an AI agent or in CI, takes the same defaults, so it never waits on a prompt. The previous `--template` (`-t`) and `--boilerplate` (`-b`) flags remain accepted for compatibility.
+`--yes` takes `playcanvas-project`, the `engine` format and the `blank` starter for anything you don't pass. It never touches files that are already there, so a non-empty target directory still needs `--keep` or `--overwrite`. A run without a terminal, such as one started by an AI agent or in CI, takes the same defaults, so it never waits on a prompt. The previous `--template` (`-t`) and `--boilerplate` (`-b`) flags remain accepted for compatibility.
 
 `--keep` adds the project to a directory that already holds files, such as a brief, assets or a README, and replaces none of them: where the project has a file of the same name, yours stays and the creator lists it. It refuses a directory that already has a `package.json`, since that is a project already. To add a project to the current directory:
 
