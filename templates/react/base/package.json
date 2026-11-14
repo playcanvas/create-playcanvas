@@ -16,7 +16,7 @@
     },
     "dependencies": {
         "@playcanvas/react": "^0.11.7",
-        "playcanvas": "^2.24.0",
+        "playcanvas": "^2.24.1",
         "react": "^19.3.1",
         "react-dom": "^19.3.1"
     },
@@ -27,7 +27,7 @@
         "@types/react-dom": "^19.3.0",
         "@vitejs/plugin-react": "^6.3.0",
         "eslint": "^9.39.5",
-        "prettier": "^3.10.0",
+        "prettier": "^3.10.1",
         "typescript": "~6.0.3",
         "vite": "^8.3.8"
     },
