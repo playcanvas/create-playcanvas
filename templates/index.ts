@@ -63,7 +63,7 @@ export const STARTERS = [
         name: 'first-person-game',
         display: 'First-Person Game',
         category: 'Games',
-        description: 'first-person movement, mouse look and jumping',
+        description: 'a timed orb hunt across ramps, stairs and jumps',
         features: ['physics']
     },
     {

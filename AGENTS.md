@@ -14,6 +14,7 @@
 - `src/` is the CLI, with one file per prompt step in `src/steps/`.
 - `templates/index.ts` lists the `FORMATS`, the `STARTERS` and the `FEATURES` a starter can ask for.
 - `templates/_common/`, `<format>/base/`, `_shared/<starter>/`, `_features/` and `<format>/<starter>/` are the layers a project is assembled from, in that order.
+- `tools/` holds the scripts that build bundled assets, such as the Blender script that assembles the first-person level from a kit of parts. It is not published.
 - `__tests__/` checks the catalog and the scaffolder. `.github/workflows/ci.yml` scaffolds every starter in every format, then formats, lints, typechecks and builds it.
 - The agent skills given to each project come from the `@playcanvas/skills` dependency. Change a skill in that repository, not here.
 

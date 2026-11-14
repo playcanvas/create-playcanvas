@@ -8,155 +8,72 @@
     </head>
     <body>
         <pc-app>
-            <pc-material id="floor-material" diffuse="#474d52" emissive="#0e0f10" gloss="0.2"></pc-material>
-            <pc-material id="wall-material" diffuse="#6b737a" emissive="#151718" gloss="0.25"></pc-material>
-            <pc-material id="blue-material" diffuse="#154a7a" emissive="#040f18" gloss="0.4"></pc-material>
-            <pc-material id="green-material" diffuse="#2e6638" emissive="#09140b" gloss="0.2"></pc-material>
-            <pc-material id="wood-material" diffuse="#7a451a" emissive="#180e05" gloss="0.2"></pc-material>
-            <pc-material id="metal-material" diffuse="#475461" emissive="#0e1113" gloss="0.5"></pc-material>
+            <!-- Swap this for your own level - files in public/ are served next to index.html, so use a ./ path.
+                 The game finds its nodes by name: a mesh called `level` to look at, one called
+                 `collision` to stand on, any number called `orb-…` to collect, and one called `spawn`
+                 where the player starts -->
+            <pc-asset id="level" src="./level.glb"></pc-asset>
+
+            <!-- Physics runs in Ammo, a WebAssembly module -->
             <pc-wasm name="Ammo" glue="./ammo/ammo.wasm.js" wasm="./ammo/ammo.wasm.wasm"></pc-wasm>
+
             <pc-scene>
-                <pc-entity name="light" rotation="50 30 0"
-                    ><pc-light
+                <!-- The sun is a directional light that the sky keeps pointing the way its own sun does.
+                     Its shadows reach 45 m, far enough to cross the yard from any corner, split into
+                     four cascades because one shadow map over that distance is too coarse up close -->
+                <pc-entity name="sun">
+                    <pc-light
                         type="directional"
-                        intensity="2.5"
+                        intensity="2"
                         cast-shadows
+                        shadow-distance="45"
+                        num-cascades="4"
+                        shadow-resolution="2048"
+                        shadow-type="pcf5-32f"
                         shadow-bias="0.2"
                         normal-offset-bias="0.05"
-                    ></pc-light
-                ></pc-entity>
-                <pc-entity name="fill" rotation="-25 -140 0"
-                    ><pc-light type="directional" intensity="0.8"></pc-light
-                ></pc-entity>
-                <pc-entity name="floor" position="0 -0.1 0" scale="18 0.2 18"
-                    ><pc-render type="box" material="floor-material"></pc-render
-                    ><pc-collision type="box" half-extents="9 0.1 9"></pc-collision
-                    ><pc-rigid-body type="static"></pc-rigid-body
-                ></pc-entity>
-                <pc-entity name="back-wall" position="0 1.5 -9" scale="18 3 0.3"
-                    ><pc-render type="box" material="wall-material"></pc-render
-                    ><pc-collision type="box" half-extents="9 1.5 0.15"></pc-collision
-                    ><pc-rigid-body type="static"></pc-rigid-body
-                ></pc-entity>
-                <pc-entity name="front-wall" position="0 1.5 9" scale="18 3 0.3"
-                    ><pc-render type="box" material="wall-material"></pc-render
-                    ><pc-collision type="box" half-extents="9 1.5 0.15"></pc-collision
-                    ><pc-rigid-body type="static"></pc-rigid-body
-                ></pc-entity>
-                <pc-entity name="left-wall" position="-9 1.5 0" scale="0.3 3 18"
-                    ><pc-render type="box" material="wall-material"></pc-render
-                    ><pc-collision type="box" half-extents="0.15 1.5 9"></pc-collision
-                    ><pc-rigid-body type="static"></pc-rigid-body
-                ></pc-entity>
-                <pc-entity name="right-wall" position="9 1.5 0" scale="0.3 3 18"
-                    ><pc-render type="box" material="wall-material"></pc-render
-                    ><pc-collision type="box" half-extents="0.15 1.5 9"></pc-collision
-                    ><pc-rigid-body type="static"></pc-rigid-body
-                ></pc-entity>
-                <pc-entity name="blue-crate" position="-2 0.75 -3" scale="1.5 1.5 1.5"
-                    ><pc-render type="box" material="blue-material"></pc-render
-                    ><pc-collision type="box" half-extents="0.75 0.75 0.75"></pc-collision
-                    ><pc-rigid-body type="static"></pc-rigid-body
-                ></pc-entity>
-                <pc-entity name="green-crate" position="3 0.5 1" scale="2.5 1 1"
-                    ><pc-render type="box" material="green-material"></pc-render
-                    ><pc-collision type="box" half-extents="1.25 0.5 0.5"></pc-collision
-                    ><pc-rigid-body type="static"></pc-rigid-body
-                ></pc-entity>
-                <pc-entity name="cargo-left-0" position="-5.5 0.75 -5.5" scale="2 1.5 2"
-                    ><pc-render type="box" material="wood-material"></pc-render
-                    ><pc-collision type="box" half-extents="1 0.75 1"></pc-collision
-                    ><pc-rigid-body type="static"></pc-rigid-body
-                ></pc-entity>
-                <pc-entity name="cargo-left-1" position="-5.5 2 -5.5" scale="1.5 1 1.5"
-                    ><pc-render type="box" material="blue-material"></pc-render
-                    ><pc-collision type="box" half-extents="0.75 0.5 0.75"></pc-collision
-                    ><pc-rigid-body type="static"></pc-rigid-body
-                ></pc-entity>
-                <pc-entity name="cargo-right-0" position="5.3 0.6 -4.8" scale="2.4 1.2 2"
-                    ><pc-render type="box" material="green-material"></pc-render
-                    ><pc-collision type="box" half-extents="1.2 0.6 1"></pc-collision
-                    ><pc-rigid-body type="static"></pc-rigid-body
-                ></pc-entity>
-                <pc-entity name="cargo-right-1" position="5.3 1.7 -4.8" scale="1.5 1 1.5"
-                    ><pc-render type="box" material="wood-material"></pc-render
-                    ><pc-collision type="box" half-extents="0.75 0.5 0.75"></pc-collision
-                    ><pc-rigid-body type="static"></pc-rigid-body
-                ></pc-entity>
-                <pc-entity name="cargo-center" position="0 0.6 -6.5" scale="2.2 1.2 1.8"
-                    ><pc-render type="box" material="blue-material"></pc-render
-                    ><pc-collision type="box" half-extents="1.1 0.6 0.9"></pc-collision
-                    ><pc-rigid-body type="static"></pc-rigid-body
-                ></pc-entity>
-                <pc-entity name="shelf-left-post-0" position="-6.8 1.4 -3.5" scale="0.25 2.8 0.25"
-                    ><pc-render type="box" material="metal-material"></pc-render
-                    ><pc-collision type="box" half-extents="0.125 1.4 0.125"></pc-collision
-                    ><pc-rigid-body type="static"></pc-rigid-body
-                ></pc-entity>
-                <pc-entity name="shelf-left-post-1" position="-6.8 1.4 0" scale="0.25 2.8 0.25"
-                    ><pc-render type="box" material="metal-material"></pc-render
-                    ><pc-collision type="box" half-extents="0.125 1.4 0.125"></pc-collision
-                    ><pc-rigid-body type="static"></pc-rigid-body
-                ></pc-entity>
-                <pc-entity name="shelf-left-post-2" position="-6.8 1.4 3.5" scale="0.25 2.8 0.25"
-                    ><pc-render type="box" material="metal-material"></pc-render
-                    ><pc-collision type="box" half-extents="0.125 1.4 0.125"></pc-collision
-                    ><pc-rigid-body type="static"></pc-rigid-body
-                ></pc-entity>
-                <pc-entity name="shelf-right-post-0" position="6.8 1.4 -3.5" scale="0.25 2.8 0.25"
-                    ><pc-render type="box" material="metal-material"></pc-render
-                    ><pc-collision type="box" half-extents="0.125 1.4 0.125"></pc-collision
-                    ><pc-rigid-body type="static"></pc-rigid-body
-                ></pc-entity>
-                <pc-entity name="shelf-right-post-1" position="6.8 1.4 0" scale="0.25 2.8 0.25"
-                    ><pc-render type="box" material="metal-material"></pc-render
-                    ><pc-collision type="box" half-extents="0.125 1.4 0.125"></pc-collision
-                    ><pc-rigid-body type="static"></pc-rigid-body
-                ></pc-entity>
-                <pc-entity name="shelf-right-post-2" position="6.8 1.4 3.5" scale="0.25 2.8 0.25"
-                    ><pc-render type="box" material="metal-material"></pc-render
-                    ><pc-collision type="box" half-extents="0.125 1.4 0.125"></pc-collision
-                    ><pc-rigid-body type="static"></pc-rigid-body
-                ></pc-entity>
-                <pc-entity name="shelf-left-low" position="-6.8 0.65 0" scale="1.1 0.18 7.5"
-                    ><pc-render type="box" material="metal-material"></pc-render
-                    ><pc-collision type="box" half-extents="0.55 0.09 3.75"></pc-collision
-                    ><pc-rigid-body type="static"></pc-rigid-body
-                ></pc-entity>
-                <pc-entity name="shelf-left-high" position="-6.8 2.1 0" scale="1.1 0.18 7.5"
-                    ><pc-render type="box" material="metal-material"></pc-render
-                    ><pc-collision type="box" half-extents="0.55 0.09 3.75"></pc-collision
-                    ><pc-rigid-body type="static"></pc-rigid-body
-                ></pc-entity>
-                <pc-entity name="shelf-right-low" position="6.8 0.65 0" scale="1.1 0.18 7.5"
-                    ><pc-render type="box" material="metal-material"></pc-render
-                    ><pc-collision type="box" half-extents="0.55 0.09 3.75"></pc-collision
-                    ><pc-rigid-body type="static"></pc-rigid-body
-                ></pc-entity>
-                <pc-entity name="shelf-right-high" position="6.8 2.1 0" scale="1.1 0.18 7.5"
-                    ><pc-render type="box" material="metal-material"></pc-render
-                    ><pc-collision type="box" half-extents="0.55 0.09 3.75"></pc-collision
-                    ><pc-rigid-body type="static"></pc-rigid-body
-                ></pc-entity>
-                <pc-entity name="pallet" position="-2.5 0.15 2.5" scale="3 0.3 2"
-                    ><pc-render type="box" material="wood-material"></pc-render
-                    ><pc-collision type="box" half-extents="1.5 0.15 1"></pc-collision
-                    ><pc-rigid-body type="static"></pc-rigid-body
-                ></pc-entity>
-                <pc-entity name="player" position="0 1 5">
+                    ></pc-light>
+                </pc-entity>
+
+                <!-- The procedural sky is both the background and the ambient light. The script is
+                     attached in src/main.ts -->
+                <pc-entity name="sky"></pc-entity>
+
+                <!-- The sky lights the shade blue. A warm light from the other side, with no shadows of
+                     its own, stands in for the sunlight the ground bounces back, so the shade stays soft
+                     and the sand warm -->
+                <pc-entity name="fill" rotation="60 -30 0">
+                    <pc-light type="directional" intensity="0.7" color="#ffdbb3"></pc-light>
+                </pc-entity>
+
+                <!-- The player is a capsule the physics moves, with the camera at eye height. The game
+                     places it at the level's spawn point and gives it a first-person controller -->
+                <pc-entity name="player">
                     <pc-collision type="capsule" radius="0.45" height="1.8"></pc-collision>
                     <pc-rigid-body type="dynamic" mass="80" angular-factor="0 0 0"></pc-rigid-body>
-                    <pc-entity name="camera" position="0 0.65 0"
-                        ><pc-camera clear-color="#61a3db" fov="80"></pc-camera
-                    ></pc-entity>
+                    <!-- The sky is HDR, so the camera needs tone mapping to bring it back into
+                         displayable range -->
+                    <pc-entity name="camera" position="0 0.65 0">
+                        <pc-camera fov="80" tonemap="aces2"></pc-camera>
+                    </pc-entity>
                 </pc-entity>
+
+                <!-- The game is attached in src/main.ts -->
+                <pc-entity name="game"></pc-entity>
             </pc-scene>
         </pc-app>
         <div class="hud">
-            <section class="panel">
-                <h1>First-Person Game</h1>
-                <p>Click the scene, then use WASD, mouse look and Space to jump.</p>
+            <header class="status">
+                <span id="orbs"></span>
+                <span id="time"></span>
+            </header>
+            <section class="panel card" id="card">
+                <h1 id="card-title"></h1>
+                <p id="card-hint"></p>
             </section>
+            <div class="crosshair"></div>
+            <div class="joystick" id="joystick" hidden></div>
+            <div class="joystick-knob" id="joystick-knob" hidden></div>
         </div>
         <script type="module" src="/src/main.ts"></script>
     </body>

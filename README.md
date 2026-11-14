@@ -46,7 +46,7 @@ Every starter is a runnable scene, available in every format. Run the creator to
 | `model-viewer`         | Viewers  | A glTF model, orbit controls and a procedural sky               |
 | `splat-viewer`         | Viewers  | A Gaussian splat and orbit controls                             |
 | `product-configurator` | Viewers  | Product variants, materials and orbit controls                  |
-| `first-person-game`    | Games    | First-person movement, mouse look and jumping                   |
+| `first-person-game`    | Games    | A timed orb hunt across ramps, stairs and jumps                 |
 | `third-person-game`    | Games    | An animated character, follow camera and locomotion             |
 | `platformer`           | Games    | An orthographic camera, sprite animation and input              |
 | `web-lens`             | Games    | A portrait game with Snapchat leaderboards, packaged for upload |
