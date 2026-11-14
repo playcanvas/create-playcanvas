@@ -36,10 +36,10 @@ export const FEATURES: Record<string, Record<string, string[]>> = {
 // `outro` follows the commands in the closing message
 export const STARTERS = [
     {
-        name: 'spinning-cube',
-        display: 'Spinning Cube',
+        name: 'blank',
+        display: 'Blank',
         category: 'Basics',
-        description: 'a rotating cube and a light'
+        description: 'just the skeleton, with a rotating cube and a light'
     },
     {
         name: 'model-viewer',
@@ -60,22 +60,22 @@ export const STARTERS = [
         description: 'product variants, materials and orbit controls'
     },
     {
-        name: 'first-person-controller',
-        display: 'First-Person Controller',
+        name: 'first-person-game',
+        display: 'First-Person Game',
         category: 'Games',
         description: 'first-person movement, mouse look and jumping',
         features: ['physics']
     },
     {
-        name: 'third-person-controller',
-        display: 'Third-Person Controller',
+        name: 'third-person-game',
+        display: 'Third-Person Game',
         category: 'Games',
         description: 'an animated character, follow camera and locomotion',
         features: ['physics']
     },
     {
-        name: 'sprite-game',
-        display: 'Sprite Game',
+        name: 'platformer',
+        display: 'Platformer',
         category: 'Games',
         description: 'an orthographic camera, sprite animation and input'
     },
@@ -95,14 +95,14 @@ export const STARTERS = [
         description: 'click to select, gizmos and a scene saved in the browser'
     },
     {
-        name: 'vr-starter',
-        display: 'VR Starter',
+        name: 'vr',
+        display: 'Virtual Reality',
         category: 'XR',
         description: 'immersive VR, controllers and locomotion'
     },
     {
-        name: 'ar-placement',
-        display: 'AR Placement',
+        name: 'ar',
+        display: 'Augmented Reality',
         category: 'XR',
         description: 'mobile AR, hit testing and object placement'
     }

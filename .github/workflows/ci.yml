@@ -226,11 +226,11 @@ jobs:
                   grep -qx '@AGENTS.md' CLAUDE.md
 
             - name: Check legacy flags and --no-skills
-              if: matrix.format == 'engine' && matrix.starter == 'spinning-cube'
+              if: matrix.format == 'engine' && matrix.starter == 'blank'
               run: |
                   node dist/index.mjs "$RUNNER_TEMP/legacy-no-skills" \
                     --template engine \
-                    --boilerplate spinning-cube \
+                    --boilerplate blank \
                     --no-skills
                   test ! -d "$RUNNER_TEMP/legacy-no-skills/.claude"
                   test ! -d "$RUNNER_TEMP/legacy-no-skills/.agents"
