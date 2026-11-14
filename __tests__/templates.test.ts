@@ -52,6 +52,12 @@ test('every starter directory belongs to a starter in the catalog', () => {
     expect(strays).toEqual([]);
 });
 
+test('the preview site has one thumbnail for each starter', () => {
+    const thumbnails = fs.readdirSync(fileURLToPath(new URL('../images/starters', import.meta.url)));
+
+    expect(thumbnails.sort()).toEqual(STARTERS.map((s) => `${s.name}.webp`).sort());
+});
+
 test('every file a starter omits is one every project gets', () => {
     const layers = ['_common', ...FORMATS.map((f) => `${f.name}/base`)];
     const stale = STARTERS.flatMap((s) =>

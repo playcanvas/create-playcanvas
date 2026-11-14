@@ -56,6 +56,8 @@ Every starter is a runnable scene, available in every format. Run the creator to
 
 ![The PlayCanvas starter scenes](images/starter-catalog.webp)
 
+Try every starter in the browser, in each format, at [playcanvas.github.io/create-playcanvas](https://playcanvas.github.io/create-playcanvas/).
+
 ## Snapchat Web Lenses
 
 The `web-lens` starter is a portrait game ready to publish to Snapchat as a [Web Lens](https://developers.snap.com/web-lenses/home), with the [Web Lens API](https://developers.snap.com/web-lenses/web-lens-api) wired up for leaderboards, Bitmoji and storage:
@@ -142,9 +144,9 @@ To add a starter:
 1. List it in `STARTERS` in `templates/index.ts`, with the `name`, `display`, `category` and `description` that the prompts and `--help` show. The first entry is the default. A starter can also name the `features` it uses, the files and folders of `_common/` and the format bases to `omit`, and an `outro` to follow the commands in the closing message.
 2. Add `_shared/<starter>/README.md`, a `##` section that describes the starter and its controls.
 3. Add its scene to every format: `engine/<starter>/src/main.ts`, `react/<starter>/src/App.tsx`, and `web-components/<starter>/index.html` with `src/main.ts`. Import `./starter.css` for the shared page and panel styles, and override a base file only when the starter needs something different.
-4. Add it to the table under [Starters](#starters) and to `images/starter-catalog.webp`.
+4. Add it to the table under [Starters](#starters) and to `images/starter-catalog.webp`, and add a 640 x 480 screenshot of it as `images/starters/<starter>.webp` for the preview site's gallery.
 
-`npm test` checks that the starter exists in every format, and CI scaffolds it in each one, then checks its formatting, lints, typechecks and builds it.
+`npm test` checks that the starter exists in every format and has a thumbnail, and CI scaffolds it in each one, then checks its formatting, lints, typechecks and builds it.
 
 Name a layer's `.gitignore` or `.npmrc` as `_gitignore` or `_npmrc`, since npm leaves those two out of a published package. The scaffolder renames them.
 
