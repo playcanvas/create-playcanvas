@@ -1,0 +1,47 @@
+/* the orbs found and the seconds left, across the top */
+.status {
+    display: flex;
+    justify-content: center;
+    gap: 24px;
+    font-size: 22px;
+    font-weight: 700;
+    font-variant-numeric: tabular-nums;
+    text-shadow: 0 1px 6px #000a;
+}
+
+/* the card sits over the middle of the view, and lets a click on it through to the canvas, where
+   the game is listening */
+.card {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    translate: -50% -50%;
+    text-align: center;
+    pointer-events: none;
+}
+
+/* the crosshair is for aiming, so it goes while a card is up */
+.card:not([hidden]) ~ .crosshair {
+    display: none;
+}
+
+/* the circle shows where a thumb went down on the left of the screen, and the knob follows it. The
+   circle's 70px radius is how far the controller lets the knob travel */
+.joystick,
+.joystick-knob {
+    position: fixed;
+    border-radius: 50%;
+    translate: -50% -50%;
+}
+
+.joystick {
+    width: 140px;
+    height: 140px;
+    border: 2px solid #fff6;
+}
+
+.joystick-knob {
+    width: 56px;
+    height: 56px;
+    background: #fff6;
+}

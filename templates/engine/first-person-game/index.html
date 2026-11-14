@@ -9,10 +9,17 @@
     <body>
         <canvas id="application-canvas"></canvas>
         <div class="hud">
-            <section class="panel">
-                <h1>First-Person Game</h1>
-                <p>Click the scene, then use WASD, mouse look and Space to jump.</p>
+            <header class="status">
+                <span id="orbs"></span>
+                <span id="time"></span>
+            </header>
+            <section class="panel card" id="card">
+                <h1 id="card-title"></h1>
+                <p id="card-hint"></p>
             </section>
+            <div class="crosshair"></div>
+            <div class="joystick" id="joystick" hidden></div>
+            <div class="joystick-knob" id="joystick-knob" hidden></div>
         </div>
         <script type="module" src="/src/main.ts"></script>
     </body>
