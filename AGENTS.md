@@ -15,7 +15,7 @@
 - `templates/index.ts` lists the `FORMATS`, the `STARTERS` and the `FEATURES` a starter can ask for.
 - `templates/_common/`, `<format>/base/`, `_shared/<starter>/`, `_features/` and `<format>/<starter>/` are the layers a project is assembled from, in that order.
 - `tools/` holds the scripts that build bundled assets, such as the Blender script that assembles the first-person level from a kit of parts. It is not published.
-- `__tests__/` checks the catalog and the scaffolder. `.github/workflows/ci.yml` scaffolds every starter in every format, then formats, lints, typechecks and builds it.
+- `__tests__/` checks the catalog and the scaffolder. `.github/workflows/ci.yml` scaffolds every starter in every format, then formats, lints, typechecks and builds it. `preview.yml` builds them again after each release and publishes them to GitHub Pages.
 - The agent skills given to each project come from the `@playcanvas/skills` dependency. Change a skill in that repository, not here.
 
 ## What a starter is for
@@ -75,7 +75,7 @@ When lean and inspiring pull apart, improve the picture, not the feature list.
 - `_shared/<starter>/README.md` says what the starter is, how to control it and which parts to replace and which to keep.
 - The `description` in `STARTERS` and the row in the README's table promise only what the scene shows.
 - Write commands for npm. The scaffolder rewrites them for the package manager in use.
-- Add the starter to `images/starter-catalog.webp`.
+- Add the starter to `images/starter-catalog.webp`, and a 640 x 480 screenshot of it as it opens to `images/starters/<starter>.webp`, which the preview site's gallery shows.
 
 ## Existing starters
 
