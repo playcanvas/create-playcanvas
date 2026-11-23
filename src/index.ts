@@ -1,10 +1,12 @@
 #!/usr/bin/env node
 
+import fs from 'node:fs';
+
 import * as prompts from '@clack/prompts';
-import mri from 'mri';
 
 import { FORMATS, STARTERS } from '../templates/index.js';
 
+import { parseArgs } from './args.js';
 import { chooseFormat } from './steps/chooseFormat.js';
 import { chooseStarter } from './steps/chooseStarter.js';
 import { getPackageName } from './steps/getPackageName.js';
@@ -12,22 +14,6 @@ import { getTargetDir } from './steps/getTargetDir.js';
 import { handleExistingDir } from './steps/handleExistingDir.js';
 import { scaffoldProject } from './steps/scaffoldProject.js';
 import { formatTargetDir } from './utils/fs.js';
-
-const argv = mri<{
-    format?: string;
-    starter?: string;
-    template?: string;
-    boilerplate?: string;
-    help?: boolean;
-    overwrite?: boolean;
-    keep?: boolean;
-    yes?: boolean;
-    skills?: boolean;
-}>(process.argv.slice(2), {
-    alias: { b: 'boilerplate', f: 'format', h: 'help', s: 'starter', t: 'template', y: 'yes' },
-    boolean: ['help', 'overwrite', 'keep', 'yes'],
-    string: ['format', 'starter', 'template', 'boilerplate']
-});
 
 const cwd = process.cwd();
 
@@ -50,6 +36,7 @@ Options:
       --no-skills            omit the PlayCanvas agent skills
   -y, --yes                  skip the prompts and take the defaults
   -h, --help                 show help
+  -v, --version              show the version
 
 Formats:
 ${catalog(FORMATS)}
@@ -69,24 +56,34 @@ const renameFiles: Record<string, string> = {
 const defaultTargetDir = 'playcanvas-project';
 
 const init = async () => {
-    const argTargetDir = argv._[0] ? formatTargetDir(String(argv._[0])) : undefined;
-    const argFormat = argv.format ?? argv.template;
-    const argStarter = argv.starter ?? argv.boilerplate;
-    const argOverwrite = argv.overwrite;
-    const argKeep = argv.keep;
+    const args = parseArgs(process.argv.slice(2));
 
-    // nothing can answer a prompt without a terminal, as when an AI agent or CI runs the command,
-    // so take the defaults as --yes does, rather than exit without creating a project
-    const interactive = Boolean(process.stdin.isTTY && process.stdout.isTTY);
-    const yes = argv.yes || !interactive;
-
-    const help = argv.help;
-    if (help) {
+    if (args.help) {
         console.log(helpMessage);
         return;
     }
 
-    if (!interactive && !argv.yes) {
+    if (args.version) {
+        // package.json is one folder up from both dist/ and src/
+        const pkg = JSON.parse(fs.readFileSync(new URL('../package.json', import.meta.url), 'utf8')) as {
+            version: string;
+        };
+        console.log(pkg.version);
+        return;
+    }
+
+    const argTargetDir = args.targetDir ? formatTargetDir(args.targetDir) : undefined;
+    const argFormat = args.format;
+    const argStarter = args.starter;
+    const argOverwrite = args.overwrite;
+    const argKeep = args.keep;
+
+    // nothing can answer a prompt without a terminal, as when an AI agent or CI runs the command,
+    // so take the defaults as --yes does, rather than exit without creating a project
+    const interactive = Boolean(process.stdin.isTTY && process.stdout.isTTY);
+    const yes = args.yes || !interactive;
+
+    if (!interactive && !args.yes) {
         prompts.log.info('Not running in a terminal, so using the defaults for any option not passed');
     }
 
@@ -101,16 +98,13 @@ const init = async () => {
     const format = await chooseFormat({ argFormat, yes, cancel });
     const starter = await chooseStarter({ argStarter, yes, cancel });
 
-    // included by default; --no-skills opts out
-    const skills = argv.skills ?? true;
-
     scaffoldProject({
         cwd,
         targetDir,
         format,
         starter,
         packageName,
-        skills,
+        skills: args.skills,
         keep,
         renameFiles
     });

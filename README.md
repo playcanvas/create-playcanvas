@@ -76,7 +76,7 @@ Pass a project name and options to skip the prompts:
 npm create playcanvas@latest my-game -- -f react -y
 ```
 
-npm needs the `--` before the options. pnpm, yarn and bun take them without it, and may ignore them after one:
+npm needs the `--` before the options. pnpm, yarn and bun take them without it:
 
 ```bash
 pnpm create playcanvas@latest my-game -f react -y
@@ -93,8 +93,11 @@ Use `.` as the project name to create the project in the current directory.
 | `--no-skills`      |           | Omit the PlayCanvas agent skills (included by default)                  |
 | `--yes`            | `-y`      | Skip the prompts and take the defaults                                  |
 | `--help`           | `-h`      | Show command help, with the formats and starters                        |
+| `--version`        | `-v`      | Show the creator's version                                              |
 
 `--yes` takes `playcanvas-project`, the `engine` format and the `blank` starter for anything you don't pass. It never touches files that are already there, so a non-empty target directory still needs `--keep` or `--overwrite`. A run without a terminal, such as one started by an AI agent or in CI, takes the same defaults, so it never waits on a prompt. The previous `--template` (`-t`) and `--boilerplate` (`-b`) flags remain accepted for compatibility.
+
+An option the creator doesn't know, an option without its name or a second project name stops it with an error, so a mistyped command never creates a project other than the one you asked for.
 
 `--keep` adds the project to a directory that already holds files, such as a brief, assets or a README, and replaces none of them: where the project has a file of the same name, yours stays and the creator lists it. It refuses a directory that already has a `package.json`, since that is a project already. To add a project to the current directory:
 

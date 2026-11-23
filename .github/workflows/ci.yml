@@ -128,6 +128,13 @@ jobs:
                       if (missing.length) throw new Error('not in --help: ' + missing.map((item) => item.name).join(', '));
                   "
 
+            - name: Print the version and create nothing
+              working-directory: ${{ runner.temp }}
+              run: |
+                  mkdir version && cd version
+                  test "$(node "$GITHUB_WORKSPACE/dist/index.mjs" --version < /dev/null)" = "$(node -p "require('$GITHUB_WORKSPACE/package.json').version")"
+                  test -z "$(ls -A)"
+
             - name: Fail where no default is safe
               working-directory: ${{ runner.temp }}
               run: |
@@ -150,6 +157,16 @@ jobs:
                       echo "::error::an unknown starter should fail"
                       exit 1
                   fi
+                  if node "$GITHUB_WORKSPACE/dist/index.mjs" bad-option --formt react < /dev/null; then
+                      echo "::error::an unknown option should fail"
+                      exit 1
+                  fi
+                  test ! -e bad-option
+                  if node "$GITHUB_WORKSPACE/dist/index.mjs" two words < /dev/null; then
+                      echo "::error::a second directory should fail"
+                      exit 1
+                  fi
+                  test ! -e two
 
     test:
         name: Test
