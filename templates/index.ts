@@ -31,6 +31,17 @@ export const FEATURES: Record<string, Record<string, string[]>> = {
     }
 };
 
+// the names starters had before 0.17.0, which --starter still takes: old versions of the creator,
+// tutorials and coding agents go on passing them. A renamed starter keeps its old name here
+export const RENAMED_STARTERS = new Map([
+    ['spinning-cube', 'blank'],
+    ['first-person-controller', 'first-person-game'],
+    ['third-person-controller', 'third-person-game'],
+    ['sprite-game', 'platformer'],
+    ['vr-starter', 'vr'],
+    ['ar-placement', 'ar']
+]);
+
 // every format holds a base plus one directory per starter; the first starter is the default. A
 // starter's `omit` lists files and folders every project gets that it has no use for, and its
 // `outro` follows the commands in the closing message
