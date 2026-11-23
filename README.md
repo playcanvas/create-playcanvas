@@ -95,7 +95,7 @@ Use `.` as the project name to create the project in the current directory.
 | `--help`           | `-h`      | Show command help, with the formats and starters                        |
 | `--version`        | `-v`      | Show the creator's version                                              |
 
-`--yes` takes `playcanvas-project`, the `engine` format and the `blank` starter for anything you don't pass. It never touches files that are already there, so a non-empty target directory still needs `--keep` or `--overwrite`. A run without a terminal, such as one started by an AI agent or in CI, takes the same defaults, so it never waits on a prompt. The previous `--template` (`-t`) and `--boilerplate` (`-b`) flags remain accepted for compatibility, as do the names starters had before 0.17.0, such as `spinning-cube` for `blank`.
+`--yes` takes `playcanvas-project`, the `engine` format and the `blank` starter for anything you don't pass. It never touches files that are already there, so a non-empty target directory still needs `--keep` or `--overwrite`. A run without a terminal, such as one started by an AI agent or in CI, takes the same defaults, so it never waits on a prompt. The previous `--template` (`-t`) and `--boilerplate` (`-b`) flags remain accepted for compatibility.
 
 An option the creator doesn't know, an option without its name or a second project name stops it with an error, so a mistyped command never creates a project other than the one you asked for.
 

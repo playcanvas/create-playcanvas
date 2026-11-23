@@ -135,12 +135,6 @@ jobs:
                   test "$(node "$GITHUB_WORKSPACE/dist/index.mjs" --version < /dev/null)" = "$(node -p "require('$GITHUB_WORKSPACE/package.json').version")"
                   test -z "$(ls -A)"
 
-            - name: Take the name a starter had before
-              working-directory: ${{ runner.temp }}
-              run: |
-                  node "$GITHUB_WORKSPACE/dist/index.mjs" renamed --starter vr-starter < /dev/null
-                  grep -q '^## Virtual Reality' renamed/README.md
-
             - name: Fail where no default is safe
               working-directory: ${{ runner.temp }}
               run: |

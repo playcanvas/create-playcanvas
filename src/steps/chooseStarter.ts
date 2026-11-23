@@ -1,6 +1,6 @@
 import * as prompts from '@clack/prompts';
 
-import { RENAMED_STARTERS, STARTERS } from '../../templates/index.js';
+import { STARTERS } from '../../templates/index.js';
 
 export const chooseStarter = async ({
     argStarter,
@@ -12,12 +12,6 @@ export const chooseStarter = async ({
     cancel: () => never;
 }) => {
     if (argStarter && STARTERS.some((s) => s.name === argStarter)) return argStarter;
-
-    const renamed = argStarter && RENAMED_STARTERS.get(argStarter);
-    if (renamed) {
-        prompts.log.warn(`The "${argStarter}" starter is now "${renamed}"`);
-        return renamed;
-    }
 
     // a run that can't show the picker (--yes, or no terminal) takes the default, and fails loudly
     // on a bad name rather than silently falling back

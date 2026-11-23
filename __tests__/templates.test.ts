@@ -4,7 +4,7 @@ import { fileURLToPath } from 'node:url';
 
 import { expect, test } from 'vitest';
 
-import { FEATURES, FORMATS, RENAMED_STARTERS, STARTERS } from '../templates/index.js';
+import { FEATURES, FORMATS, STARTERS } from '../templates/index.js';
 
 const TEMPLATES_DIR = fileURLToPath(new URL('../templates', import.meta.url));
 
@@ -50,13 +50,6 @@ test('every starter directory belongs to a starter in the catalog', () => {
     );
 
     expect(strays).toEqual([]);
-});
-
-test('every name a starter used to have leads to a starter in the catalog, and is not one itself', () => {
-    const names = STARTERS.map((s) => s.name);
-
-    expect([...RENAMED_STARTERS.values()].filter((name) => !names.includes(name))).toEqual([]);
-    expect([...RENAMED_STARTERS.keys()].filter((old) => names.includes(old))).toEqual([]);
 });
 
 test('the preview site has one thumbnail for each starter', () => {
