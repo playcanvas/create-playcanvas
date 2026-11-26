@@ -4,6 +4,6 @@
         "package": "vite build && node scripts/package-lens.mjs dist/lens"
     },
     "dependencies": {
-        "@snap/web-lens-api": "^0.1.3"
+        "@snap/web-lens-api": "^0.2.1"
     }
 }
